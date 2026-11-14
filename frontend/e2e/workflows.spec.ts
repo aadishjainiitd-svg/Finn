@@ -24,6 +24,12 @@ for(const order of ['old-first','new-first'])test('late research response cannot
  await expect(page.getByText('INFY fixture answer')).toBeVisible();await expect(page.getByText('TCS fixture answer')).toHaveCount(0);
 });
 
+test('generation failure retains document coverage, missing-source gap and evidence',async({page})=>{
+ await fixture(page);await page.route('**/api/research',r=>r.fulfill({json:{id:'quota',status:'error',stage:'Could not complete',error:{code:'daily_quota',message:'Shared answer allowance reached.'},documents:[{...evidence,kind:'transcript',period:'Q2 FY27'}],evidence:[evidence],gaps:[{kind:'annual',message:'Document processing exceeded the hosting memory budget.'}]}}));
+ await page.goto('/');await page.getByRole('button',{name:'Research',exact:true}).click();await page.getByLabel('NSE company symbol').fill('TEST');await page.getByRole('button',{name:'Investigate company'}).click();
+ await expect(page.getByText('Shared answer allowance reached.')).toBeVisible();await expect(page.getByText('Earnings call · Q2 FY27')).toBeVisible();await expect(page.getByText(/Annual report: Document processing exceeded/)).toBeVisible();await expect(page.getByText('The sources are still here')).toBeVisible();
+});
+
 test('coverage loss is visible without events being reordered',async({page})=>{
  await page.clock.install();let reads=0;await page.route('**/api/brief',r=>r.fulfill({json:++reads===1?brief:{...brief,source_status:'unavailable',coverage:brief.coverage.map(c=>({...c,filings:{...c.filings,status:'unavailable'}}))}}));
  await page.goto('/');await expect(page.getByRole('button',{name:/15\/15 filings/})).toBeVisible();await page.clock.fastForward(61000);await expect(page.getByRole('button',{name:/0\/15 filings/})).toBeVisible();await expect(page.getByRole('button',{name:event.title})).toBeVisible();

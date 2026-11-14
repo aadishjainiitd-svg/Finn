@@ -15,6 +15,15 @@ def restore():
         store.put(key,{k:max(current[k],baseline[k]) for k in ('reserved_tokens','requests')})
     if not store.cached('brief-snapshot') and data.get('brief'):
         brief=data['brief'];brief['is_demo_seed']=True;brief['source_status']='demo'
+        from .brief import filing_revision
+        for event in brief['events']:
+            if event['kind']!='filing':continue
+            evidence=event.get('evidence',[])
+            content_hash=evidence[0]['hash'] if evidence else None
+            if content_hash:
+                key='latest-document-filing-'+event['url']
+                if not store.cached(key):store.put(key,evidence[0].get('version',content_hash))
+            event['revision']=filing_revision(event['source_signature'],content_hash)
         for coverage in brief['coverage']:
             for source in ('price','filings'):coverage[source]['status']='demo'
         store.put('brief-snapshot',brief)

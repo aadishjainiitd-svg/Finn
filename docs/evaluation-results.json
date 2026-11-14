@@ -1,0 +1,371 @@
+{
+  "audited_at": "2026-11-14T07:21:10.263749+00:00",
+  "method": "Recorded expectations before grading. Real source/API results; final rendering checked from cache, not fresh model calls. I2 is an isolated fixture.",
+  "cases": [
+    {
+      "case": "I1",
+      "surface": "http://127.0.0.1:8000",
+      "http_status": 200,
+      "wall_seconds": 2.05,
+      "status": "unknown_ticker",
+      "model_called_on_final_replay": false,
+      "claim_count": 0,
+      "citations": [],
+      "all_quotes_exact": true
+    },
+    {
+      "case": "N1",
+      "surface": "http://127.0.0.1:8000",
+      "http_status": 202,
+      "wall_seconds": 0.05,
+      "status": "supported",
+      "model_called_on_final_replay": false,
+      "claim_count": 1,
+      "citations": [
+        {
+          "id": "13033ccd2b71c7b60da6b53cdb7c80013366725d8bc36c3a17749503aad8c2fe-x57fc941e14-transcript-p3-c0",
+          "symbol": "TCS",
+          "kind": "transcript",
+          "period": "Q2FY27",
+          "page": 3,
+          "hash": "13033ccd2b71c7b60da6b53cdb7c80013366725d8bc36c3a17749503aad8c2fe",
+          "parser": "pdfium-5.15.2-pages-v2",
+          "url": "https://www.bseindia.com/xml-data/corpfiling/AttachHis/7dc14216-f892-46f1-bf82-5c7b387a83b9.pdf",
+          "fetched_at": "2026-11-14T06:17:59.184400+00:00"
+        }
+      ],
+      "all_quotes_exact": true
+    },
+    {
+      "case": "N2",
+      "surface": "http://127.0.0.1:8000",
+      "http_status": 202,
+      "wall_seconds": 0.03,
+      "status": "insufficient_evidence",
+      "model_called_on_final_replay": false,
+      "claim_count": 0,
+      "citations": [],
+      "all_quotes_exact": true
+    },
+    {
+      "case": "S1",
+      "surface": "http://127.0.0.1:8000",
+      "http_status": 202,
+      "wall_seconds": 0.06,
+      "status": "partial",
+      "model_called_on_final_replay": false,
+      "claim_count": 3,
+      "citations": [
+        {
+          "id": "d0bdc7fe1ae741b07bb76a158019cae05ab18abd2c2eeda43177d367bef24eb8-x57fc941e14-annual-p55-c0",
+          "symbol": "TCS",
+          "kind": "annual",
+          "period": "2025-26",
+          "page": 55,
+          "hash": "d0bdc7fe1ae741b07bb76a158019cae05ab18abd2c2eeda43177d367bef24eb8",
+          "parser": "pdfium-5.15.2-pages-v2",
+          "url": "https://www.bseindia.com/xml-data/corpfiling/AttachHis/ad42e748-d73c-4c79-8c52-bcf1b1399bc1.pdf",
+          "fetched_at": "2026-11-14T06:17:54.508129+00:00"
+        },
+        {
+          "id": "d0bdc7fe1ae741b07bb76a158019cae05ab18abd2c2eeda43177d367bef24eb8-x57fc941e14-annual-p55-c0",
+          "symbol": "TCS",
+          "kind": "annual",
+          "period": "2025-26",
+          "page": 55,
+          "hash": "d0bdc7fe1ae741b07bb76a158019cae05ab18abd2c2eeda43177d367bef24eb8",
+          "parser": "pdfium-5.15.2-pages-v2",
+          "url": "https://www.bseindia.com/xml-data/corpfiling/AttachHis/ad42e748-d73c-4c79-8c52-bcf1b1399bc1.pdf",
+          "fetched_at": "2026-11-14T06:17:54.508129+00:00"
+        },
+        {
+          "id": "d0bdc7fe1ae741b07bb76a158019cae05ab18abd2c2eeda43177d367bef24eb8-x57fc941e14-annual-p25-c0",
+          "symbol": "TCS",
+          "kind": "annual",
+          "period": "2025-26",
+          "page": 25,
+          "hash": "d0bdc7fe1ae741b07bb76a158019cae05ab18abd2c2eeda43177d367bef24eb8",
+          "parser": "pdfium-5.15.2-pages-v2",
+          "url": "https://www.bseindia.com/xml-data/corpfiling/AttachHis/ad42e748-d73c-4c79-8c52-bcf1b1399bc1.pdf",
+          "fetched_at": "2026-11-14T06:17:54.508129+00:00"
+        }
+      ],
+      "all_quotes_exact": true
+    },
+    {
+      "case": "S2",
+      "surface": "http://127.0.0.1:8000",
+      "http_status": 202,
+      "wall_seconds": 0.03,
+      "status": "supported",
+      "model_called_on_final_replay": false,
+      "claim_count": 3,
+      "citations": [
+        {
+          "id": "53ce18345720ca7cd612416129f01c25bd11faa59006289dfe60c44f2780303b-x57fc941e14-annual-p5-c0",
+          "symbol": "KPITTECH",
+          "kind": "annual",
+          "period": "2025-26",
+          "page": 5,
+          "hash": "53ce18345720ca7cd612416129f01c25bd11faa59006289dfe60c44f2780303b",
+          "parser": "pdfium-5.15.2-pages-v2",
+          "url": "https://www.bseindia.com/xml-data/corpfiling/AttachHis/4d2467e3-e28a-472b-8492-7fd9e46e63c4.pdf",
+          "fetched_at": "2026-11-14T06:18:38.468925+00:00"
+        },
+        {
+          "id": "e55a1ccbcac895e3c04c68ccf73193d99aa00748258456e08a1eb112b087771c-x57fc941e14-transcript-p14-c0",
+          "symbol": "KPITTECH",
+          "kind": "transcript",
+          "period": "Q2 FY27",
+          "page": 14,
+          "hash": "e55a1ccbcac895e3c04c68ccf73193d99aa00748258456e08a1eb112b087771c",
+          "parser": "pdfium-5.15.2-pages-v2",
+          "url": "https://www.bseindia.com/xml-data/corpfiling/AttachHis/a7331811-fe14-4c79-896d-f0a9df901335.pdf",
+          "fetched_at": "2026-11-14T06:18:41.370486+00:00"
+        },
+        {
+          "id": "e55a1ccbcac895e3c04c68ccf73193d99aa00748258456e08a1eb112b087771c-x57fc941e14-transcript-p14-c0",
+          "symbol": "KPITTECH",
+          "kind": "transcript",
+          "period": "Q2 FY27",
+          "page": 14,
+          "hash": "e55a1ccbcac895e3c04c68ccf73193d99aa00748258456e08a1eb112b087771c",
+          "parser": "pdfium-5.15.2-pages-v2",
+          "url": "https://www.bseindia.com/xml-data/corpfiling/AttachHis/a7331811-fe14-4c79-896d-f0a9df901335.pdf",
+          "fetched_at": "2026-11-14T06:18:41.370486+00:00"
+        },
+        {
+          "id": "e55a1ccbcac895e3c04c68ccf73193d99aa00748258456e08a1eb112b087771c-x57fc941e14-transcript-p14-c0",
+          "symbol": "KPITTECH",
+          "kind": "transcript",
+          "period": "Q2 FY27",
+          "page": 14,
+          "hash": "e55a1ccbcac895e3c04c68ccf73193d99aa00748258456e08a1eb112b087771c",
+          "parser": "pdfium-5.15.2-pages-v2",
+          "url": "https://www.bseindia.com/xml-data/corpfiling/AttachHis/a7331811-fe14-4c79-896d-f0a9df901335.pdf",
+          "fetched_at": "2026-11-14T06:18:41.370486+00:00"
+        },
+        {
+          "id": "e55a1ccbcac895e3c04c68ccf73193d99aa00748258456e08a1eb112b087771c-x57fc941e14-transcript-p10-c0",
+          "symbol": "KPITTECH",
+          "kind": "transcript",
+          "period": "Q2 FY27",
+          "page": 10,
+          "hash": "e55a1ccbcac895e3c04c68ccf73193d99aa00748258456e08a1eb112b087771c",
+          "parser": "pdfium-5.15.2-pages-v2",
+          "url": "https://www.bseindia.com/xml-data/corpfiling/AttachHis/a7331811-fe14-4c79-896d-f0a9df901335.pdf",
+          "fetched_at": "2026-11-14T06:18:41.370486+00:00"
+        },
+        {
+          "id": "e55a1ccbcac895e3c04c68ccf73193d99aa00748258456e08a1eb112b087771c-x57fc941e14-transcript-p14-c0",
+          "symbol": "KPITTECH",
+          "kind": "transcript",
+          "period": "Q2 FY27",
+          "page": 14,
+          "hash": "e55a1ccbcac895e3c04c68ccf73193d99aa00748258456e08a1eb112b087771c",
+          "parser": "pdfium-5.15.2-pages-v2",
+          "url": "https://www.bseindia.com/xml-data/corpfiling/AttachHis/a7331811-fe14-4c79-896d-f0a9df901335.pdf",
+          "fetched_at": "2026-11-14T06:18:41.370486+00:00"
+        }
+      ],
+      "all_quotes_exact": true
+    },
+    {
+      "case": "S3",
+      "surface": "http://127.0.0.1:8000",
+      "http_status": 202,
+      "wall_seconds": 0.05,
+      "status": "supported",
+      "model_called_on_final_replay": false,
+      "claim_count": 3,
+      "citations": [
+        {
+          "id": "34f6ee4a749b90fd7b0d0772030e252217baa210ece789457e4597909d669429-x57fc941e14-annual-p4-c0",
+          "symbol": "ASTRAL",
+          "kind": "annual",
+          "period": "2025-26",
+          "page": 4,
+          "hash": "34f6ee4a749b90fd7b0d0772030e252217baa210ece789457e4597909d669429",
+          "parser": "pdfium-5.15.2-pages-v2",
+          "url": "https://www.bseindia.com/xml-data/corpfiling/AttachHis/5772a6ee-bd33-47d5-bbd1-85b269bd26c3.pdf",
+          "fetched_at": "2026-11-14T06:19:41.373368+00:00"
+        },
+        {
+          "id": "3c6f9a2462640601cd7d31484881e7df343ae22e1f0578e976cd6c57f6d5902d-x57fc941e14-transcript-p2-c1",
+          "symbol": "ASTRAL",
+          "kind": "transcript",
+          "period": "Q2 FY2027",
+          "page": 2,
+          "hash": "3c6f9a2462640601cd7d31484881e7df343ae22e1f0578e976cd6c57f6d5902d",
+          "parser": "pdfium-5.15.2-pages-v2",
+          "url": "https://www.astralltd.com/wp-content/uploads/2026/11/Equirus-Astral-Nov05-2026-1.pdf",
+          "fetched_at": "2026-11-14T06:19:46.115649+00:00"
+        },
+        {
+          "id": "3c6f9a2462640601cd7d31484881e7df343ae22e1f0578e976cd6c57f6d5902d-x57fc941e14-transcript-p2-c1",
+          "symbol": "ASTRAL",
+          "kind": "transcript",
+          "period": "Q2 FY2027",
+          "page": 2,
+          "hash": "3c6f9a2462640601cd7d31484881e7df343ae22e1f0578e976cd6c57f6d5902d",
+          "parser": "pdfium-5.15.2-pages-v2",
+          "url": "https://www.astralltd.com/wp-content/uploads/2026/11/Equirus-Astral-Nov05-2026-1.pdf",
+          "fetched_at": "2026-11-14T06:19:46.115649+00:00"
+        },
+        {
+          "id": "3c6f9a2462640601cd7d31484881e7df343ae22e1f0578e976cd6c57f6d5902d-x57fc941e14-transcript-p2-c1",
+          "symbol": "ASTRAL",
+          "kind": "transcript",
+          "period": "Q2 FY2027",
+          "page": 2,
+          "hash": "3c6f9a2462640601cd7d31484881e7df343ae22e1f0578e976cd6c57f6d5902d",
+          "parser": "pdfium-5.15.2-pages-v2",
+          "url": "https://www.astralltd.com/wp-content/uploads/2026/11/Equirus-Astral-Nov05-2026-1.pdf",
+          "fetched_at": "2026-11-14T06:19:46.115649+00:00"
+        }
+      ],
+      "all_quotes_exact": true
+    },
+    {
+      "case": "S4",
+      "surface": "http://127.0.0.1:8000",
+      "http_status": 202,
+      "wall_seconds": 0.03,
+      "status": "supported",
+      "model_called_on_final_replay": false,
+      "claim_count": 3,
+      "citations": [
+        {
+          "id": "cb8976c68422277f7f8e83047cdedbe4f5c210f574f886fd8f141316ea82e00f-x57fc941e14-annual-p216-c0",
+          "symbol": "HAVELLS",
+          "kind": "annual",
+          "period": "2025-26",
+          "page": 216,
+          "hash": "cb8976c68422277f7f8e83047cdedbe4f5c210f574f886fd8f141316ea82e00f",
+          "parser": "pdfium-5.15.2-pages-v2",
+          "url": "https://www.bseindia.com/xml-data/corpfiling/AttachHis/91649597-75d8-410c-b359-b79e40e6bd6b.pdf",
+          "fetched_at": "2026-11-14T06:20:40.086253+00:00"
+        },
+        {
+          "id": "cb8976c68422277f7f8e83047cdedbe4f5c210f574f886fd8f141316ea82e00f-x57fc941e14-annual-p216-c0",
+          "symbol": "HAVELLS",
+          "kind": "annual",
+          "period": "2025-26",
+          "page": 216,
+          "hash": "cb8976c68422277f7f8e83047cdedbe4f5c210f574f886fd8f141316ea82e00f",
+          "parser": "pdfium-5.15.2-pages-v2",
+          "url": "https://www.bseindia.com/xml-data/corpfiling/AttachHis/91649597-75d8-410c-b359-b79e40e6bd6b.pdf",
+          "fetched_at": "2026-11-14T06:20:40.086253+00:00"
+        },
+        {
+          "id": "0effb7c786969f224e4025efc8df194ba6d9273f0460f8e374a8fdbf7c8f79d0-x57fc941e14-transcript-p9-c1",
+          "symbol": "HAVELLS",
+          "kind": "transcript",
+          "period": "Q2 FY27",
+          "page": 9,
+          "hash": "0effb7c786969f224e4025efc8df194ba6d9273f0460f8e374a8fdbf7c8f79d0",
+          "parser": "pdfium-5.15.2-pages-v2",
+          "url": "https://www.bseindia.com/xml-data/corpfiling/AttachHis/160d9e40-34d9-4f66-8c1f-e1c50f663569.pdf",
+          "fetched_at": "2026-11-14T06:20:52.236262+00:00"
+        },
+        {
+          "id": "0effb7c786969f224e4025efc8df194ba6d9273f0460f8e374a8fdbf7c8f79d0-x57fc941e14-transcript-p9-c1",
+          "symbol": "HAVELLS",
+          "kind": "transcript",
+          "period": "Q2 FY27",
+          "page": 9,
+          "hash": "0effb7c786969f224e4025efc8df194ba6d9273f0460f8e374a8fdbf7c8f79d0",
+          "parser": "pdfium-5.15.2-pages-v2",
+          "url": "https://www.bseindia.com/xml-data/corpfiling/AttachHis/160d9e40-34d9-4f66-8c1f-e1c50f663569.pdf",
+          "fetched_at": "2026-11-14T06:20:52.236262+00:00"
+        }
+      ],
+      "all_quotes_exact": true
+    },
+    {
+      "case": "S5",
+      "surface": "http://127.0.0.1:8000",
+      "http_status": 202,
+      "wall_seconds": 0.05,
+      "status": "supported",
+      "model_called_on_final_replay": false,
+      "claim_count": 1,
+      "citations": [
+        {
+          "id": "0effb7c786969f224e4025efc8df194ba6d9273f0460f8e374a8fdbf7c8f79d0-x57fc941e14-transcript-p9-c1",
+          "symbol": "HAVELLS",
+          "kind": "transcript",
+          "period": "Q2 FY27",
+          "page": 9,
+          "hash": "0effb7c786969f224e4025efc8df194ba6d9273f0460f8e374a8fdbf7c8f79d0",
+          "parser": "pdfium-5.15.2-pages-v2",
+          "url": "https://www.bseindia.com/xml-data/corpfiling/AttachHis/160d9e40-34d9-4f66-8c1f-e1c50f663569.pdf",
+          "fetched_at": "2026-11-14T06:20:52.236262+00:00"
+        }
+      ],
+      "all_quotes_exact": true
+    },
+    {
+      "case": "S6",
+      "surface": "http://127.0.0.1:8000",
+      "http_status": 202,
+      "wall_seconds": 0.02,
+      "status": "supported",
+      "model_called_on_final_replay": false,
+      "claim_count": 2,
+      "citations": [
+        {
+          "id": "13033ccd2b71c7b60da6b53cdb7c80013366725d8bc36c3a17749503aad8c2fe-x57fc941e14-transcript-p3-c0",
+          "symbol": "TCS",
+          "kind": "transcript",
+          "period": "Q2FY27",
+          "page": 3,
+          "hash": "13033ccd2b71c7b60da6b53cdb7c80013366725d8bc36c3a17749503aad8c2fe",
+          "parser": "pdfium-5.15.2-pages-v2",
+          "url": "https://www.bseindia.com/xml-data/corpfiling/AttachHis/7dc14216-f892-46f1-bf82-5c7b387a83b9.pdf",
+          "fetched_at": "2026-11-14T06:17:59.184400+00:00"
+        },
+        {
+          "id": "13033ccd2b71c7b60da6b53cdb7c80013366725d8bc36c3a17749503aad8c2fe-x57fc941e14-transcript-p3-c0",
+          "symbol": "TCS",
+          "kind": "transcript",
+          "period": "Q2FY27",
+          "page": 3,
+          "hash": "13033ccd2b71c7b60da6b53cdb7c80013366725d8bc36c3a17749503aad8c2fe",
+          "parser": "pdfium-5.15.2-pages-v2",
+          "url": "https://www.bseindia.com/xml-data/corpfiling/AttachHis/7dc14216-f892-46f1-bf82-5c7b387a83b9.pdf",
+          "fetched_at": "2026-11-14T06:17:59.184400+00:00"
+        }
+      ],
+      "all_quotes_exact": true
+    },
+    {
+      "case": "U1",
+      "surface": "http://127.0.0.1:8000",
+      "http_status": 202,
+      "wall_seconds": 0.03,
+      "status": "insufficient_evidence",
+      "model_called_on_final_replay": false,
+      "claim_count": 0,
+      "citations": [],
+      "all_quotes_exact": true
+    },
+    {
+      "case": "U2",
+      "surface": "http://127.0.0.1:8000",
+      "http_status": 202,
+      "wall_seconds": 0.03,
+      "status": "insufficient_evidence",
+      "model_called_on_final_replay": false,
+      "claim_count": 0,
+      "citations": [],
+      "all_quotes_exact": true
+    },
+    {
+      "case": "I2",
+      "surface": "controlled Python fixture",
+      "status": "passed",
+      "model_called_on_final_replay": false
+    }
+  ]
+}

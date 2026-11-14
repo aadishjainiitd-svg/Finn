@@ -13,6 +13,11 @@ FINN application code is original. Runtime dependencies remain under their own l
 | python-dotenv | Local server configuration | BSD-3-Clause |
 | pypdf (development only) | Synthetic PDF test fixtures | BSD-3-Clause |
 | pytest (development only) | Tests | MIT |
+| React / React DOM | Mobile interface | MIT |
+| Radix Dialog | Accessible evidence sheet | MIT |
+| Vite / TypeScript | Build and type checking | MIT / Apache-2.0 |
+| Playwright (development only) | Browser regression tests | Apache-2.0 |
+| Adobe Source Sans 3 | Self-hosted typeface | SIL Open Font License 1.1; notice in frontend/public/fonts |
 
 The pypdfium2 and PDFium notices are retained in `LICENSES/pdfium/`. The installed wheel includes the complete platform-dependent dependency licences under its distribution's `licenses/BUILD_LICENSES` directory. This repository references the wheel; it does not redistribute PDFium binaries.
 

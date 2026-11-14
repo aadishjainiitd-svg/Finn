@@ -95,8 +95,10 @@ def grounded_display(result):
             # A following exclusion/qualification is part of the observation.
             # Keep it verbatim, within the same supplied chunk and speaker turn.
             tail=normal(e['text']).partition(quote)[2]
-            qualifier=re.match(r'\s+((?:This|These|That)\s+(?:excludes?|includes? only|does not|do not|is not|are not)\b[^.!?]*[.!?])',tail,re.I)
-            if qualifier and not SPEAKER.search(qualifier[1]):quote+=' '+qualifier[1]
+            protected=re.sub(r'\b(Mr|Ms|Mrs|Dr|Prof|No)\.',lambda m:m[0][:-1]+'\uE000',tail)
+            protected=re.sub(r'\b([A-Z])\.(?=\s+[A-Z])',lambda m:m[0][:-1]+'\uE000',protected)
+            qualifier=re.match(r'\s+((?:This|These|That)\s+(?:excludes?|includes? only|does not|do not|is not|are not)\b.*?[.!?])(?=\s|$)',protected,re.I)
+            if qualifier and not SPEAKER.search(tail[:qualifier.end()]):quote+=tail[:qualifier.end()]
             # Strip layout headers only; the retained text is still source-exact.
             cleaned=re.sub(r'^.{0,120}?Page \d+ of \d+\s+','',quote)
             cleaned=re.sub(r'^.*?(?:ABOUT THE COMPANY|ABOUT [A-Z]+|Business Overview)\s+','',cleaned)
@@ -226,5 +228,5 @@ async def synthesize(question,evidence,progress,provider='groq'):
             result=resolve_spans(json.loads(raw),selected,allowed)
         except (KeyError,ValueError,IndexError,ValidationError,TypeError):
             raise SourceError('invalid_answer','The model response could not be verified. Read the available excerpts instead.') from None
-        return grounded_display({**result,'provider':provider,'model':GEMINI_MODEL if provider=='gemini' else MODEL,'evidence':selected})
+        return grounded_display({**result,'provider':provider,'model':GEMINI_MODEL if provider=='gemini' else MODEL,'evidence':selected,'question':question})
 

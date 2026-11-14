@@ -18,6 +18,9 @@ filing_inflight={}
 
 def digest(value):return hashlib.sha256(json.dumps(value,sort_keys=True).encode()).hexdigest()
 
+def filing_revision(signature,content_hash=None):
+    return digest([signature,content_hash,'priority-v2'])[:20]
+
 def priority(title,text=None):
     if not text:return {'tier':1,'assessment':'pending','reason':'Attachment not yet assessed; kept visible.'}
     combined=(title+' '+text).lower()
@@ -60,7 +63,10 @@ def make_filing(row,checked):
     eid='filing-'+symbol+'-'+str(row.get('seq_id') or digest(source)[:16])
     signature=digest(source)
     assessed=valid_assessment(eid,signature,source['url'])
-    revision=digest([source,assessed.get('version') if assessed else None,'priority-v2'])[:20]
+    # Assessment freshness controls coverage, not whether the disclosure changed.
+    # Keep the last observed byte hash across TTL expiry and parser-only upgrades.
+    observed=store.cached('latest-document-filing-'+source['url']) or (assessed or {}).get('version')
+    revision=filing_revision(signature,observed.split('-x')[0] if observed else None)
     state=priority(source['title'],assessed.get('text') if assessed else None)
     return {'id':eid,'revision':revision,'symbol':symbol,'name':row.get('sm_name') or symbol,'kind':'filing',
         'title':source_headline(source['title'],assessed.get('text') if assessed else None),'description':source['title']+' · '+source['description'],'published_at':published,'checked_at':checked,

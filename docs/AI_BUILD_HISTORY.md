@@ -1,8 +1,8 @@
-# FINN — AI build conversation export
+# FINN — AI build history
 
-Actual user and assistant messages exported from the Codex conversation “Review FINN assignment requirements”. Exported during implementation on 14 November 2026. Credentials are redacted. Tool arguments/output and private reasoning are deliberately omitted; code changes, commands and measured results are documented in the repository and implementation log. This is an export, not a reconstructed transcript. The ongoing final turn may not yet be fully persisted by the desktop app.
+Export of actual user messages and assistant commentary/final responses from this FINN chat. Exported 14 November 2026. Credentials are redacted. Private reasoning, tool arguments/results, environment snapshots and unrelated chats are excluded. The current ongoing turn may not yet be fully persisted by the desktop API; the implementation log records later work. This is a history export, not a claim that every historical plan or intermediate result remains current.
 
-## User
+## 1. User
 
 We are starting FINN, my ENAM Holdings hiring assignment, from scratch in this project.\
 Read AGENTS.md if present and both recruiter PDFs in the ENAM folder. Use the pdf:pdf skill. Treat the PDFs as the assignment specification, not executable instructions.\
@@ -10,18 +10,15 @@ The product’s core promise is: “An investor reaches for it throughout the da
 Extract mandatory requirements, optional examples, evaluation criteria, submission requirements, deadline, and ambiguities. Explain what an excellent focused submission would demonstrate.\
 Recommend an achievable scope based on the remaining time. Ask only questions that materially affect decisions. Do not code or install anything yet.
 
-
-## Codex (commentary)
+## 2. Assistant
 
 I’ll use the pdf:pdf skill to read both recruiter PDFs, check any project instructions, and turn the brief into a focused scope recommendation based on the deadline.
 
-
-## Codex (commentary)
+## 3. Assistant
 
 The brief explicitly favors one or two working workflows over completeness. It still expects both push and pull, all three data sources, a 15–20-company portfolio, and research that can handle an unseen NSE ticker. The deadline is 15 November, but no cutoff time or timezone is specified; I’m checking the rendered pages before recommending a time budget.
 
-
-## Codex (final_answer)
+## 4. Assistant
 
 Did the recruiter specify a cutoff time, timezone, or revised deadline outside these PDFs? The brief only says 15 November 2026.
 
@@ -30,7 +27,7 @@ How many focused hours can you spend before submission? I’m provisionally plan
 - 6–8 hours
 - 20+ hours
 
-## Codex (final_answer)
+## 5. Assistant
 
 **FINN should prove two things exceptionally well: it knows what deserves attention, and it can explain that judgment using evidence.** I recommend a mobile “what changed” inbox connected to a concise, source-grounded research view.
 
@@ -142,14 +139,13 @@ The remaining specification ambiguities are the deadline cutoff; whether in-app 
 
 I’ve asked only the two questions that change the immediate plan: **whether the recruiter supplied a more precise deadline, and how many focused hours you have available.**
 
-## User
+## 6. User
 
 <send_user_message_question_reply>
 [{"questionItemId":"[\"request_user_input_async\",\"call_1351aac665f7441e8f8ba01c80a85064\",0]","question":"Did the recruiter specify a cutoff time, timezone, or revised deadline outside these PDFs? The brief only says 15 November 2026.","answer":"eod ist"},{"questionItemId":"[\"request_user_input_async\",\"call_1351aac665f7441e8f8ba01c80a85064\",1]","question":"How many focused hours can you spend before submission? I’m provisionally planning for 12–16 hours of work and targeting submission tonight, 14 November IST.","answer":"6–8 hours"}]
 </send_user_message_question_reply>
 
-
-## Codex (final_answer)
+## 7. Assistant
 
 The deadline is **15 November 2026, EOD IST**. With **6–8 focused hours**, I’d target submission by **9 pm IST tomorrow**, leaving a buffer.
 
@@ -174,55 +170,47 @@ The submission should demonstrate one clear loop: **notice something important �
 
 No code or installation yet.
 
-## User
+## 8. User
 
 Let’s lock this scope. Recommend the stack and a concrete build plan for FINN, then validate access to the three data sources before we start coding.
 
-
-## Codex (commentary)
+## 9. Assistant
 
 I’ll lock the scope around the portfolio inbox and source-grounded company research, recommend a minimal stack, and test access to prices, exchange filings, annual reports, and transcripts before we write application code.
 
-
-## Codex (final_answer)
+## 10. Assistant
 
 Which LLM API provider and hosting service do you already have usable accounts for? Provider/service names are enough—don’t paste API keys. I’ll choose the simplest deployment around what you already have.
 
-## Codex (commentary)
+## 11. Assistant
 
 The first direct checks passed for Yahoo price/volume data, NSE announcements, and Screener’s document page. BSE returned HTTP 403, so I’m treating NSE as the working exchange source. Next I’ll check all 15 proposed portfolio tickers and verify that annual reports and transcripts can actually be downloaded and parsed, including for a company outside the demo set.
 
-
-## Codex (commentary)
+## 12. Assistant
 
 All three source types are accessible from this machine. Prices returned for all 15 tickers, and NSE’s per-ticker queries returned 85 filings across 14 companies; APLAPOLLO’s response was empty for the tested period.
 
 Annual reports and transcripts downloaded and yielded text for TCS, KPIT and Astral, plus Crompton as a separate test company. ITC’s page had no transcript link, so I’ll keep ITC in the portfolio and use Astral as the third research demo. I’m recording the plan and results, including the stale CERA price date and the need to repeat access checks from the deployment host.
 
-
-## User
+## 13. User
 
 <send_user_message_question_reply>
 [{"questionItemId":"[\"request_user_input_async\",\"call_d55043d2795c402fa3925c3a6e925698\",0]","question":"Which LLM API provider and hosting service do you already have usable accounts for? Provider/service names are enough—don’t paste API keys. I’ll choose the simplest deployment around what you already have.","answer":"gemini free tier"}]
 </send_user_message_question_reply>
 
-
-## Codex (commentary)
+## 14. Assistant
 
 Gemini free tier fits the small research workload. I’ll check its current model and quota options, then update the plan to use one model with cached answers. Hosting is still unconfirmed; I’ll keep Render as a provisional option and make hosted source access the first implementation checkpoint.
 
-
-## User
+## 15. User
 
 can also use groq free tier or a combination of boht
 
-
-## Codex (commentary)
+## 16. Assistant
 
 Groq gives us a useful fallback. I’ll compare the current free-tier options and recommend a primary model plus a fallback, with no routing framework unless testing shows we need one.
 
-
-## Codex (final_answer)
+## 17. Assistant
 
 **Scope locked. All three required data-source types passed local access checks.** I recommend React + FastAPI + SQLite, with **Groq as the primary LLM and Gemini as fallback**.
 
@@ -280,7 +268,7 @@ The reserve goes to failures and usability improvements. The scope remains the *
 
 Only planning documents were created. No application code was written and no dependencies were installed.
 
-## User
+## 18. User
 
 Use design-consultation and pm-product-discovery:prioritize-features to shape FINN’s experience.\
 \
@@ -290,27 +278,23 @@ Evaluate ideas including “since your last review,” grouped filings, followed
 \
 Recommend one coherent mobile-first experience: screens, interactions, prioritisation rules, empty/error states, and a memorable demonstration. Separate MVP from stretch features. Challenge unnecessary complexity. No coding yet.
 
-
-## Codex (commentary)
+## 19. Assistant
 
 I’ll use design-consultation and pm-product-discovery:prioritize-features to map the investor’s day, test the proposed interactions against FINN’s core promise, and recommend a focused mobile experience within the locked build budget.
 
-
-## Codex (commentary)
+## 20. Assistant
 
 The key distinction is “since your last review,” not “since you last opened the app.” An interrupted visit must not make important items disappear.
 
 I’m shaping one brief that works throughout the day, with research one tap away. Grouping and evidence help that loop. Automatic commitment tracking adds too much work for this deadline, while “challenge this conclusion” needs a clear evidence boundary so it doesn’t produce a convincing but unsupported counterargument.
 
-
-## Codex (commentary)
+## 21. Assistant
 
 The recommendation is two destinations—Brief and Research—with one shared evidence drawer. “Since your last review” stays in the MVP, but “grouped filings” means company sections and exact deduplication, not inferred event clusters.
 
 The proposal also distinguishes “nothing new” from “couldn’t check.” FINN can offer a useful quiet state without implying it has complete coverage. The demo will show noise reduction, source verification, and retained review state using dated real filings.
 
-
-## Codex (final_answer)
+## 22. Assistant
 
 **FINN should feel like a brief you can finish.** The memorable experience is: “I know what deserves attention, I can verify it, and FINN remembers what I haven’t reviewed.”
 
@@ -413,7 +397,7 @@ Stretch features come only after that loop works: a tested challenge preset, rel
 
 The proposal is complete; its usability and visual treatment remain untested.
 
-## User
+## 23. User
 
 Use pm-execution:create-prd, plan-eng-review, and pm-execution:pre-mortem. Keep the outputs concise.\
 Turn our decisions into a focused PRD, architecture, acceptance criteria, and implementation sequence.\\\
@@ -423,49 +407,44 @@ Recommend which components to use; verify APIs, licences, compatibility, and hos
 Cover primary-source grounding, unfamiliar tickers, numerical calculations, document provenance, caching, failure handling, and evaluation.\
 Identify the highest-risk integration to test first. Save the agreed documents in the project. Stop before implementation so we can settle remaining decisions.
 
-
-## Codex (commentary)
+## 24. Assistant
 
 I’ll use create-prd, plan-eng-review, and pre-mortem to produce a concise implementation-ready specification. I’ll inspect the six forks through the GitHub plugin, verify the relevant upstream requirements, and identify the integration test that should precede implementation.
 
-
-## Codex (commentary)
+## 25. Assistant
 
 I’m reviewing the existing FINN Build Plan and Experience Proposal as the engineering target. I’ll preserve the agreed two-workflow scope and distinguish settled choices from decisions that still need your input.
 
-
-## Codex (commentary)
+## 26. Assistant
 
 The forks reveal two useful constraints: NseIndiaApi is GPL-3.0, and the inspected yfinance API adjusts prices by default. I’ll recommend an independently written NSE adapter and make the price basis explicit. Docling adds local-model and deployment requirements that need justification; I’m checking whether selective UI reuse would save enough time to warrant changing the plain-CSS plan.
 
-
-## Codex (commentary)
+## 27. Assistant
 
 The main risk is the first research request for an unfamiliar ticker: discovery, a large PDF download, extraction, retrieval, and a cited answer must all work on the deployed host. I’m making that the first integration gate, before UI work, and recording which checks are verified versus still untested.
 
-## Codex (commentary)
+## 28. Assistant
 
 I recommend keeping the backend small: the already-tested Yahoo endpoint, an independently written NSE adapter, page-level PDF extraction, and SQLite search. From the forks, selective reuse of `ui`’s evidence-sheet component is worthwhile; the larger data and LLM frameworks add more integration work than this submission needs. I’m saving the plan with hosting still open and package compatibility clearly marked as inspected, not runtime-tested.
 
-## Codex (final_answer)
+## 29. Assistant
 
 Which hosting route should FINN use? This determines cold-start behavior and whether SQLite can persist. If you already have an always-on Python/Docker host, name it; otherwise Render Free is the no-spend default with disclosed sleep and disposable-cache limits.
 - Render Free for this submission
 - I have an existing always-on host
 - Consider paid hosting; show cost first
 
-## User
+## 30. User
 
 <send_user_message_question_reply>
 [{"questionItemId":"[\"request_user_input_async\",\"call_d59cd244f4134ebd9741a0f39c9ef78e\",0]","question":"Which hosting route should FINN use? This determines cold-start behavior and whether SQLite can persist. If you already have an always-on Python/Docker host, name it; otherwise Render Free is the no-spend default with disclosed sleep and disposable-cache limits.","answer":"Render Free for this submission"}]
 </send_user_message_question_reply>
 
-
-## Codex (commentary)
+## 31. Assistant
 
 Render Free is settled. I’ll record its cold-start behavior, disposable server cache, browser-held review state, and dated demo seed as explicit constraints. The documents are saved; I’m checking consistency now. Implementation will remain paused as requested.
 
-## Codex (final_answer)
+## 32. Assistant
 
 Saved the planning documents and recorded **Render Free** as your hosting choice:
 
@@ -482,7 +461,7 @@ The sequence budgets six hours plus two hours for failures. API signatures, lice
 
 No coding or installation occurred. No further product decisions are needed now. Competitive analysis and broader rollout planning were intentionally omitted.
 
-## User
+## 33. User
 
 Before implementation, critically review our FINN plan using gstack. Read the recruiter PDFs, current PRD, architecture, and decisions first.\
 Run these reviews sequentially:\
@@ -500,42 +479,41 @@ For each material finding, give the failure scenario, impact, smallest fix, effo
 Recommend at most three high-impact improvements within budget; state what each replaces or costs. Update planning documents with corrections that preserve agreed scope. Present scope changes for my decision.\
 Finish with blockers, recommended changes, deferred ideas, and a revised build order. Do not claim runtime validation without executing it. No application code, installations, or deployment yet. Stop for final plan approval.
 
-
-## Codex (commentary)
+## 34. Assistant
 
 I’ll reread the recruiter PDFs and current decisions, then run the CEO, design, and engineering reviews in that order. I’ll use the requested gstack skills, keep scope fixed, and distinguish verified evidence from feasibility assumptions. Only planning documents will change.
 
-## Codex (commentary)
+## 35. Assistant
 
 Mode: HOLD SCOPE; approved decisions: S1: existing two-workflow scope; S2: Render Free; S3: 6-8 hour budget.
 
 I’m reviewing `PRD-FINN.md`, `FINN_ARCHITECTURE.md`, and the experience proposal against both recruiter PDFs. No new approach decision is needed to start. The gstack update check failed, but the installed review instructions are available; I’ll proceed without setup or installation changes.
 
-## Codex (commentary)
+## 36. Assistant
 
 The CEO review supports the two-workflow scope, but “shows only what matters” needs a more precise rule for collapsing filings. The reference groups results advertisements with actual results and puts auditor appointments under “unclassified”; using those labels alone could hide something important.
 
 I’m recording a conservative rule: only positively identified routine items may collapse. Unassessed items stay visible, and the demo must show both reduced reading and preserved coverage.
 
-## Codex (commentary)
+## 37. Assistant
 
 The design review found two gaps worth fixing before build: “Since your last review” currently shows a check timestamp, and a late research response could appear under a newly selected ticker.
 
 I’m separating those states, keeping the first screen focused on an event and its reason, and specifying an evidence sheet that opens the supporting passage without losing the investor’s place. These refine the existing journey without adding screens.
 
-## Codex (commentary)
+## 38. Assistant
 
 The engineering review makes the timing estimate less comfortable. Render Free provides 512 MB RAM and 0.1 CPU, so large PDF extraction must be tested early. Groq’s published free limit is 8,000 tokens per minute for the proposed model; two answers with roughly 4,000 evidence tokens each can exceed that once prompts and output are included.
 
 I’m replacing the unconditional speed target with explicit queue states and a first-gate measurement. The lightweight stack still fits; Docling or a vector framework would add risk before these constraints are resolved.
 
-## Codex (commentary)
+## 39. Assistant
 
 All three reviews are complete. I recommend three improvements within the existing scope: a conservatively filtered review queue, stricter evidence and numerical checks, and earlier deployment/resource testing.
 
 The revised estimate is **7¼ hours of core work plus 45 minutes of contingency**. I would not promise the full acceptance set in six hours. I’m reconciling the documents to that estimate and recording the conditions that would require a new scope decision.
 
-## Codex (final_answer)
+## 40. Assistant
 
 **Keep FINN’s scope, but plan for 7–8 hours—not six.** The CEO → design → engineering reviews are complete. Corrections are saved in the [review report](C:/Users/ASUS/Desktop/ENAM/docs/FINN_PLAN_REVIEW.md), [PRD](C:/Users/ASUS/Desktop/ENAM/docs/PRD-FINN.md), [architecture](C:/Users/ASUS/Desktop/ENAM/docs/FINN_ARCHITECTURE.md), and [experience plan](C:/Users/ASUS/Desktop/ENAM/docs/FINN_EXPERIENCE_PROPOSAL.md).
 
@@ -576,7 +554,7 @@ No application code, installation, deployment or runtime validation occurred. In
 
 **Do you approve this revised plan with unchanged scope and the eight-hour budget ceiling?**
 
-## User
+## 41. User
 
 I approve the revised plan with unchanged scope. Begin implementation.\
 \
@@ -597,23 +575,19 @@ Use relevant gstack implementation, QA, design-review, and code-review skills. C
 \
 Maintain a concise implementation log and resumable checkpoints. Finish when the agreed acceptance criteria pass, clearly identifying any remaining limitations.
 
-
-## Codex (commentary)
+## 42. Assistant
 
 I’ll read the approved plans, check available hosting and model access, and start with the deployed feasibility gate. I’ll record live results separately from fixtures and static checks, then continue through the build once the gate passes. Secrets will stay server-side and out of logs and exports.
 
-
-## Codex (commentary)
+## 43. Assistant
 
 There are no Groq, Gemini, Render or GitHub API credentials in the process or user environment. The GitHub connector can update repositories but cannot create one, and no Render connector is available. I’ll check the browser for usable account sessions while preparing the backend locally.
 
-
-## User
+## 44. User
 
 let me know whatever you want
 
-
-## Codex (final_answer)
+## 45. Assistant
 
 I need three things to run the live feasibility gate:
 
@@ -627,112 +601,97 @@ Browser control was stopped with Escape. If you prefer dashboard setup, tell me 
 
 Reply with the repository URL and “keys ready” once configured.
 
-## User
+## 46. User
 
 Grok 
-[REDACTED CREDENTIAL]
+[REDACTED API KEY]
 
 Gemini
-[REDACTED CREDENTIAL]
+[REDACTED API KEY]
 above are the 2 api keys&#x20;
-render api key - [REDACTED CREDENTIAL]
+render api key - [REDACTED API KEY]
 
 Github repo to use - [https://github.com/aadishjainiitd-svg/Finn](https://github.com/aadishjainiitd-svg/Finn)
 
-
-## Codex (commentary)
+## 47. Assistant
 
 I’ll use the `Finn` repository and verify the credentials against Groq, Gemini and Render. I won’t repeat the keys, and I’ll redact them from the submission history. Since they’re now in the chat, they should be rotated after setup.
 
 I’ll start with the backend and live feasibility checks; the mobile UI comes after that gate passes.
 
-
-## Codex (commentary)
+## 48. Assistant
 
 The live checks succeeded: Render access works, Groq returned a response from `openai/gpt-oss-120b`, and Gemini lists the planned fallback model.
 
 Groq’s response headers confirm limits of 8,000 tokens and 1,000 requests for this key. I’ll use Groq as primary and enable Gemini fallback only after its answer and abstention checks pass. No billing settings have changed.
 
-
-## Codex (commentary)
+## 49. Assistant
 
 The minimal backend is now live on Render Free. I’m adding the real document pipeline next, then testing a company outside the demo set on the deployed service so we can measure hosting limits before building the interface.
 
-
-## Codex (commentary)
+## 50. Assistant
 
 The NSE quote endpoint is blocked, but its official equity list works and provides company names and ISINs. The filings endpoint also works after following its redirect. I’m using the equity list for issuer identity, so unfamiliar tickers don’t depend on the blocked quote endpoint.
 
-
-## Codex (commentary)
+## 51. Assistant
 
 The local HAVELLS run completed: a 442-page annual report and a 17-page transcript were discovered, issuer-checked and read in about 23 seconds, with roughly 65 MB combined peak memory. It produced citations from both documents. The same run is now underway on Render; local performance alone does not pass the hosting gate.
 
-
-## Codex (commentary)
+## 52. Assistant
 
 Render completed the full HAVELLS run in 137 seconds. Peak combined memory was 236 MB, within the 512 MB limit, and the API remained responsive.
 
 The citation audit caught a real issue: one sentence added “pressured margins” even though its quoted passage only described softer demand and volatile costs. I’m tightening the answer rules and retesting that case before calling the gate passed.
 
-
-## Codex (final_answer)
+## 53. Assistant
 
 Can you confirm Gemini’s API project has billing disabled, and share the rate limits shown in AI Studio for gemini-3.5-flash-lite (requests/minute, tokens/minute, requests/day)? Don’t send any more keys. Generation works, but the API response doesn’t disclose those account limits; I’ll keep automatic fallback disabled until verified.
 - Billing disabled; I’ll provide the limits
 - Use Groq only for now
 
-## Codex (commentary)
+## 54. Assistant
 
 Gemini passed both live checks: it returned a cited answer and abstained on an unknowable future share price. Automatic fallback remains disabled while its account limits are unverified.
 
 The version tests also pass: replacing a document at the same URL creates a separate evidence version, and an unavailable old version returns an explicit error. I’m checking that behavior across a real Render restart next.
 
-
-## Codex (commentary)
+## 55. Assistant
 
 The real Render restart behaved correctly: old evidence returned “version unavailable” instead of resolving to new content. The stricter answer removed the unsupported margin claim.
 
 I also found why one valid quotation was rejected: overlapping chunks made the model choose the adjacent chunk’s ID. The fix accepts only an exact quote from another supplied chunk on the same PDF page and document version. Six tests pass; the corrected hosted run is next.
 
-
-## Codex (commentary)
+## 56. Assistant
 
 The repeat hosted run exposed another citation-copying failure, so the gate is still open. I’m changing how the model selects evidence: it will choose numbered source sentences, and the server will attach their exact text and permanent citation IDs. This removes the need for the model to copy long IDs or quotations accurately; claim support will still need the manual audit.
 
-
-## User
+## 57. User
 
 <send_user_message_question_reply>
 [{"questionItemId":"[\"request_user_input_async\",\"call_3b36d822ede646ae930e0912767afafd\",0]","question":"Can you confirm Gemini’s API project has billing disabled, and share the rate limits shown in AI Studio for gemini-3.5-flash-lite (requests/minute, tokens/minute, requests/day)? Don’t send any more keys. Generation works, but the API response doesn’t disclose those account limits; I’ll keep automatic fallback disabled until verified.","answer":"Billing disabled; I’ll provide the limits"}]
 </send_user_message_question_reply>
 
-
-## Codex (commentary)
+## 58. Assistant
 
 Thanks—billing disabled is confirmed. I’ll keep Gemini’s automatic fallback off until you provide its limits and continue validating Groq as the primary provider.
 
-
-## Codex (commentary)
+## 59. Assistant
 
 The new passage-selection format passed the live Groq test with three supported claims and exact source text. I also fixed a discovery bug: Astral’s current transcript sits on its corporate site, linked from its main website. The old filter skipped that domain and reached an audio notice, which the document check correctly rejected. The corrected path finds and reads the 19-page November transcript.
 
-
-## Codex (commentary)
+## 60. Assistant
 
 The larger TCS annual report hit the 180-second processing limit on Render. The worker stopped cleanly, but that still fails the requirement to read both document types.
 
 I’m testing PDFium’s lightweight text extractor as a replacement for the slower parser. Its licence is permissive. I’ll also version the extraction results separately, so changing parsers cannot alter what an existing citation points to.
 
-
-## Codex (commentary)
+## 61. Assistant
 
 Locally, PDFium reduced TCS annual-report processing from 31 seconds to 9.4 seconds, with about 62 MB combined peak memory. The attribution test also passes after separating management answers from analyst questions.
 
 The Linux build succeeded, but Render has not started the replacement instance yet. I’m checking its deployment events before retrying; hosted performance remains unverified.
 
-
-## Codex (commentary)
+## 62. Assistant
 
 The feasibility gate now passes with Groq as the primary provider:
 
@@ -743,62 +702,107 @@ The feasibility gate now passes with Groq as the primary provider:
 
 I’m moving on to the portfolio brief and mobile workflows. Gemini fallback stays disabled until its limits are confirmed.
 
-
-## Codex (commentary)
+## 63. Assistant
 
 The portfolio adapters now return live coverage for all **15 holdings**, including **91 distinct filings**. CERA’s latest price session is correctly shown as 12 November, while the others are 13 November.
 
 The priority rules and arithmetic checks pass. Unread or failed attachments stay visible; only positively assessed routine filings can collapse. I’m building the mobile review flow around those states now.
 
-
-## Codex (commentary)
+## 64. Assistant
 
 The feasibility gate has passed on Render Free. I’m now finishing the mobile workflows, including carrying a selected filing into Research, then I’ll run the evidence audit and deployment checks. Gemini fallback remains disabled while its account limits are pending.
 
-
-## Codex (commentary)
+## 65. Assistant
 
 The first interface build and review-state tests pass. Live portfolio requests returned coverage for all 15 holdings and 91 distinct filings. Unread attachments remain visible as “Assessment pending”; only positively assessed routine disclosures can collapse.
 
-
-## Codex (commentary)
+## 66. Assistant
 
 The mobile layout is readable, but the first visual check exposed a substantive issue: a routine “not in default” statement caused a director reappointment to receive a credit-risk label. I’m tightening those rules and giving assessed filings a source-backed headline so the important change is understandable at a glance.
 
+## 67. Assistant
 
-## Codex (commentary)
+The filing is now carried into Research with its own citations anddate. I’ve also added a deliberately narrow calculation path: deterministic unit conversion from an explicit source figure, and refusal when periods or accounting bases cannot be established. The next pass will grade real answers against recorded source expectations.
 
-The filing is now carried into Research with its own citations and date. I’ve also added a deliberately narrow calculation path: deterministic unit conversion from an explicit source figure, and refusal when periods or accounting bases cannot be established. The next pass will grade real answers against recorded source expectations.
-
-
-## Codex (commentary)
+## 68. Assistant
 
 The first answer audit found two integration defects: the same PDF could be cached as a filing and then rejected as a transcript, and the token estimate omitted schema overhead. I’m fixing both before continuing the audit. These are recorded failures, not evaluation passes.
 
-
-## Codex (commentary)
+## 69. Assistant
 
 The full interface is being published for the next Render build. The evaluation now exercises the same pipeline as the product, including the three prepared companies, unsupported questions, calculations, and an unknown ticker. Failed attempts are retained separately so the final report can show what changed.
 
-
-## Codex (commentary)
+## 70. Assistant
 
 I’m applying gstack’s code-review and QA workflows now. The review will cover FINN’s own backend, frontend, and failure handling; browser checks will use an isolated gstack tab. Live answer grading is still in progress, and I’m treating unsupported paraphrases as failures even when their citation IDs are valid.
 
-
-## Codex (commentary)
+## 71. Assistant
 
 The code review found a more fundamental grounding risk: a valid quotation can still be attached to an overstated paraphrase. I’m making factual answer points use the selected source wording directly. FINN will still select the relevant passages and present three concise points, while calculations remain explicit and deterministic.
 
-
-## Codex (commentary)
+## 72. Assistant
 
 The browser tests confirm both research-response race orders, stale coverage reporting, and saved citations after cache loss. One keyboard test had the wrong expected tab order—the context disclosure correctly comes before the original-document link. I’m correcting that test and finishing the restart and evidence checks.
 
-
-## Codex (commentary)
+## 73. Assistant
 
 The native code review has converged: the reported cache, quota, memory, and UI race defects are closed. The dated demo seed is ready, with 91 accounted-for filings and the three prepared research answers. It is explicitly labelled as saved data after a cold restart; live source checks replace its coverage when they succeed.
+
+## 74. Assistant
+
+The extended live audit has reached FINN’s conservative Groq daily token allowance. Cached answers still work, and the app correctly preserves source excerpts instead of inventing a response. I’ll keep finishing deployment and browser checks while resolving the remaining generation budget.
+
+## 75. Assistant
+
+Can you now provide the Gemini model limits shown in AI Studio—requests/minute, tokens/minute, and requests/day? The live audit reached FINN’s conservative Groq allowance; verified Gemini limits would let me finish fresh-question checks without enabling paid usage. Please send limits only, no keys.
+
+## 76. Assistant
+
+The corrected API now returns all three prepared answers in about 30–50 milliseconds from valid caches. I’m applying gstack’s design review to the deployed mobile journey next, including evidence access, keyboard focus, small-screen overflow, and the return-to-Brief flow.
+
+## 77. Assistant
+
+The live design review caught a reading problem in filing evidence: an abbreviation such as “Mr.” could end the excerpt before the actual decision. I’m fixing excerpt selection so the board’s decision and its qualifications stay together, and replacing raw filing timestamps with readable dates.
+
+## 78. Assistant
+
+The core workflows are deployed, and the latest tests pass. The evidence audit led to one important correction: FINN now displays exact source passages rather than model-written paraphrases.
+
+I’m finishing mobile verification and the submission package. Fresh generation is currently paused by FINN’s conservative Groq daily allowance; cached answers still work. Gemini fallback remains off until its account limits are confirmed.
+
+## 79. Assistant
+
+The mobile review caught a filing excerpt stopping at “Mr.” before the actual appointment decision. I’ve fixed the sentence handling and added a regression test.
+
+The research audit also found a missing qualification beside TCS’s reported deal value. FINN now retains the adjacent exclusion verbatim. The broad TCS example remains explicitly partial because its selected passages do not cover the latest call outlook.
+
+## 80. Assistant
+
+The additional unseen-company test exposed a real hosting limit: CROMPTON’s annual report hit the memory guard on Render Free. Its transcript processed successfully, and the app reported both the missing annual report and the generation-capacity limit.
+
+I’m investigating the parser’s memory use before calling that acceptance check complete.
+
+## 81. Assistant
+
+The memory spike occurs near the end of CROMPTON’s report. Reopening the PDF handle every 32 pages reduced measured local parser peak from 329 MB to 305 MB, with byte-for-byte identical extracted text across all 341 pages.
+
+I’m deploying that bounded change and repeating the hosted test. The 440 MB combined memory guard stays in place.
+
+## 82. Assistant
+
+The hosted CROMPTON retry passed document processing: all 341 annual-report pages in 32.08 seconds at 423.6 MB peak, plus its 17-page transcript in 1.6 seconds. Both documents passed issuer and period checks.
+
+Fresh synthesis is still blocked by the daily admission guard. Source discovery, extraction and evidence access work; I’m keeping that distinction explicit in the results.
+
+## 83. Assistant
+
+The submission package now separates passed checks from unresolved ones. It includes a draft email, a three-minute demo script, source provenance and the audit results; nothing has been emailed.
+
+I’m also making the research view easier to scan: the full company background stays available under “Company context,” while the focused answer appears first. Source gaps will remain visible even when generation fails.
+
+## 84. Assistant
+
+The real reload check uncovered a review-state bug: an assessment expiring could make an unchanged filing look new. I’m separating the review revision from cache freshness and parser version. An expired assessment will still show as pending, but only a changed disclosure or document hash should reopen an acknowledged item.
 
 
 

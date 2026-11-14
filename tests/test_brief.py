@@ -64,3 +64,18 @@ def test_issuer_subject_is_used_without_inventing_a_resignation():
     from backend.brief import source_headline
     text='Sub: Re-appointment of Mr. V. Srinivasa Rangan as Executive Director Ref: Regulation 30'
     assert source_headline('Change in Director(s)',text)=='Re-appointment of Mr. V. Srinivasa Rangan as Executive Director'
+
+def test_review_revision_survives_assessment_expiry_and_parser_upgrade(monkeypatch):
+    from backend import store,brief
+    row={'symbol':'TEST','seq_id':'123','desc':'Board change','attchmntText':'Appointment','attchmntFile':'https://example.com/filing.pdf','an_dt':'13-Nov-2026 10:00:00'}
+    event=brief.make_filing(row,'now');key='latest-document-filing-'+row['attchmntFile']
+    store.put(key,'bytes-xparser1-filing')
+    store.put('assessed-'+event['id'],{'version':'bytes-xparser1-filing','source_signature':event['source_signature'],'text':'The board approved re-appointment of the director.','evidence':[]})
+    assessed=brief.make_filing(row,'now')
+    with store.db() as c:c.execute('UPDATE cache SET fetched=fetched-601 WHERE key=?',('assessed-'+event['id'],))
+    expired=brief.make_filing(row,'later')
+    assert expired['assessment']=='pending' and expired['revision']==assessed['revision']
+    store.put(key,'bytes-xparser2-filing')
+    assert brief.make_filing(row,'later')['revision']==assessed['revision']
+    store.put(key,'replacement-xparser2-filing')
+    assert brief.make_filing(row,'later')['revision']!=assessed['revision']

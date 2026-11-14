@@ -108,6 +108,8 @@ def test_display_retains_adjacent_exclusion_and_marks_missing_call_partial():
     assert grounded_display(rendered)==rendered
     e['kind']='annual'
     assert grounded_display(result)['status']=='partial'
+    e['kind']='transcript';e['text']=quote+' This excludes INR 1.5 billion from discontinued operations. Another statement.'
+    assert grounded_display(result)['claims'][0]['citations'][0]['quote']==quote+' This excludes INR 1.5 billion from discontinued operations.'
 
 def test_answer_cache_hit_and_source_version_invalidation():
     from backend.research import question_key,recent_answer

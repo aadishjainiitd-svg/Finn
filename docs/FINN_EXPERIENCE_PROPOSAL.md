@@ -1,6 +1,7 @@
 # FINN experience proposal
 
-> Implementation status, 14 November 2026: user approved this reviewed scope. The hosted feasibility gate passed; implementation and acceptance testing are underway. Historical planning-only statements below describe the review date, not current authorisation. Current evidence: [implementation log](IMPLEMENTATION_LOG.md) and [feasibility results](FEASIBILITY_RESULTS.md). Runtime extractor is PDFium 5.15.2 after a measured pypdf timeout; Groq is primary and Gemini fallback remains disabled pending account quotas.
+> Current implementation status (14 November 2026): approved scope is implemented and deployed. Hosted source/document processing passes, including post-build CROMPTON after a bounded PDFium cache fix. Final release acceptance is still open for free model capacity and the broad TCS question. See [current audit](EVIDENCE_AUDIT.md), [QA results](QA_REVIEW.md) and [checkpoint](RESUME.md). Historical planning-only statements below are retained as the decision record, not current authorisation. No deferred feature was added.
+
 14 November 2026. Recommendation for the agreed 6-8 hour build; not an approved visual design system or a rendered prototype.
 
 Methods: design-consultation for product context, visual coherence and deliberate differentiation; pm-product-discovery:prioritize-features for impact, effort, risk and strategic alignment. Existing assignment analysis and observed source-access results are the evidence base. No investor interviews, usability tests or competitor UI audit have been performed. No independent design agents were used.
