@@ -14,6 +14,7 @@ from .network import SourceError
 refresh_lock=asyncio.Lock()
 assessment_task=None
 events_by_id={}
+filing_inflight={}
 
 def digest(value):return hashlib.sha256(json.dumps(value,sort_keys=True).encode()).hexdigest()
 
@@ -42,6 +43,13 @@ def source_headline(title,text):
     match=re.search(r'\bSub(?:ject)?\s*:\s*(.{20,350}?)(?=\s+(?:Ref\s*:|In furtherance|Pursuant|Dear|We wish|This is))',text,re.I)
     return match[1].strip() if match and len(match[1])<=240 else title
 
+def valid_assessment(eid,signature,url):
+    assessed=store.cached('assessed-'+eid,600)
+    if assessed and assessed.get('source_signature')!=signature:return None
+    latest=store.cached('latest-document-filing-'+url)
+    if assessed and assessed.get('version') and latest and latest!=assessed['version']:return None
+    return assessed
+
 def make_filing(row,checked):
     symbol=row['symbol'];source={'title':row.get('desc') or 'Unclassified disclosure','description':row.get('attchmntText') or '',
         'url':row.get('attchmntFile') or '', 'published':row.get('an_dt') or row.get('sort_date') or ''}
@@ -50,12 +58,13 @@ def make_filing(row,checked):
         try:published=datetime.fromisoformat(source['published']).replace(tzinfo=IST).isoformat()
         except ValueError:published=None
     eid='filing-'+symbol+'-'+str(row.get('seq_id') or digest(source)[:16])
-    assessed=store.cached('assessed-'+eid)
+    signature=digest(source)
+    assessed=valid_assessment(eid,signature,source['url'])
     revision=digest([source,assessed.get('version') if assessed else None,'priority-v2'])[:20]
     state=priority(source['title'],assessed.get('text') if assessed else None)
     return {'id':eid,'revision':revision,'symbol':symbol,'name':row.get('sm_name') or symbol,'kind':'filing',
         'title':source_headline(source['title'],assessed.get('text') if assessed else None),'description':source['title']+' · '+source['description'],'published_at':published,'checked_at':checked,
-        'url':source['url'],**state,'evidence':assessed.get('evidence',[]) if assessed else [],
+        'url':source['url'],'source_signature':signature,**state,'evidence':assessed.get('evidence',[]) if assessed else [],
         'assessment_error':assessed.get('error') if assessed else None}
 
 async def assess(event):
@@ -67,11 +76,12 @@ async def assess(event):
     version=doc['version']
     with store.db() as c:
         rows=c.execute('SELECT id,page,text FROM chunks WHERE hash=? ORDER BY page,id',(version,)).fetchall()
+    if sum(len(r['text']) for r in rows)>1_000_000:raise SourceError('assessment_limit','Large attachment remains pending; inspect the original document.')
     # The full extracted content informs classification; no title-only suppression.
     text=' '.join(r['text'] for r in rows)
     picks=[r for r in rows if re.search(r'appoint|resign|financial results|default|downgrad|investment|newspaper',r['text'],re.I)] or rows[:1]
     evidence=[{**doc,'id':r['id'],'page':r['page'],'text':r['text']} for r in picks[:3]]
-    store.put('assessed-'+event['id'],{'version':version,'text':text,'evidence':evidence})
+    store.put('assessed-'+event['id'],{'version':version,'text':text,'evidence':evidence,'source_signature':event['source_signature']})
     store.put('brief-snapshot',None)
     return evidence
 
@@ -83,10 +93,10 @@ async def assess_background(events):
             async with research.worker:
                 await assess(event)
         except SourceError as e:
-            store.put('assessed-'+event['id'],{'version':None,'text':None,'evidence':[], 'error':e.message})
+            store.put('assessed-'+event['id'],{'version':None,'text':None,'evidence':[], 'error':e.message,'source_signature':event['source_signature']})
         except Exception as e:
             print('filing_error='+type(e).__name__,flush=True)
-            store.put('assessed-'+event['id'],{'version':None,'text':None,'evidence':[],'error':'Attachment processing was interrupted. Retry explicitly.'})
+            store.put('assessed-'+event['id'],{'version':None,'text':None,'evidence':[],'error':'Attachment processing was interrupted. Retry explicitly.','source_signature':event['source_signature']})
         finally:research.background_active=False
 
 async def get_brief(force=False):
@@ -156,13 +166,18 @@ async def run_filing(job,event):
             job.update(status='complete',stage='Complete',result={'evidence':evidence,'company':{'symbol':event['symbol'],'name':event['name']}})
     except SourceError as e:job.update(status='error',stage='Could not read attachment',error={'code':e.code,'message':e.message})
     except Exception:job.update(status='error',stage='Could not read attachment',error={'code':'processing_error','message':'Attachment processing was interrupted. Retry later.'})
+    finally:filing_inflight.pop(event['id'],None)
 
 def submit_filing(eid):
     import uuid
     event=events_by_id.get(eid)
     if not event:raise SourceError('event_expired','Refresh the brief before opening this filing.')
-    if event['evidence']:return {'id':'cache','status':'complete','result':{'evidence':event['evidence']}}
+    if eid in filing_inflight:return research.jobs[filing_inflight[eid]]
+    cached=valid_assessment(eid,event['source_signature'],event['url'])
+    if cached and cached.get('evidence'):
+        return {'id':'cache','status':'complete','result':{'evidence':cached['evidence']}}
     active=sum(j['status']=='running' for j in research.jobs.values())+int(research.background_active)
     if active>=2:raise SourceError('busy','Document processing is busy. Open the original or retry shortly.')
+    research.prune_jobs()
     job={'id':uuid.uuid4().hex,'symbol':event['symbol'],'status':'running','stage':'Waiting to read attachment','created_at':now()}
-    research.jobs[job['id']]=job;asyncio.create_task(run_filing(job,event));return job
+    research.jobs[job['id']]=job;filing_inflight[eid]=job['id'];asyncio.create_task(run_filing(job,event));return job

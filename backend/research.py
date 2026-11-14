@@ -6,8 +6,8 @@ import uuid
 from . import store
 from .config import MODEL,PARSER
 from .sources import ticker,identity,discover,now
-from .documents import ingest,retrieve
-from .llm import synthesize
+from .documents import ingest,retrieve,latest_key
+from .llm import synthesize,grounded_display
 from .calculations import numerical_answer
 from .network import SourceError
 
@@ -15,21 +15,29 @@ jobs={}
 worker=asyncio.Lock()
 inflight={}
 background_active=False
-VERSION='retrieval-6-prompt-4-schema-4-'+PARSER+'-'+MODEL
+VERSION='retrieval-7-prompt-5-schema-4-'+PARSER+'-'+MODEL
 
 def question_key(symbol,question,filing_id=None):
-    return 'recent-answer-'+hashlib.sha256(json.dumps([symbol,question.strip().lower(),filing_id,VERSION]).encode()).hexdigest()
+    signature=None
+    if filing_id:
+        from .brief import events_by_id
+        signature=events_by_id.get(filing_id,{}).get('source_signature')
+    fields=[symbol,question.strip().lower(),filing_id,VERSION]
+    if filing_id:fields.append(signature)
+    return 'recent-answer-'+hashlib.sha256(json.dumps(fields).encode()).hexdigest()
 
 def recent_answer(symbol,question,filing_id=None):
-    result=store.cached(question_key(symbol,question,filing_id),600)
+    # Report/call answers are dated observations. Reuse for a day, invalidating
+    # immediately when a newer known source version or prompt changes the key.
+    result=store.cached(question_key(symbol,question,filing_id),86400)
     if not result:return None
     with store.db() as c:
         for doc in result['documents']:
             version=doc.get('version',doc['hash'])
             if not result.get('is_demo_seed') and not c.execute('SELECT 1 FROM documents WHERE hash=?',(version,)).fetchone():return None
-            pointer=store.cached('latest-document-'+doc['download_url'])
+            pointer=store.cached(latest_key(doc))
             if pointer and pointer!=version:return None
-    return {**result,'cache_hit':True}
+    return grounded_display({**result,'cache_hit':True})
 
 async def run(job, symbol, question, filing_id=None):
     started=time.monotonic()
@@ -62,7 +70,7 @@ async def run(job, symbol, question, filing_id=None):
             evidence=retrieve(documents,question); job['evidence']=evidence
             key=hashlib.sha256(json.dumps([symbol,question.strip().lower(),[e['id'] for e in evidence],VERSION]).encode()).hexdigest()
             hit=store.cached('answer-'+key)
-            if hit: result={**hit,'cache_hit':True}
+            if hit: result=grounded_display({**hit,'cache_hit':True})
             else:
                 result=numerical_answer(question,evidence)
                 if result is None:result=await synthesize(question,evidence,job)
@@ -80,6 +88,10 @@ async def run(job, symbol, question, filing_id=None):
         job['elapsed_seconds']=round(time.monotonic()-started,2)
         inflight.pop((symbol,question.strip().lower(),filing_id),None)
 
+def prune_jobs():
+    for jid in list(jobs):
+        if len(jobs)>=25 and jobs[jid]['status']!='running':jobs.pop(jid)
+
 def submit(symbol,question,filing_id=None):
     symbol=ticker(symbol); key=(symbol,question.strip().lower(),filing_id)
     recent=recent_answer(symbol,question,filing_id)
@@ -88,8 +100,7 @@ def submit(symbol,question,filing_id=None):
     active=sum(j['status']=='running' for j in jobs.values())+int(background_active)
     if active>=2: raise SourceError('busy','One investigation is running and one is waiting. Please retry shortly.')
     # Bounded metadata in process; large evidence is never retained indefinitely.
-    for jid in list(jobs):
-        if len(jobs)>25 and jobs[jid]['status']!='running': jobs.pop(jid)
+    prune_jobs()
     job={'id':uuid.uuid4().hex,'symbol':symbol,'status':'running','stage':'Waiting to process','created_at':now()}
     jobs[job['id']]=job; inflight[key]=job['id']
     asyncio.create_task(run(job,symbol,question,filing_id))

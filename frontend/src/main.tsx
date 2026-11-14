@@ -40,27 +40,33 @@ function EvidenceView({evidence}:{evidence:Evidence}){
 function App(){
  const [tab,setTab]=useState<'brief'|'research'>('brief');const [brief,setBrief]=useState<Brief|null>(null);const briefRef=useRef<Brief|null>(null);
  const [window,setWindow]=useState('since');const [visible,setVisible]=useState<Event[]>([]);const [loading,setLoading]=useState(true);const [refreshing,setRefreshing]=useState(false);
- const [error,setError]=useState('');const [pending,setPending]=useState<Brief|null>(null);const [sheet,setSheet]=useState<SheetState>(null);
+ const [error,setError]=useState('');const [pending,setPending]=useState<Brief|null>(null);const [sheet,setSheetState]=useState<SheetState>(null);const sheetTrigger=useRef<HTMLElement|null>(null);const openingRequest=useRef(0);
+ function setSheet(value:SheetState){openingRequest.current++;setOpening(null);if(value)sheetTrigger.current=document.activeElement as HTMLElement;setSheetState(value);}
  const [review,setReview]=useState<ReviewState|null>(()=>readStored<ReviewState>('finn.review.v1'));const reviewRef=useRef(review);const windowRef=useRef(window);
  const [storageError,setStorageError]=useState(false);const [researchContext,setResearchContext]=useState<{symbol:string;event?:Event;nonce:number}|null>(null);
  const [opening,setOpening]=useState<string|null>(null);const [openError,setOpenError]=useState('');
  function persist(next:ReviewState){setReview(next);reviewRef.current=next;if(!saveStored('finn.review.v1',next))setStorageError(true);}
  function apply(data:Brief){const state=observe(data.events,reviewRef.current);persist(state);setBrief(data);briefRef.current=data;
    setVisible(data.events.filter(e=>inWindow(e,windowRef.current,state)));setPending(null);setError('');}
- async function refresh(){setRefreshing(true);try{if(pending)apply(pending);else apply(await api<Brief>('/api/brief'));}catch(e){setError((e as Error).message);}finally{setRefreshing(false);setLoading(false);}}
+ async function refresh(){setRefreshing(true);try{apply(await api<Brief>('/api/brief'));}catch(e){setError((e as Error).message);}finally{setRefreshing(false);setLoading(false);}}
+ function background(data:Brief){if(!briefRef.current){apply(data);return;}setPending(data);setError('');
+   const updated={...briefRef.current,coverage:data.coverage,source_status:data.source_status,is_demo_seed:data.is_demo_seed,filing_checked_at:data.filing_checked_at,checked_at:data.checked_at};
+   briefRef.current=updated;setBrief(updated);}
  useEffect(()=>{api<Brief>('/api/brief').then(apply).catch(e=>setError(e.message)).finally(()=>setLoading(false));
-   const timer=setInterval(()=>{if(document.visibilityState==='visible')api<Brief>('/api/brief').then(data=>{if(briefRef.current)setPending(data);else apply(data);}).catch(()=>{});},60000);
+   const timer=setInterval(()=>{if(document.visibilityState==='visible')api<Brief>('/api/brief').then(background).catch(()=>setError('Could not refresh source coverage. The previous check is still shown; retry to establish current coverage.'));},60000);
    return()=>clearInterval(timer);},[]);
  function changeWindow(value:string){setWindow(value);windowRef.current=value;if(brief)setVisible(brief.events.filter(e=>inWindow(e,value,reviewRef.current)));}
- function navigate(to:'brief'|'research'){setTab(to);if(to==='brief'&&brief)setVisible(brief.events.filter(e=>inWindow(e,windowRef.current,reviewRef.current)));document.querySelector('main')?.scrollIntoView({block:'start'});}
- function investigate(event:Event){setResearchContext({symbol:event.symbol,event,nonce:Date.now()});setTab('research');globalThis.scrollTo({top:0,behavior:'auto'});}
+ function navigate(to:'brief'|'research'){openingRequest.current++;setOpening(null);setTab(to);if(to==='brief'&&brief)setVisible(brief.events.filter(e=>inWindow(e,windowRef.current,reviewRef.current)));document.querySelector('main')?.scrollIntoView({block:'start'});}
+ function investigate(event:Event){openingRequest.current++;setOpening(null);setResearchContext({symbol:event.symbol,event,nonce:Date.now()});setTab('research');globalThis.scrollTo({top:0,behavior:'auto'});}
  function toggleReview(event:Event){if(reviewRef.current)persist(isReviewed(reviewRef.current,event)?undo(reviewRef.current,event.id):acknowledge(reviewRef.current,event));}
  async function openEvent(event:Event){
+   const request=++openingRequest.current;
    setOpenError('');if(event.kind==='price'){setSheet({kind:'price',event});return;}
    let evidence=event.evidence;
    if(!evidence.length){setOpening(event.id);try{const first=await api<Job>('/api/filings/'+encodeURIComponent(event.id)+'/assess',{});
-     const result=await followJob(first,()=>{},()=>true);if(result?.status==='error')throw new Error(result.error?.message);evidence=result?.result?.evidence||[];
-   }catch(e){setOpenError((e as Error).message);}finally{setOpening(null);}}
+     const result=await followJob(first,()=>{},()=>openingRequest.current===request);if(result?.status==='error')throw new Error(result.error?.message);evidence=result?.result?.evidence||[];
+   }catch(e){if(openingRequest.current===request)setOpenError((e as Error).message);}finally{if(openingRequest.current===request)setOpening(null);}}
+   if(openingRequest.current!==request)return;
    if(evidence.length){const e=evidence[0];const sentences=e.text.split(/(?<=[.!?])\s+/);const quote=sentences.find(s=>/appoint|resign|approved|financial results|revenue|investment/i.test(s)&&s.length>50)||sentences.find(s=>s.length>60)||e.text;
      setSheet({kind:'evidence',evidence:{...e,quote}});}
  }
@@ -83,7 +89,7 @@ function App(){
   {error&&<ErrorNote>{error} {brief?'Your previous check is still shown.':''} <button className="text-button" onClick={refresh}>Retry</button></ErrorNote>}
   <div className="window-row"><label className="sr-only" htmlFor="window">Review window</label><select id="window" value={window} onChange={e=>changeWindow(e.target.value)}><option value="since">Since review</option><option value="today">Today</option><option value="7">Last 7 days</option><option value="14">Last 14 days</option></select><span>{!loading&&`${unreviewed} to review`}</span></div>
   {loading?<div className="loading-state" role="status"><span className="pulse"/><h2>Checking your companies</h2><p>Fetching exchange filings and completed trading sessions.</p></div>:<>
-   {!visible.length&&<div className="empty-state"><span className="empty-icon"><Icon name="check" size={28}/></span><h2>{brief?.source_status==='unavailable'?'Could not check your portfolio':'A quieter review window'}</h2><p>{brief?.source_status==='unavailable'?'Source checks did not complete. Retry to establish coverage.':`No unreviewed items in this window. ${brief?.counts.pending?`${brief.counts.pending} filings in the wider period still await assessment.`:'This is bounded by the sources and period checked.'}`}</p><button className="button secondary" onClick={()=>changeWindow('14')}>Look back 14 days<Icon name="arrow"/></button></div>}
+   {!visible.length&&<div className="empty-state"><span className="empty-icon"><Icon name="check" size={28}/></span><h2>{(!brief||brief.source_status==='unavailable')?'Could not check your portfolio':'A quieter review window'}</h2><p>{(!brief||brief.source_status==='unavailable')?'Source checks did not complete. Retry to establish coverage.':`No unreviewed items in this window. ${brief?.counts.pending?`${brief.counts.pending} filings in the wider period still await assessment.`:'This is bounded by the sources and period checked.'}`}</p><button className="button secondary" onClick={()=>changeWindow('14')}>Look back 14 days<Icon name="arrow"/></button></div>}
    {groups.map(group=>group.events.length>0&&<section className="event-section" key={group.tier}><div className="section-title"><h2>{group.tier===0?'Review first':group.tier===1?'Also to review':'At the last close'}</h2><span>{group.events.length}</span></div>
      {Array.from(new Set(group.events.map(e=>e.symbol))).map(symbol=><div className="company-group" key={symbol}><div className="company-heading"><span>{symbol}</span><span>{group.events.find(e=>e.symbol===symbol)?.name}</span></div>
        {group.events.filter(e=>e.symbol===symbol).map(event=><EventRow key={event.id+event.revision} event={event} reviewed={isReviewed(review,event)} onReview={()=>toggleReview(event)} onEvidence={()=>openEvent(event)} onResearch={()=>investigate(event)} opening={opening===event.id}/>)}</div>)}
@@ -96,7 +102,7 @@ function App(){
  <Research hidden={tab!=='research'} context={researchContext} onEvidence={e=>setSheet({kind:'evidence',evidence:e})}/>
  </main>
  <nav className="bottom-nav" aria-label="Main navigation"><div><button className={tab==='brief'?'active':''} onClick={()=>navigate('brief')} aria-current={tab==='brief'?'page':undefined}><Icon name="brief"/><span>Brief</span></button><button className={tab==='research'?'active':''} onClick={()=>navigate('research')} aria-current={tab==='research'?'page':undefined}><Icon name="search"/><span>Research</span></button></div></nav>
- <Dialog.Root open={!!sheet} onOpenChange={open=>{if(!open)setSheet(null);}}><Dialog.Portal><Dialog.Overlay className="sheet-overlay"/><Dialog.Content className="sheet" aria-describedby={undefined}><div className="sheet-handle"/><header className="sheet-header"><Dialog.Title>{sheetTitle}</Dialog.Title><Dialog.Close className="icon-button" aria-label="Close evidence"><Icon name="close"/></Dialog.Close></header><div className="sheet-body">
+ <Dialog.Root open={!!sheet} onOpenChange={open=>{if(!open)setSheet(null);}}><Dialog.Portal><Dialog.Overlay className="sheet-overlay"/><Dialog.Content className="sheet" aria-describedby={undefined} onCloseAutoFocus={e=>{e.preventDefault();sheetTrigger.current?.focus();}}><div className="sheet-handle"/><header className="sheet-header"><Dialog.Title>{sheetTitle}</Dialog.Title><Dialog.Close className="icon-button" aria-label="Close evidence"><Icon name="close"/></Dialog.Close></header><div className="sheet-body">
   {sheet?.kind==='evidence'&&<EvidenceView key={sheet.evidence.id+(sheet.evidence.quote||'')} evidence={sheet.evidence}/>}
   {sheet?.kind==='coverage'&&<><p className="muted">Price and filing checks are separate. A successful check does not imply that every attachment has been assessed.</p>{coverage.length?coverage.map(c=><div className="coverage-row" key={c.symbol}><h3>{c.symbol}</h3><div><span className={'coverage-status '+(c.filings.status==='live'?'':'amber')}>Filings · {c.filings.status}</span><small>Checked {clock(c.filings.checked_at)} IST</small></div><div><span className={'coverage-status '+(c.price.status==='live'&&!c.price.older_session?'':'amber')}>Prices · {c.price.status}{c.price.older_session?' · older session':''}</span><small>Session {when(c.price.session)} · {c.price.close!=null?`${c.price.currency||'INR'} ${c.price.close.toLocaleString('en-IN')}`:'price unavailable'}</small></div>{(c.price.error||c.filings.error)&&<p className="fine-print amber">{c.price.error||c.filings.error}</p>}</div>):<p>Source checks are not complete yet.</p>}</>}
   {sheet?.kind==='price'&&<PriceView event={sheet.event}/>}
@@ -117,7 +123,7 @@ function PriceView({event}:{event:Event}){const s=event.signal!;return <><p clas
 
 const EXAMPLES=[{symbol:'TCS',label:'AI demand',question:'What does TCS do, and what does management say about AI demand and deal momentum?'},{symbol:'KPITTECH',label:'Growth visibility',question:'What does KPIT do, and what does management say about demand and growth visibility?'},{symbol:'ASTRAL',label:'Demand & margins',question:'What does Astral do, and what does management say about demand and operating margins?'}];
 function Research({hidden,context,onEvidence}:{hidden:boolean;context:{symbol:string;event?:Event;nonce:number}|null;onEvidence:(e:Evidence)=>void}){
- const saved=useRef(readStored<Answer>('finn.answer.v1'));
+ const saved=useRef(readStored<Answer>('finn.answer.v2'));
  const [symbol,setSymbol]=useState(saved.current?.company.symbol||'');const [question,setQuestion]=useState(saved.current?.question||'What does the company do, and what is management’s stated outlook?');
  const [answer,setAnswer]=useState<Answer|null>(saved.current);const [restored,setRestored]=useState(!!saved.current);const [job,setJob]=useState<Job|null>(null);const [error,setError]=useState('');const [partial,setPartial]=useState<Evidence[]>([]);const [busy,setBusy]=useState(false);const generation=useRef(0);
  function changed(){generation.current++;setAnswer(null);setJob(null);setBusy(false);setError('');setPartial([]);setRestored(false);}
@@ -125,7 +131,7 @@ function Research({hidden,context,onEvidence}:{hidden:boolean;context:{symbol:st
  async function ask(nextSymbol=symbol,nextQuestion=question){const request=++generation.current;setBusy(true);setError('');setAnswer(null);setPartial([]);setRestored(false);
   try{const first=await api<Job>('/api/research',{symbol:nextSymbol,question:nextQuestion,filing_id:nextSymbol===context?.symbol&&context.event?.kind==='filing'?context.event.id:undefined});const result=await followJob(first,setJob,()=>generation.current===request);if(!result)return;
    if(result.status==='error'){setPartial(result.evidence||[]);throw new Error(result.error?.message||'This investigation could not complete.');}
-   const a=result.result!;setAnswer(a);setJob(null);saveStored('finn.answer.v1',a);
+   const a=result.result!;setAnswer(a);setJob(null);saveStored('finn.answer.v2',a);
   }catch(e){if(generation.current===request)setError((e as Error).message);}finally{if(generation.current===request)setBusy(false);}}
  function example(item:typeof EXAMPLES[number]){changed();setSymbol(item.symbol);setQuestion(item.question);ask(item.symbol,item.question);}
  return <div hidden={hidden} className="research-page"><div className="page-heading"><div><p className="eyebrow">FOLLOW THE EVIDENCE</p><h1>Look closer<span className="teal-dot">.</span></h1></div><span className="research-symbol"><Icon name="search" size={27}/></span></div><p className="intro">One company. One question. The source behind it.</p>

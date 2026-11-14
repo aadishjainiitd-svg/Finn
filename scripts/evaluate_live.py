@@ -8,8 +8,13 @@ base=sys.argv[1] if len(sys.argv)>1 else 'http://127.0.0.1:8000'
 only=set(sys.argv[2:])
 out=ROOT/'data/evaluation';out.mkdir(exist_ok=True)
 with httpx.Client(timeout=95) as c:
+    starts=[]
     for case in cases:
         if case['type'].endswith('fixture') or (only and case['id'] not in only):continue
+        starts=[t for t in starts if time.monotonic()-t<61]
+        if len(starts)>=4:
+            print('Waiting for client request capacity',flush=True);time.sleep(max(0,61-(time.monotonic()-starts[0])))
+        starts.append(time.monotonic())
         started=time.monotonic();r=c.post(base+'/api/research',json={'symbol':case['symbol'],'question':case['question']})
         j=r.json();previous=None
         while j.get('status')=='running' and time.monotonic()-started<420:

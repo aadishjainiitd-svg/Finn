@@ -1,5 +1,6 @@
 """Bounded public HTTPS fetching. Source URLs are discovered, never supplied by users."""
 import ipaddress
+import asyncio
 import socket
 from urllib.parse import urlparse, urljoin
 import httpx
@@ -22,14 +23,22 @@ def validate_url(url):
         raise SourceError('dns','Source host could not be resolved.') from None
     if not addresses or any(not ipaddress.ip_address(a[4][0]).is_global for a in addresses):
         raise SourceError('unsafe_url','Source address is not public.')
+    return next((a[4][0] for a in addresses if a[0]==socket.AF_INET),addresses[0][4][0])
 
 async def fetch(url, limit=6_000_000, path=None):
     original = url
-    async with httpx.AsyncClient(headers=HEADERS,timeout=httpx.Timeout(35,connect=12),follow_redirects=False) as c:
+    async with httpx.AsyncClient(headers=HEADERS,timeout=httpx.Timeout(35,connect=12),follow_redirects=False,
+                                trust_env=False,limits=httpx.Limits(max_keepalive_connections=0)) as c:
         for _ in range(5):
-            validate_url(url)
             try:
-                async with c.stream('GET',url) as r:
+                async with asyncio.timeout(12):address=await asyncio.to_thread(validate_url,url)
+            except TimeoutError:raise SourceError('dns_timeout','Source identity lookup timed out.') from None
+            host=urlparse(url).hostname
+            pinned=httpx.URL(url).copy_with(host=address)
+            try:
+                # Connect only to the validated address while verifying the original
+                # TLS hostname. No second hostname resolution or proxy bypass.
+                async with c.stream('GET',pinned,headers={'Host':host},extensions={'sni_hostname':host}) as r:
                     if r.status_code in (301,302,303,307,308):
                         url=urljoin(url,r.headers.get('location','')); continue
                     if r.status_code != 200:

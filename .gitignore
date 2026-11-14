@@ -17,3 +17,7 @@ docs/.review-state/
 /*.pdf
 
 .gstack/
+
+frontend/test-results/
+frontend/playwright-report/
+.gstack/

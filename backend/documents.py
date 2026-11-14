@@ -22,6 +22,8 @@ def speaker_key(name):return re.sub(r'[^a-z]','',name.lower())
 def extraction_version(digest,parser=PARSER,kind='document'):
     return digest+'-x'+hashlib.sha256(parser.encode()).hexdigest()[:10]+'-'+kind
 
+def latest_key(doc):return 'latest-document-'+doc.get('kind','document')+'-'+doc['download_url']
+
 def management_names(opening):
     names=[]
     pattern=r'\b(?:MR|MS|MRS|DR)\.?\s+([A-Za-z.]+(?:\s+[A-Za-z.]+){0,4}?)\s*(?:[–—-]|,)'
@@ -85,7 +87,7 @@ async def ingest(company,doc,progress):
                 saved['period']=validate_identity(company,doc,opening)
                 saved['management_speakers']=management_names(opening) if doc['kind']=='transcript' else []
                 c.execute('UPDATE documents SET meta=? WHERE hash=?',(json.dumps(saved),version))
-            put('latest-document-'+doc['download_url'],version)
+            put(latest_key(doc),version)
             return saved
         meta={**company,**doc,**download,'original_url':doc['original_url'],'hash':digest,'version':version,'fetched_at':now(),'parser':PARSER,'publication_date':None}
         proc=await asyncio.create_subprocess_exec(sys.executable,'-m','backend.extract_worker',str(path),
@@ -105,6 +107,7 @@ async def ingest(company,doc,progress):
             nonlocal count,chars
             while line:=await proc.stdout.readline():
                 row=json.loads(line); count=row['page']; content=normal(row['text']); chars+=len(content)
+                if chars>6_000_000:raise SourceError('text_limit','Document exceeds the six-million-character processing bound.')
                 if count<=12: opening.append(content)
                 # Page-local overlap preserves sentence context and stable PDF page coordinates.
                 with db() as c:
@@ -130,7 +133,7 @@ async def ingest(company,doc,progress):
         meta['management_speakers']=management_names(' '.join(opening)) if doc['kind']=='transcript' else []
         meta.update(pages=count,characters=chars,processing_seconds=round(time.monotonic()-started,2),combined_peak_mb=round(peak/1024**2,1))
         with db() as c: c.execute('INSERT INTO documents VALUES (?,?,?,?)',(version,company['symbol'],doc['kind'],json.dumps(meta)))
-        put('latest-document-'+doc['download_url'],version)
+        put(latest_key(doc),version)
         return meta
     except TimeoutError:
         raise SourceError('processing_timeout','Document exceeded the 180-second processing limit.') from None
@@ -159,18 +162,18 @@ def retrieve(documents,question):
             if doc['kind']=='transcript':
                 all_rows=c.execute('SELECT id,page,text FROM chunks WHERE hash=? ORDER BY page,CAST(substr(id,instr(id,"-c")+2) AS INTEGER)',(version,)).fetchall()
                 previous=''
-                for r in all_rows:
+                for index,r in enumerate(all_rows):
                     matches=list(SPEAKER.finditer(previous))
                     transcript_prefix[r['id']]=matches[-1][1] if matches else ''
                     # Adjacent chunks overlap by 400 characters; scan only their distinct prefix.
-                    previous=(previous+' '+r['text'][:1800])[-15000:]
+                    continues=index+1<len(all_rows) and all_rows[index+1]['page']==r['page']
+                    previous=(previous+' '+(r['text'][:1800] if continues else r['text']))[-15000:]
             rows=c.execute('SELECT id,text FROM search WHERE search MATCH ? AND hash=? ORDER BY bm25(search) LIMIT 4',(query,version)).fetchall()
             if doc['kind']=='annual' and (re.search(r'what does .{1,50} do',question,re.I) or 'business' in words):
                 first=re.findall(r'[a-zA-Z]+',doc.get('name',''))
-                context=[]
-                for context_query in (['"about '+first[0]+'"'] if first else [])+['"about the company"','"business overview"']:
-                    context=c.execute('SELECT id,text FROM search WHERE search MATCH ? AND hash=? ORDER BY bm25(search) LIMIT 1',(context_query,version)).fetchall()
-                    if context:break
+                header=r'ABOUT THE COMPANY|Business Overview|BUSINESS OVERVIEW'+('|ABOUT '+re.escape(first[0].upper()) if first else '')
+                candidates=c.execute('SELECT id,text,page FROM chunks WHERE hash=? ORDER BY page,id',(version,)).fetchall()
+                context=[r for r in candidates if re.search(header,r['text']) and len(r['text'])>500][:1]
                 rows=(context+[r for r in rows if not context or r['id']!=context[0]['id']])[:4]
             if not rows:
                 rows=c.execute('SELECT id,text FROM chunks WHERE hash=? ORDER BY page LIMIT 2',(version,)).fetchall()

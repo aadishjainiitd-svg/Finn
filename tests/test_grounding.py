@@ -102,9 +102,9 @@ def test_answer_cache_hit_and_source_version_invalidation():
     from backend.research import question_key,recent_answer
     doc={'hash':'bytes','version':'bytes-xparser','download_url':'https://example.com/report.pdf'}
     with store.db() as c:c.execute('INSERT INTO documents VALUES (?,?,?,?)',(doc['version'],'TEST','annual',json.dumps(doc)))
-    result={'documents':[doc],'claims':[],'gaps':[]}
+    result={'documents':[doc],'claims':[],'gaps':[],'status':'insufficient_evidence'}
     store.put(question_key('TEST','What are the risks?'),result)
-    store.put('latest-document-'+doc['download_url'],doc['version'])
+    store.put('latest-document-document-'+doc['download_url'],doc['version'])
     assert recent_answer('TEST','What are the risks?')['cache_hit']
-    store.put('latest-document-'+doc['download_url'],'new-bytes-xparser')
+    store.put('latest-document-document-'+doc['download_url'],'new-bytes-xparser')
     assert recent_answer('TEST','What are the risks?') is None
