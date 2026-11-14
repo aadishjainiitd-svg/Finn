@@ -13,7 +13,24 @@ from .network import fetch, SourceError
 from .sources import now
 from .store import db
 
-def normal(text): return ' '.join(text.split())
+def normal(text): return ' '.join(re.sub(r'[\x00-\x08\x0b\x0c\x0e-\x1f]','',text).split())
+
+SPEAKER=re.compile(r'(?<!\w)([A-Z][A-Za-z.]*(?:\s+[A-Z][A-Za-z.]*){0,4}):')
+
+def speaker_key(name):return re.sub(r'[^a-z]','',name.lower())
+
+def extraction_version(digest,parser=PARSER):
+    return digest+'-x'+hashlib.sha256(parser.encode()).hexdigest()[:10]
+
+def management_names(opening):
+    names=[]
+    pattern=r'\b(?:MR|MS|MRS|DR)\.?\s+([A-Za-z.]+(?:\s+[A-Za-z.]+){0,4}?)\s*(?:[–—-]|,)'
+    for m in re.finditer(pattern,opening,re.I):
+        role=opening[m.end():m.end()+100].lower()
+        # Stop at the next named participant, so an analyst cannot inherit a later officer's role.
+        role=re.split(r'\b(?:mr|ms|mrs|dr)\.?\s',role)[0]
+        if re.search(r'chief|director|president|head|\bcfo\b|\bceo\b|\bcoo\b',role):names.append(m[1])
+    return list(dict.fromkeys(names))
 
 def validate_identity(company, doc, opening):
     text=normal(opening).lower()
@@ -33,9 +50,19 @@ def validate_identity(company, doc, opening):
         if year and year[0] not in text:
             raise SourceError('period_mismatch','Transcript date does not match the discovery period.')
     # Preserve the actual source period phrase; do not infer fiscal year from fetch date.
-    patterns=[r'(?:quarter|half.year|year)\s+ended\s+\d{1,2}(?:st|nd|rd|th)?\s+[A-Za-z]+,?\s+20\d{2}',r'(?:Q[1-4]\s*(?:FY)\s*\d{2,4})',r'(?:20\d{2}\s*[-–]\s*(?:20)?\d{2})']
-    periods=[m[0].strip() for p in patterns for m in list(re.finditer(p,normal(opening),re.I))[:3]]
-    return '; '.join(dict.fromkeys(periods))[:180] or doc['discovery_period']+' (source label; period not independently extracted)'
+    if doc['kind']=='annual':
+        end=int(re.search(r'20\d{2}',doc['discovery_period'])[0])
+        match=re.search(str(end-1)+r'\s*[-–]\s*(?:'+str(end)+'|'+str(end)[2:]+r')\b',text)
+        if match:return match[0]
+        match=re.search(r'year\s+ended\s+\d{1,2}(?:st|nd|rd|th)?\s+[a-z]+,?\s+'+str(end),text)
+        if match:return match[0]
+    elif doc['kind']=='transcript':
+        # First call heading, not every comparator quarter mentioned later in Q&A.
+        match=re.search(r'Q[1-4]\s*FY\s*\d{2,4}',normal(opening),re.I)
+        if match:return match[0].upper()
+        match=re.search(r'(?:quarter|half.year)\s+ended\s+\d{1,2}(?:st|nd|rd|th)?\s+[A-Za-z]+,?\s+20\d{2}',normal(opening),re.I)
+        if match:return match[0]
+    return doc['discovery_period']+' (source label; accounting period unverified)'
 
 async def ingest(company,doc,progress):
     started=time.monotonic(); path=DATA/(uuid.uuid4().hex+'.pdf'); proc=None
@@ -45,14 +72,20 @@ async def ingest(company,doc,progress):
         with path.open('rb') as f:
             if f.read(5)!=b'%PDF-': raise SourceError('not_pdf','Source did not return a PDF.')
             f.seek(0); digest=hashlib.file_digest(f,'sha256').hexdigest()
+        version=extraction_version(digest)
         with db() as c:
-            old=c.execute('SELECT meta FROM documents WHERE hash=?',(digest,)).fetchone()
+            old=c.execute('SELECT meta FROM documents WHERE hash=?',(version,)).fetchone()
         if old:
             saved=json.loads(old['meta'])
             if saved['symbol']!=company['symbol'] or saved['kind']!=doc['kind']:
                 raise SourceError('issuer_mismatch','Cached source identity differs from the requested issuer or document type.')
+            with db() as c:
+                opening=' '.join(r['text'] for r in c.execute('SELECT text FROM chunks WHERE hash=? AND page<=12 ORDER BY page,id',(version,)))
+                saved['period']=validate_identity(company,doc,opening)
+                saved['management_speakers']=management_names(opening) if doc['kind']=='transcript' else []
+                c.execute('UPDATE documents SET meta=? WHERE hash=?',(json.dumps(saved),version))
             return saved
-        meta={**company,**doc,**download,'original_url':doc['original_url'],'hash':digest,'fetched_at':now(),'parser':PARSER,'publication_date':None}
+        meta={**company,**doc,**download,'original_url':doc['original_url'],'hash':digest,'version':version,'fetched_at':now(),'parser':PARSER,'publication_date':None}
         proc=await asyncio.create_subprocess_exec(sys.executable,'-m','backend.extract_worker',str(path),
                   stdout=asyncio.subprocess.PIPE,stderr=asyncio.subprocess.DEVNULL,limit=2_000_000)
         peak=0; count=0; chars=0; opening=[]
@@ -76,9 +109,9 @@ async def ingest(company,doc,progress):
                     for index,start in enumerate(range(0,len(content),1800)):
                         text=content[start:start+2200]
                         if len(text)<30: continue
-                        eid=f'{digest}-p{count}-c{index}'
-                        c.execute('INSERT OR REPLACE INTO chunks VALUES (?,?,?,?)',(eid,digest,count,text))
-                        c.execute('INSERT INTO search VALUES (?,?,?)',(eid,digest,text))
+                        eid=f'{version}-p{count}-c{index}'
+                        c.execute('INSERT OR REPLACE INTO chunks VALUES (?,?,?,?)',(eid,version,count,text))
+                        c.execute('INSERT INTO search VALUES (?,?,?)',(eid,version,text))
                 progress.update({'pages':count,'document':doc['title']})
             await proc.wait()
             if proc.returncode: raise SourceError('parse_failed','PDF extraction failed within the processing limits.')
@@ -92,8 +125,9 @@ async def ingest(company,doc,progress):
             await asyncio.gather(*tasks,return_exceptions=True)
         if chars<500: raise SourceError('empty_extraction','PDF has too little readable text. OCR is outside this prototype.')
         meta['period']=validate_identity(company,doc,' '.join(opening))
+        meta['management_speakers']=management_names(' '.join(opening)) if doc['kind']=='transcript' else []
         meta.update(pages=count,characters=chars,processing_seconds=round(time.monotonic()-started,2),combined_peak_mb=round(peak/1024**2,1))
-        with db() as c: c.execute('INSERT INTO documents VALUES (?,?,?,?)',(digest,company['symbol'],doc['kind'],json.dumps(meta)))
+        with db() as c: c.execute('INSERT INTO documents VALUES (?,?,?,?)',(version,company['symbol'],doc['kind'],json.dumps(meta)))
         return meta
     except TimeoutError:
         raise SourceError('processing_timeout','Document exceeded the 180-second processing limit.') from None
@@ -116,13 +150,23 @@ def retrieve(documents,question):
     groups=[]
     with db() as c:
         for doc in documents:
+            version=doc.get('version',doc['hash'])
             results=[]
-            rows=c.execute('SELECT id,text FROM search WHERE search MATCH ? AND hash=? ORDER BY bm25(search) LIMIT 4',(query,doc['hash'])).fetchall()
+            transcript_prefix={}
+            if doc['kind']=='transcript':
+                all_rows=c.execute('SELECT id,page,text FROM chunks WHERE hash=? ORDER BY page,CAST(substr(id,instr(id,"-c")+2) AS INTEGER)',(version,)).fetchall()
+                previous=''
+                for r in all_rows:
+                    matches=list(SPEAKER.finditer(previous))
+                    transcript_prefix[r['id']]=matches[-1][1] if matches else ''
+                    # Adjacent chunks overlap by 400 characters; scan only their distinct prefix.
+                    previous=(previous+' '+r['text'][:1800])[-15000:]
+            rows=c.execute('SELECT id,text FROM search WHERE search MATCH ? AND hash=? ORDER BY bm25(search) LIMIT 4',(query,version)).fetchall()
             if not rows:
-                rows=c.execute('SELECT id,text FROM chunks WHERE hash=? ORDER BY page LIMIT 2',(doc['hash'],)).fetchall()
+                rows=c.execute('SELECT id,text FROM chunks WHERE hash=? ORDER BY page LIMIT 2',(version,)).fetchall()
             for r in rows:
                 row=c.execute('SELECT page FROM chunks WHERE id=?',(r['id'],)).fetchone()
-                results.append({**doc,'id':r['id'],'page':row['page'],'text':r['text']})
+                results.append({**doc,'id':r['id'],'page':row['page'],'text':r['text'],'speaker_before':transcript_prefix.get(r['id'],'')})
             groups.append(results)
     # Interleave sources so a long annual-report passage cannot consume the entire budget.
     return [group[i] for i in range(4) for group in groups if i<len(group)]

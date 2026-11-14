@@ -20,7 +20,7 @@ with httpx.Client(timeout=10) as c:
                 r=c.get(BASE+'/api/evidence/'+eid)
                 if r.status_code in (200,410):
                     result=r.json()
-                    correct=r.status_code==410 or (' '.join(cite['quote'].split()) in ' '.join(result['text'].split()) and result['hash']==eid.split('-p')[0])
+                    correct=r.status_code==410 or (' '.join(cite['quote'].split()) in ' '.join(result['text'].split()) and eid.startswith(result['hash']+'-'))
                     record={'operation':'real Render restart','elapsed_seconds':round(time.monotonic()-start,2),'evidence_status':r.status_code,'correct':correct,'saved_citation':cite,'revision':health.json()['revision']}
                     Path('data/restart-verification.json').write_text(json.dumps(record,indent=2),encoding='utf-8')
                     print(json.dumps(record));raise SystemExit(0 if correct else 1)

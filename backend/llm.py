@@ -9,7 +9,7 @@ from typing import Literal
 import httpx
 from pydantic import BaseModel, ConfigDict, Field, ValidationError
 from .config import MODEL, GEMINI_MODEL
-from .documents import normal
+from .documents import normal,SPEAKER,speaker_key
 from .network import SourceError
 from . import store
 
@@ -49,19 +49,21 @@ class SpanAnswer(BaseModel):
 def source_spans(evidence):
     spans={}
     for index,e in enumerate(evidence,1):
-        text=normal(e['text']); start=0;n=1
-        while start<len(text):
-            end=min(start+650,len(text))
-            if end<len(text):
-                # Prefer a complete sentence, otherwise a word boundary. Never alter source text.
-                cut=max(text.rfind('. ',start+250,end),text.rfind('? ',start+250,end),text.rfind('! ',start+250,end))
-                end=cut+1 if cut>=0 else text.rfind(' ',start,end)
-                if end<=start:end=min(start+650,len(text))
-            quote=text[start:end].strip()
-            if len(quote)>=12:spans[f'E{index}S{n}']={'evidence':e,'quote':quote}
-            start=end
-            while start<len(text) and text[start]==' ':start+=1
-            n+=1
+        text=normal(e['text']); n=1;segments=[(text,'')]
+        if e.get('kind')=='transcript':
+            managers={speaker_key(x) for x in e.get('management_speakers',[])}
+            matches=list(SPEAKER.finditer(text));segments=[];start=0;who=e.get('speaker_before','')
+            for match in matches:
+                if speaker_key(who) in managers:segments.append((text[start:match.start()].strip(),who))
+                start=match.start();who=match[1]
+            if speaker_key(who) in managers:segments.append((text[start:].strip(),who))
+        for segment,who in segments:
+            # Complete sentence units preserve negation and qualifications. Overlong units
+            # are excluded rather than cropped into potentially misleading quotations.
+            units=re.split(r'(?<=[.!?])\s+',segment)
+            for unit in units:
+                if 12<=len(unit)<=1000 and not unit[0].islower() and unit.endswith(('.', '?', '!')):
+                    spans[f'E{index}S{n}']={'evidence':e,'quote':unit,'speaker':who};n+=1
     return spans
 
 def resolve_spans(data,evidence):
@@ -116,7 +118,8 @@ async def synthesize(question,evidence,progress,provider='groq'):
         if size+len(e['text'])>10500: continue
         selected.append(e); size+=len(e['text'])
     spans=source_spans(selected)
-    payload=[{**{k:s['evidence'][k] for k in ('symbol','kind','period','page')},'source_id':sid,'text':s['quote']} for sid,s in spans.items()]
+    if not spans:raise SourceError('no_supporting_passages','No complete, attributable source passages were found for this question.')
+    payload=[{**{k:s['evidence'][k] for k in ('symbol','kind','period','page')},'source_id':sid,'speaker':s['speaker'],'text':s['quote']} for sid,s in spans.items()]
     schema=SpanAnswer.model_json_schema()
     schema['$defs']['SpanCitation']['properties']['source_id']['enum']=list(spans)
     user=json.dumps({'question':question,'evidence':payload},ensure_ascii=False)
