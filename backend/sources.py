@@ -39,7 +39,10 @@ def primary_pdf(url):
             return 'https://www.bseindia.com/xml-data/corpfiling/AttachHis/'+name
     return url
 
-def parse_discovery(html, company):
+def issuer_sites(soup):
+    return list(dict.fromkeys(a['href'] for a in soup.select('a[href]') if a.select_one('i.icon-link') and a['href'].startswith('https://')))[:2]
+
+def parse_discovery(html, company,extra_hosts=()):
     soup=BeautifulSoup(html,'html.parser')
     # Verify the discovery index identifies the exchange symbol as well.
     links=[a.get('href','') for a in soup.select('a[href]')]
@@ -48,9 +51,9 @@ def parse_discovery(html, company):
         significant=re.sub(r'\b(limited|ltd|india)\b','',company['name'].lower()).strip().split()
         if not heading or not significant or significant[0] not in heading.get_text().lower():
             raise SourceError('identity_mismatch','Discovery page does not match the exchange issuer.')
-    issuer_hosts=set()
-    for a in soup.select('.company-links a[href]'):
-        h=urlparse(a['href']).hostname
+    issuer_hosts=set(extra_hosts)
+    for site in issuer_sites(soup):
+        h=urlparse(site).hostname
         if h and not any(x in h for x in ('nseindia','bseindia','screener')): issuer_hosts.add(h.removeprefix('www.'))
     docs=[]
     for kind, selector in [('annual','.annual-reports a[href]'),('transcript','.concalls a[href]')]:
@@ -65,20 +68,42 @@ def parse_discovery(html, company):
             period=label if kind=='annual' else a.parent.get_text(' ',strip=True).split('Transcript')[0].strip()
             candidates.append({'kind':kind,'title':label if kind=='annual' else 'Earnings call transcript',
                 'discovery_period':period,'download_url':url,'original_url':original})
-        if candidates: docs.append(candidates[0])
+        if candidates:
+            def period_order(item):
+                label=item['discovery_period']
+                if kind=='annual':
+                    year=re.search(r'20\d{2}',label)
+                    return datetime(int(year[0]),1,1) if year else datetime.min
+                try:return datetime.strptime(label,'%b %Y')
+                except ValueError:return datetime.min
+            docs.append(max(candidates,key=period_order))
     return docs
 
 async def discover(company):
-    key='discovery-v1-'+company['symbol']; hit=cached(key,86400)
+    key='discovery-v2-'+company['symbol']; hit=cached(key,86400)
     if hit: return hit
-    last=None
+    last=None; found=[]
     for suffix in ('/consolidated/','/'):
         try:
             body,_=await fetch('https://www.screener.in/company/'+company['symbol']+suffix)
-            docs=parse_discovery(body,company)
-            if docs:
-                put(key,docs); return docs
+            index=BeautifulSoup(body,'html.parser'); extra_hosts=set()
+            # Follow a corporate/IR link from the verified company website, not a name-based web search.
+            for site in issuer_sites(index)[:1]:
+                try:
+                    page,meta=await fetch(site,limit=4_000_000)
+                    extra_hosts.add(urlparse(meta['url']).hostname.removeprefix('www.'))
+                    for a in BeautifulSoup(page,'html.parser').select('a[href]'):
+                        label=a.get_text(' ',strip=True).lower(); host=urlparse(a['href']).hostname
+                        if host and ('investor' in label or 'corporate' in label or ('about' in label and company['name'].split()[0].lower() in label)):
+                            extra_hosts.add(host.removeprefix('www.'))
+                except SourceError:pass # Direct issuer-domain and exchange links remain usable.
+            docs=parse_discovery(body,company,extra_hosts)
+            for doc in docs:
+                if not any(d['kind']==doc['kind'] for d in found):found.append(doc)
+            if len(found)==2:
+                put(key,found); return found
         except SourceError as e: last=e
+    if found:put(key,found);return found
     raise last or SourceError('no_documents','No primary annual report or transcript was discovered.')
 
 async def filings():

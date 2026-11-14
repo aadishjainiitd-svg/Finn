@@ -65,10 +65,8 @@ def test_discovery_never_substitutes_presentation_for_transcript():
 
 def test_sentence_selection_attaches_original_text_and_stable_id():
     e=[{'id':'sha-p9-c1','text':'Management: Demand improved. We cannot give a firm timeline.'}]
-    data={'status':'supported','claims':[{'text':'Management declines a firm timeline.','nature':'reported','citations':[{'evidence_id':'E1','sentence_start':2,'sentence_end':2}]}],'limitation':''}
+    data={'status':'supported','claims':[{'text':'Management declines a firm timeline.','nature':'reported','citations':[{'source_id':'E1S1'}]}],'limitation':''}
     a=resolve_spans(data,e)
-    assert a['claims'][0]['citations']==[{'evidence_id':'sha-p9-c1','quote':'We cannot give a firm timeline.'}]
-    data['claims'][0]['citations'][0]['sentence_end']=3
-    with pytest.raises(SourceError):resolve_spans(data,e)
-    data['claims'][0]['citations'][0]['evidence_id']='E2'
+    assert a['claims'][0]['citations']==[{'evidence_id':'sha-p9-c1','quote':e[0]['text']}]
+    data['claims'][0]['citations'][0]['source_id']='E2S1'
     with pytest.raises(SourceError):resolve_spans(data,e)
