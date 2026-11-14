@@ -92,6 +92,11 @@ def grounded_display(result):
         for citation in claim.get('citations',[])[:3]:
             e=by_id.get(citation['evidence_id']);quote=normal(citation['quote'])
             if not e or quote not in normal(e['text']) or quote in seen:continue
+            # A following exclusion/qualification is part of the observation.
+            # Keep it verbatim, within the same supplied chunk and speaker turn.
+            tail=normal(e['text']).partition(quote)[2]
+            qualifier=re.match(r'\s+((?:This|These|That)\s+(?:excludes?|includes? only|does not|do not|is not|are not)\b[^.!?]*[.!?])',tail,re.I)
+            if qualifier and not SPEAKER.search(qualifier[1]):quote+=' '+qualifier[1]
             # Strip layout headers only; the retained text is still source-exact.
             cleaned=re.sub(r'^.{0,120}?Page \d+ of \d+\s+','',quote)
             cleaned=re.sub(r'^.*?(?:ABOUT THE COMPANY|ABOUT [A-Z]+|Business Overview)\s+','',cleaned)
@@ -105,10 +110,11 @@ def grounded_display(result):
     if not claims:status='insufficient_evidence'
     elif len(claims)<len(result.get('claims',[])):status='partial'
     kinds={by_id[cite['evidence_id']]['kind'] for c in claims for cite in c['citations']}
+    if claims and 'transcript' not in kinds and re.search(r'\b(management|call|outlook)\b',result.get('question',''),re.I):status='partial'
     limitation='The selected passages do not establish an answer to this question.' if not claims else (
-        'No earnings-call passage was selected for this answer. It does not establish managementâ€™s latest call outlook.' if 'transcript' not in kinds else
+        'No earnings-call passage was selected for this answer. It does not establish management’s latest call outlook.' if 'transcript' not in kinds else
         'The report and call cover different periods. These points do not establish a change over time.' if 'annual' in kinds else
-        'These are managementâ€™s statements in the cited call, not verified future outcomes.')
+        'These are management’s statements in the cited call, not verified future outcomes.')
     return {**result,'claims':claims,'status':status,'wording':'source-exact','limitation':limitation}
 
 SYSTEM='''You are FINN, a primary-source research assistant for an Indian equity investor.

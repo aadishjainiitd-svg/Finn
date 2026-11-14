@@ -61,7 +61,7 @@
       "id": "N1",
       "symbol": "TCS",
       "question": "Convert the revenue for the quarter reported in the Q2 FY27 call from crore to lakh.",
-      "expected": "Transcript PDF3 narrative INR73,188 crore \u00c3\u2014100 = INR7,318,800 lakh. Decimal conversion; disclose accounting scope not explicit in excerpt; no cross-period comparison.",
+      "expected": "Transcript PDF3 narrative INR73,188 crore x100 = INR7,318,800 lakh. Decimal conversion; disclose accounting scope not explicit in excerpt; no cross-period comparison.",
       "type": "numerical"
     },
     {

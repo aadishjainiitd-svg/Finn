@@ -3,6 +3,7 @@ import {createRoot} from 'react-dom/client';
 import * as Dialog from '@radix-ui/react-dialog';
 import type {Answer,Brief,Claim,Evidence,Event,Job} from './types';
 import {api,followJob} from './api';
+import {filingExcerpt} from './evidence';
 import {acknowledge,changedCount,inWindow,isReviewed,observe,readStored,saveStored,undo,type ReviewState} from './state';
 import './style.css';
 
@@ -28,7 +29,7 @@ function EvidenceView({evidence}:{evidence:Evidence}){
    if(e.hash!==evidence.hash||e.page!==evidence.page||!normal(e.text).includes(normal(evidence.quote||'')))setUnavailable(true);
  }).catch(()=>live&&setUnavailable(true));return()=>{live=false;};},[evidence.id]);
  return <><div className="source-line"><span className="tag">{evidence.kind==='annual'?'Annual report':evidence.kind==='transcript'?'Earnings call':'Exchange filing'}</span><span>PDF page {evidence.page}</span></div>
- <h3 className="source-company">{evidence.name||evidence.symbol}</h3><p className="muted">{evidence.period}</p>
+ <h3 className="source-company">{evidence.name||evidence.symbol}</h3><p className="muted">{evidence.kind==='filing'&&/^\d{4}-\d{2}-\d{2}T/.test(evidence.period)?when(evidence.period,true):evidence.period}</p>
  {unavailable&&<div className="notice">Version unavailable on the server. This is the saved excerpt from {when(evidence.fetched_at,true)}; the original link may now contain a newer version.</div>}
  <p className="eyebrow space-top">EXACT SOURCE EXCERPT</p><blockquote>{evidence.quote||evidence.text}</blockquote>
  {evidence.quote&&<details className="context"><summary>Show surrounding context</summary><p>{evidence.text}</p></details>}
@@ -67,7 +68,7 @@ function App(){
      const result=await followJob(first,()=>{},()=>openingRequest.current===request);if(result?.status==='error')throw new Error(result.error?.message);evidence=result?.result?.evidence||[];
    }catch(e){if(openingRequest.current===request)setOpenError((e as Error).message);}finally{if(openingRequest.current===request)setOpening(null);}}
    if(openingRequest.current!==request)return;
-   if(evidence.length){const e=evidence[0];const sentences=e.text.split(/(?<=[.!?])\s+/);const quote=sentences.find(s=>/appoint|resign|approved|financial results|revenue|investment/i.test(s)&&s.length>50)||sentences.find(s=>s.length>60)||e.text;
+   if(evidence.length){const e=evidence[0];const quote=filingExcerpt(e.text);
      setSheet({kind:'evidence',evidence:{...e,quote}});}
  }
  const newCount=pending&&brief?changedCount(brief.events,pending.events):0;
@@ -126,6 +127,8 @@ function Research({hidden,context,onEvidence}:{hidden:boolean;context:{symbol:st
  const saved=useRef(readStored<Answer>('finn.answer.v2'));
  const [symbol,setSymbol]=useState(saved.current?.company.symbol||'');const [question,setQuestion]=useState(saved.current?.question||'What does the company do, and what is management’s stated outlook?');
  const [answer,setAnswer]=useState<Answer|null>(saved.current);const [restored,setRestored]=useState(!!saved.current);const [job,setJob]=useState<Job|null>(null);const [error,setError]=useState('');const [partial,setPartial]=useState<Evidence[]>([]);const [busy,setBusy]=useState(false);const generation=useRef(0);
+ const answerSection=useRef<HTMLElement|null>(null);
+ useEffect(()=>{if(answer&&!hidden&&!restored)answerSection.current?.scrollIntoView({block:'start',behavior:'auto'});},[answer,hidden,restored]);
  function changed(){generation.current++;setAnswer(null);setJob(null);setBusy(false);setError('');setPartial([]);setRestored(false);}
  useEffect(()=>{if(context){changed();setSymbol(context.symbol);setQuestion(context.event?.kind==='filing'?'What does this exchange filing disclose, and what relevant context do the company documents provide?':'What does management’s latest earnings call say about the outlook for this company?');}},[context?.nonce]);
  async function ask(nextSymbol=symbol,nextQuestion=question){const request=++generation.current;setBusy(true);setError('');setAnswer(null);setPartial([]);setRestored(false);
@@ -143,7 +146,7 @@ function Research({hidden,context,onEvidence}:{hidden:boolean;context:{symbol:st
  {busy&&<div className="investigation-progress" role="status" aria-live="polite"><div className="progress-symbol"><span className="pulse"/></div><div><h2>{job?.stage||'Starting your investigation'}</h2><p>{job?.pages?`${job.pages} PDF pages read. `:''}A new company can take a little longer. You can return to your brief.</p></div></div>}
  {error&&<ErrorNote>{error}</ErrorNote>}
  {partial.length>0&&<section className="partial-sources"><h2>The sources are still here</h2><p>Analysis could not complete. Inspect the retrieved passages directly.</p>{partial.slice(0,4).map(e=><button className="source-chip" key={e.id} onClick={()=>onEvidence(e)}>{kindName(e.kind)} · PDF p.{e.page}<Icon name="chevron" size={14}/></button>)}</section>}
- {answer&&<section className="answer-section" aria-label="Research answer"><div className="answer-identity"><span className="ticker">{answer.company.symbol}</span><h2>{answer.company.name}</h2><p>{answer.is_demo_seed?'Dated demonstration answer':restored?'Saved on this device':answer.cache_hit?'Previously verified answer':'Source-based answer'} · {when(answer.answered_at)} · {clock(answer.answered_at)} IST</p></div>
+ {answer&&<section ref={answerSection} className="answer-section" aria-label="Research answer"><div className="answer-identity"><span className="ticker">{answer.company.symbol}</span><h2>{answer.company.name}</h2><p>{answer.is_demo_seed?'Dated demonstration answer':restored?'Saved on this device':answer.cache_hit?'Previously verified answer':'Source-based answer'} · {when(answer.answered_at)} · {clock(answer.answered_at)} IST</p><p>{answer.question}</p><button className="text-button" onClick={()=>document.querySelector<HTMLTextAreaElement>('#question')?.focus()}>Edit question<Icon name="arrow" size={16}/></button></div>
   <div className="document-coverage">{answer.documents.map((d,i)=><span key={d.hash+String(i)}><Icon name="file" size={14}/>{kindName(d.kind)} · {d.period}</span>)}</div>
   {answer.gaps.map((g,i)=><div className="notice" key={i}>{g.message}</div>)}
   {answer.status==='insufficient_evidence'?<div className="empty-answer"><h3>I couldn’t establish that from these sources.</h3><p>Try a narrower question or inspect the available documents.</p></div>:<ol className="claims">{answer.claims.map((claim,i)=><li key={i}><span className="claim-index">0{i+1}</span><div>{claim.nature==='interpretation'&&<span className="event-label">FINN interpretation</span>}<p>{claim.text}</p><Citations claim={claim} answer={answer} onEvidence={onEvidence}/></div></li>)}</ol>}

@@ -98,6 +98,17 @@ def test_parser_replacement_also_versions_citation_coordinates():
     assert extraction_version(digest,'parser-a')!=extraction_version(digest,'parser-b')
     assert extraction_version(digest,'parser-a')==extraction_version(digest,'parser-a')
 
+def test_display_retains_adjacent_exclusion_and_marks_missing_call_partial():
+    from backend.llm import grounded_display
+    quote='TCV for the quarter was US$9.6 billion.'
+    e={'id':'a','kind':'transcript','text':quote+' This excludes two large deals. Another statement.'}
+    result={'status':'supported','question':'What did management report?','claims':[{'text':'ignored paraphrase','citations':[{'evidence_id':'a','quote':quote}]}],'evidence':[e]}
+    rendered=grounded_display(result)
+    assert rendered['claims'][0]['citations'][0]['quote']==quote+' This excludes two large deals.'
+    assert grounded_display(rendered)==rendered
+    e['kind']='annual'
+    assert grounded_display(result)['status']=='partial'
+
 def test_answer_cache_hit_and_source_version_invalidation():
     from backend.research import question_key,recent_answer
     doc={'hash':'bytes','version':'bytes-xparser','download_url':'https://example.com/report.pdf'}
