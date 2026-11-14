@@ -44,8 +44,18 @@ def validate_answer(data,evidence):
     by_id={e['id']:e for e in evidence}
     for claim in answer.claims:
         for cite in claim.citations:
-            if cite.evidence_id not in by_id or normal(cite.quote) not in normal(by_id[cite.evidence_id]['text']):
+            if cite.evidence_id not in by_id:
                 raise SourceError('citation_invalid','The generated answer failed its source check. Read the available excerpts instead.')
+            supplied=by_id[cite.evidence_id]
+            if normal(cite.quote) not in normal(supplied['text']):
+                # Overlapping chunks can contain the same sentence prefix. Resolve an exact
+                # quote only within another SUPPLIED chunk of the SAME version and PDF page.
+                # Never repair unknown IDs, invented text, other pages or another document.
+                matches=[e for e in evidence if e.get('hash')==supplied.get('hash') and e.get('page')==supplied.get('page')
+                    and supplied.get('hash') and normal(cite.quote) in normal(e['text'])]
+                if len(matches)!=1:
+                    raise SourceError('citation_invalid','The generated answer failed its source check. Read the available excerpts instead.')
+                cite.evidence_id=matches[0]['id']
     if answer.status=='supported' and not answer.claims:
         raise SourceError('invalid_answer','The model returned no supported claims.')
     if answer.status=='insufficient_evidence' and answer.claims:

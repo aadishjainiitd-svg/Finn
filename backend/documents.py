@@ -19,8 +19,8 @@ def validate_identity(company, doc, opening):
     text=normal(opening).lower()
     name=re.sub(r'[^a-z0-9 ]',' ',company['name'].lower())
     terms=[t for t in name.split() if t not in ('limited','ltd','india','and')]
-    # First distinctive issuer token and a majority of the remaining words.
-    if not terms or terms[0] not in text or sum(t in text for t in terms)<max(1,(len(terms)+1)//2):
+    # Require every distinctive legal-name token; a shared group name is insufficient.
+    if not terms or not all(re.search(r'\b'+re.escape(t)+r'\b',text) for t in terms):
         raise SourceError('issuer_mismatch','PDF issuer does not match the exchange identity. Document quarantined.')
     if doc['kind']=='annual':
         if not re.search(r'annual\s+report',text): raise SourceError('type_mismatch','PDF is not identifiable as an annual report.')
@@ -108,13 +108,16 @@ def retrieve(documents,question):
     for key, extra in expansions.items():
         if any(key in w for w in words): terms.extend(extra)
     query=' OR '.join('"'+w+'"' for w in dict.fromkeys(terms)) or '"business"'
-    results=[]
+    groups=[]
     with db() as c:
         for doc in documents:
+            results=[]
             rows=c.execute('SELECT id,text FROM search WHERE search MATCH ? AND hash=? ORDER BY bm25(search) LIMIT 4',(query,doc['hash'])).fetchall()
             if not rows:
                 rows=c.execute('SELECT id,text FROM chunks WHERE hash=? ORDER BY page LIMIT 2',(doc['hash'],)).fetchall()
             for r in rows:
                 row=c.execute('SELECT page FROM chunks WHERE id=?',(r['id'],)).fetchone()
                 results.append({**doc,'id':r['id'],'page':row['page'],'text':r['text']})
-    return results
+            groups.append(results)
+    # Interleave sources so a long annual-report passage cannot consume the entire budget.
+    return [group[i] for i in range(4) for group in groups if i<len(group)]

@@ -35,6 +35,16 @@ def test_same_url_replacement_never_relabels_old_citation():
     assert store.evidence(ids[0]) is None
     assert store.evidence(ids[1])['text']=='Revenue was 200 crore.'
 
+def test_overlap_quote_resolves_only_within_supplied_same_page_version():
+    a={'status':'supported','claims':[{'text':'Demand was softer.','nature':'reported','citations':[{'evidence_id':'a','quote':'Demand was softer across retail and project segments.'}]}],'limitation':''}
+    evidence=[{'id':'a','hash':'version','page':2,'text':'Demand was softer across retail'},
+              {'id':'b','hash':'version','page':2,'text':'Demand was softer across retail and project segments.'}]
+    assert validate_answer(a,evidence)['claims'][0]['citations'][0]['evidence_id']=='b'
+    evidence[1]['page']=3
+    with pytest.raises(SourceError):validate_answer(a,evidence)
+    evidence[1]['page']=2;evidence[1]['hash']='replacement'
+    with pytest.raises(SourceError):validate_answer(a,evidence)
+
 def test_identity_type_and_period_mismatch():
     company={'name':'Havells India Limited'}
     doc={'kind':'transcript','discovery_period':'Oct 2026'}
