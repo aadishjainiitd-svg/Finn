@@ -4,6 +4,7 @@ import pytest
 from backend import store
 from backend.documents import validate_identity
 from backend.llm import validate_answer
+from backend.llm import resolve_spans
 from backend.network import SourceError,validate_url
 from backend.sources import ticker,parse_discovery
 
@@ -61,3 +62,13 @@ def test_symbol_and_private_url_rejection():
 def test_discovery_never_substitutes_presentation_for_transcript():
     html='<h1>Havells</h1><div class="concalls"><a href="https://www.bseindia.com/test.pdf">PPT</a></div>'
     assert parse_discovery(html,{'symbol':'HAVELLS','name':'Havells India Limited'})==[]
+
+def test_sentence_selection_attaches_original_text_and_stable_id():
+    e=[{'id':'sha-p9-c1','text':'Management: Demand improved. We cannot give a firm timeline.'}]
+    data={'status':'supported','claims':[{'text':'Management declines a firm timeline.','nature':'reported','citations':[{'evidence_id':'E1','sentence_start':2,'sentence_end':2}]}],'limitation':''}
+    a=resolve_spans(data,e)
+    assert a['claims'][0]['citations']==[{'evidence_id':'sha-p9-c1','quote':'We cannot give a firm timeline.'}]
+    data['claims'][0]['citations'][0]['sentence_end']=3
+    with pytest.raises(SourceError):resolve_spans(data,e)
+    data['claims'][0]['citations'][0]['evidence_id']='E2'
+    with pytest.raises(SourceError):resolve_spans(data,e)

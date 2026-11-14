@@ -40,13 +40,18 @@ def validate_identity(company, doc, opening):
 async def ingest(company,doc,progress):
     started=time.monotonic(); path=DATA/(uuid.uuid4().hex+'.pdf'); proc=None
     try:
-        _,download=await fetch(doc['download_url'],40_000_000,path)
+        async with asyncio.timeout(40):
+            _,download=await fetch(doc['download_url'],40_000_000,path)
         with path.open('rb') as f:
             if f.read(5)!=b'%PDF-': raise SourceError('not_pdf','Source did not return a PDF.')
             f.seek(0); digest=hashlib.file_digest(f,'sha256').hexdigest()
         with db() as c:
             old=c.execute('SELECT meta FROM documents WHERE hash=?',(digest,)).fetchone()
-        if old: return json.loads(old['meta'])
+        if old:
+            saved=json.loads(old['meta'])
+            if saved['symbol']!=company['symbol'] or saved['kind']!=doc['kind']:
+                raise SourceError('issuer_mismatch','Cached source identity differs from the requested issuer or document type.')
+            return saved
         meta={**company,**doc,**download,'original_url':doc['original_url'],'hash':digest,'fetched_at':now(),'parser':PARSER,'publication_date':None}
         proc=await asyncio.create_subprocess_exec(sys.executable,'-m','backend.extract_worker',str(path),
                   stdout=asyncio.subprocess.PIPE,stderr=asyncio.subprocess.DEVNULL,limit=2_000_000)
