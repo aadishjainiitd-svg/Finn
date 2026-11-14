@@ -97,8 +97,14 @@ async def ingest(company,doc,progress):
             nonlocal peak
             while proc.returncode is None:
                 try:
-                    combined=psutil.Process().memory_info().rss+psutil.Process(proc.pid).memory_info().rss
+                    child=psutil.Process(proc.pid)
+                    child_rss=sum(p.memory_info().rss for p in [child,*child.children(recursive=True)])
+                    parent_rss=psutil.Process().memory_info().rss
+                    combined=parent_rss+child_rss
                     peak=max(peak,combined)
+                    progress['processing_peak_mb']=round(peak/1024**2,1)
+                    progress['parent_rss_mb']=round(parent_rss/1024**2,1)
+                    progress['worker_rss_mb']=round(child_rss/1024**2,1)
                     if combined>440*1024*1024:
                         proc.kill(); raise SourceError('memory_limit','Document processing exceeded the hosting memory budget.')
                 except psutil.NoSuchProcess: break

@@ -11,6 +11,11 @@ def main():
     try:
         if len(reader)>500: raise ValueError('page_limit')
         for index in range(len(reader)):
+            # PDFium retains document-level resources after individual pages close.
+            # Reopen periodically to bound that cache before a costly later page.
+            if index and index % 32 == 0:
+                reader.close()
+                reader=pdfium.PdfDocument(sys.argv[1])
             page=reader[index]
             try:
                 textpage=page.get_textpage()

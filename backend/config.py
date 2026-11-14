@@ -10,5 +10,5 @@ DATA.mkdir(parents=True, exist_ok=True)
 MODEL = os.getenv('FINN_LLM_MODEL', 'openai/gpt-oss-120b')
 GEMINI_MODEL = os.getenv('FINN_GEMINI_MODEL', 'gemini-3.5-flash-lite')
 PORTFOLIO = ['RELIANCE','TCS','INFY','HDFCBANK','ICICIBANK','LT','BHARTIARTL','ITC','SUNPHARMA','MARUTI','TITAN','ULTRACEMCO','KPITTECH','APLAPOLLO','CERA']
-PARSER = 'pdfium-5.15.2-pages-v2'
+PARSER = 'pdfium-5.15.2-pages-v3'
 
