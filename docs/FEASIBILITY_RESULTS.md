@@ -1,5 +1,7 @@
 # FINN feasibility evidence
 
+**Gate passed, 14 November 2026 11:15 IST, with Groq selected.** Runtime extractor was replaced with PDFium after a measured timeout; details below supersede initial pypdf timings. Gemini automatic fallback is still disabled pending the account limits the user will supply; billing disabled was user-confirmed.
+
 14 November 2026. All times below are measured, not estimates. Public service: https://finn-enam-yije.onrender.com. Hosting explicitly uses Render **Free**, Singapore, one Python 3.12.14 process. No paid service or billing upgrade was enabled.
 
 | Check | Observed result | Evidence class |
@@ -32,3 +34,20 @@ The model attached one annual-report quote to an overlapping chunk whose last se
 - Memory is sampled every 100 ms. Worker has a Linux 350 MB address-space limit, combined RSS ceiling 440 MB, 40 MB download, 500-page and 180-second processing bounds. These do not establish universal PDF coverage.
 - Render's cache is disposable. Browser-retained excerpts are still to be implemented. A saved quote remains traceable to the recorded version, but this prototype does not permanently host original PDFs.
 - Six isolated grounding tests currently pass. Frontend, portfolio workflow, full fault suite and submission audit have not yet run.
+
+## Final hosted gate — PDFium, revision 31eef4479422
+
+| Live check | Result |
+|---|---|
+| HAVELLS annual / transcript | 442 / 17 pages; 26.8 / 2.02 seconds; observed combined peaks 288.0 / 92.1 MB |
+| HAVELLS full answer | 42.73 seconds including capacity wait; three supported claims spanning annual PDF page 216 and transcript PDF page 9; all five returned citation references resolved to exact text |
+| TCS annual / transcript | 361 / 29 pages; 21.9 / 1.91 seconds; observed combined peaks 155.7 / 98.0 MB. This fixes the original 180-second annual-report timeout. The broad risk question abstained; it is not counted as a supported research gold case. |
+| Price / filing sources | HTTP 200; 63 HAVELLS daily bars and 4 NSE filings from Render |
+| Actual restart with new IDs | Restart accepted; healthy after the 50.45-second probe window; old parser-versioned citation returned HTTP 410 rather than another version |
+| Automated checks | 20 local tests passed, including malformed/blank PDFs, 403/429/timeout source errors, unknown citations, queue capacity/coalescing, source replacement, parser replacement and answer-cache invalidation |
+
+A Render replacement stalled after a successful build without starting its application process. Cancelling that replacement and retrying the same free deployment once resolved it. No paid resource or alternate host was introduced.
+
+The final answer format constrains the model to supplied passage IDs. The server attaches exact source text. Transcript passages offered for synthesis are complete sentences attributed to management through source introductions; analyst questions are excluded. This fixed the observed management/analyst attribution error. It does not eliminate the need for the planned manual semantic audit. Duplicate references and answer brevity remain product-polish work.
+
+PDFium's runtime licence and provenance changes are recorded in THIRD_PARTY_NOTICES.md and the implementation log. Citations now include a parser fingerprint as well as document SHA, page and chunk. Earlier measurements and failures above are retained as the investigation history; they are not current success claims.

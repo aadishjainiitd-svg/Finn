@@ -1,0 +1,13 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {observe,acknowledge,undo,inWindow,isReviewed,changedCount} from '../src/state.ts';
+import type {Event} from '../src/types.ts';
+const now=new Date('2026-11-14T06:00:00Z');
+const event={id:'one',revision:'v1',published_at:'2026-11-13T12:00:00Z'} as Event;
+test('opening and observing do not mark reviewed',()=>{const state=observe([event],null,now);assert.equal(isReviewed(state,event),false);assert.equal(inWindow(event,'since',state,now),true);});
+test('acknowledgement is explicit, persistent data and reversible',()=>{let state=observe([event],null,now);state=acknowledge(state,event);assert.equal(isReviewed(JSON.parse(JSON.stringify(state)),event),true);state=undo(state,event.id);assert.equal(isReviewed(state,event),false);});
+test('reviewing the displayed old revision cannot acknowledge an incoming revision',()=>{let state=observe([event],null,now);state=acknowledge(state,event);const revised={...event,revision:'v2'};state=observe([revised],state,now);assert.equal(isReviewed(state,revised),false);assert.equal(inWindow(revised,'since',state,now),true);});
+test('incoming revision before old acknowledgement stays outstanding',()=>{let state=observe([event],null,now);const revised={...event,revision:'v2'};state=observe([revised],state,now);state=acknowledge(state,event);assert.equal(isReviewed(state,revised),false);});
+test('late discovered old filing is newly eligible without changing its publication date',()=>{const old={...event,id:'late',published_at:'2026-11-08T06:00:00Z'};let state=observe([event],null,now);state=observe([event,old],state,now);assert.equal(inWindow(old,'since',state,now),true);assert.equal(old.published_at,'2026-11-08T06:00:00Z');});
+test('first check defaults to 24 hours and today uses IST midnight',()=>{const old={...event,published_at:'2026-11-10T06:00:00Z'};const state=observe([old],null,now);assert.equal(inWindow(old,'since',state,now),false);assert.equal(inWindow({...event,published_at:'2026-11-13T19:00:00Z'},'today',state,now),true);assert.equal(inWindow({...event,published_at:'2026-11-13T18:00:00Z'},'today',state,now),false);});
+test('identical refreshes create no new updates',()=>{assert.equal(changedCount([event],[{...event}]),0);assert.equal(changedCount([event],[{...event,revision:'v2'}]),1);});

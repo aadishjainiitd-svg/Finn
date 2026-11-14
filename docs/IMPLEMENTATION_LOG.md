@@ -27,3 +27,33 @@ Current blocker is account access, not a validated runtime incompatibility. No m
 - Live local HAVELLS: generic NSE equity CSV identity (ISIN INE176B01034), Screener discovery, primary BSE annual report 442 pages + transcript 17 pages; 23.33 seconds total, 64.8 MB observed combined peak. Three claims with exact matching citations across both documents. This is local evidence, not hosted performance.
 - Live hosted sources: HAVELLS 63 Yahoo daily bars, 4 NSE filings. Health answered in 0.20 seconds during extraction. NSE quote endpoint returned 403 locally; official EQUITY_L.csv works and replaces that dependency. Filings follow NSE's redirect to nseindia.in.
 - No frontend yet. Deferred features remain excluded. Next: finish hosted extraction, audit cited pages, restart/version tests; resolve performance if the 180-second bound fails, then implement Brief and mobile UI.
+
+## Checkpoint 2 — gate corrections, 14 November 11:05 IST
+
+- Gate remains OPEN. HAVELLS fully ingests on Render (latest full run 149.78 seconds; observed peak 171 MB), but manual answer audit caught analyst statements attributed to management. TCS annual-report extraction hit the 180-second timeout; transcript succeeded. Both failures are recorded, not waived.
+- Replaced fragile model-copied citations and sentence ranges with constrained passage IDs. The server attaches original text and permanent evidence IDs. No arbitrary citation repair across pages/documents. A real local response passed exact-source and semantic checks.
+- Transcript synthesis now uses attributable management turns extracted from participant introductions; analyst questions cannot serve as management assertions. Source passages retain full sentences, negation and qualifications. Reported claims still require manual entailment evaluation.
+- Switched runtime extractor to pypdfium2 5.15.2 (Apache-2.0/BSD-3-Clause wrapper; BSD PDFium) after measured TCS timeout. Local HAVELLS annual 6.84s, transcript 0.91s; TCS annual 9.44s, transcript 0.88s. Local peak 53–62 MB. These are not hosted performance claims.
+- Extraction version is now document SHA + parser fingerprint. Parser changes cannot reuse old citation coordinates. Eighteen source/failure tests passed before parser swap; nineteen after it. TestClient emits a dependency deprecation warning but tests execute successfully.
+- Discovery now resolves the corporate/IR host from the issuer website, sorts actual document periods, and tries standalone when consolidated lacks a type. Astral's November 2026 transcript is 19 pages on astralltd.com, linked from astralpipes.com. The older index link was an audio notice and correctly failed type validation.
+- User confirmed Gemini billing disabled and will provide limits. Its automatic fallback stays off. Groq is selected primary. No paid usage enabled.
+- Current remote head/deployment: 31eef44794228c6b5e460cf96097aeefbe57e1f4; Render build in progress. Local files mirror this code; local Git history was connected to origin while preserving working files. No UI or Brief implementation yet.
+- Next: run HAVELLS and TCS on the PDFium deployment, audit their answers, repeat restart with versioned citations, then finish the approved build order. If this gate exceeds 90 minutes from ~10:15 IST, report unresolved blockers/time decision as planned.
+
+## Checkpoint 3 — feasibility gate passed, 14 November 11:15 IST
+
+- Hosted PDFium HAVELLS: 42.73s end-to-end, annual 26.8s / 288 MB peak, transcript 2.02s / 92.1 MB. Three manually checked claims span annual PDF page 216 and transcript PDF page 9. All citation requests return exact supporting text.
+- Hosted TCS: annual 21.9s / 155.7 MB, transcript 1.91s / 98 MB. Original timeout resolved. Broad risk query abstained, so it is not a supported gold-set pass. Fixed an additional speaker-parser edge locally (`Samir. Samir Seksaria:` must identify Samir Seksaria).
+- Live sources on the final gate deployment return 63 HAVELLS daily bars and 4 NSE filings. Real restart with new citation IDs yields explicit HTTP 410 for evicted versions. 20 local tests pass.
+- Runtime deploy initially stalled after a successful Linux build; one cancel/retry resolved it. Current live revision remains 31eef4479422. Local cache-speed and speaker-prefix fixes are newer than that revision and await the next release.
+- Gate passed with Groq primary. Gemini billing disabled is confirmed by user; account limits remain pending and automatic fallback remains disabled. No paid usage enabled.
+- Proceeding to Brief adapters/prioritisation/arithmetic, then the two mobile screens, evaluation, QA/design/code review and submission package. No deferred feature was added.
+
+## Checkpoint 4 — mobile workflows and evaluation underway
+
+- Brief requests cover all 15 holdings; 91 distinct filings, no exact duplicates in the initial live window. Prices and filings retain separate coverage. Review state uses explicit event revisions and never changes on opening.
+- React/Vite builds; seven review-state tests pass. Real gstack browser at 390px renders both navigation destinations. This is an initial implementation check, not completed QA.
+- Visual inspection exposed a wrong priority reason on the HDFCBANK reappointment: a biography mentioning Fraud & Vigilance matched the broad fraud rule. Narrowed positive event patterns and added a negation regression; issuer-written subject lines now provide readable assessed headlines. The initial progress note's suspected default clause was not the actual live trigger.
+- Selected filing context is included in Research with separate provenance. Added explicit narrative amount conversion using Decimal; incompatible/unknown calculation operands abstain. Dated seed loader added; audited seed data still pending.
+- Recorded the 12 evaluation expectations before grading. Live evaluation is running through the API; results are ungraded. Current local build is newer than the public deployment.
+- Next: audit answers, fix any unsupported claims/retrieval failures, bundle dated seed, publish full interface, then formal QA/design/code review and submission evidence.

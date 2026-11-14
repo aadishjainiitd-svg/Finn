@@ -65,11 +65,24 @@ with httpx.Client(headers={'Authorization': 'Bearer ' + os.environ['RENDER_API_K
             deploys = client.get(BASE + '/services/' + sid + '/deploys?limit=3').json()
             print(json.dumps({'service': sid, 'url': service['serviceDetails'].get('url'), 'plan': 'free',
                               'deploys': deploys}, indent=2))
+        elif action == 'configure':
+            response=client.patch(BASE+'/services/'+sid,json={'serviceDetails':{'envSpecificDetails':{'buildCommand':'bash scripts/build.sh'}}})
+            print(json.dumps({'status':response.status_code,'operation':'configure FINN build','plan':'free'}))
+            response.raise_for_status()
         elif action == 'deploy':
             response = client.post(BASE + '/services/' + sid + '/deploys', json={'clearCache': 'do_not_clear'})
             print(clean(json.dumps({'status': response.status_code, 'result': response.json()})))
         elif action == 'restart':
             response = client.post(BASE + '/services/' + sid + '/restart')
             print(json.dumps({'status': response.status_code, 'operation': 'restart'}))
+        elif action == 'logs':
+            response=client.get(BASE+'/logs',params={'ownerId':state['owner'],'resource':sid,'limit':40,'type':'app'})
+            if response.status_code!=200:print('Log status',response.status_code)
+            else:
+                data=response.json()
+                rows=data.get('logs',[]) if isinstance(data,dict) else data
+                for row in rows:
+                    message=row.get('message',row.get('text',''))
+                    print(clean(str(message))[:1000])
         else:
             raise SystemExit('Unknown operation')

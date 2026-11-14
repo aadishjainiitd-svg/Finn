@@ -16,3 +16,4 @@ tmp/
 docs/.review-state/
 /*.pdf
 
+.gstack/

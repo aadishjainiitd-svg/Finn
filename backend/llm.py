@@ -66,14 +66,14 @@ def source_spans(evidence):
                     spans[f'E{index}S{n}']={'evidence':e,'quote':unit,'speaker':who};n+=1
     return spans
 
-def resolve_spans(data,evidence):
+def resolve_spans(data,evidence,allowed=None):
     parsed=SpanAnswer.model_validate(data).model_dump()
     spans=source_spans(evidence)
     for claim in parsed['claims']:
         resolved=[]
         for cite in claim['citations']:
             span=spans.get(cite['source_id'])
-            if not span:raise SourceError('citation_invalid','Unknown source reference in model response.')
+            if not span or (allowed is not None and cite['source_id'] not in allowed):raise SourceError('citation_invalid','Unknown source reference in model response.')
             resolved.append({'evidence_id':span['evidence']['id'],'quote':span['quote']})
         claim['citations']=resolved
     return validate_answer(parsed,evidence)
@@ -121,11 +121,16 @@ async def synthesize(question,evidence,progress,provider='groq'):
     if not spans:raise SourceError('no_supporting_passages','No complete, attributable source passages were found for this question.')
     payload=[{**{k:s['evidence'][k] for k in ('symbol','kind','period','page')},'source_id':sid,'speaker':s['speaker'],'text':s['quote']} for sid,s in spans.items()]
     schema=SpanAnswer.model_json_schema()
-    schema['$defs']['SpanCitation']['properties']['source_id']['enum']=list(spans)
-    user=json.dumps({'question':question,'evidence':payload},ensure_ascii=False)
-    # Deliberately overestimates English token counts and reserves output/reasoning.
-    reservation=(len((SYSTEM+user).encode('utf-8'))+2)//3+1600
-    if reservation>7600: raise SourceError('token_limit','Evidence is too large for the free answer budget. Ask a narrower question.')
+    # Include schema overhead, output/reasoning and complete passages. Remove whole
+    # trailing sentences until the actual request fits; never truncate a quotation.
+    while payload:
+        allowed={p['source_id'] for p in payload}
+        schema['$defs']['SpanCitation']['properties']['source_id']['enum']=sorted(allowed)
+        user=json.dumps({'question':question,'evidence':payload},ensure_ascii=False)
+        reservation=(len((SYSTEM+user+json.dumps(schema)).encode('utf-8'))+2)//3+1600
+        if reservation<=7600:break
+        payload.pop()
+    if not payload:raise SourceError('token_limit','The question cannot fit the free answer budget. Please shorten it.')
     async with lock:
         progress['stage']='Waiting for answer capacity'
         wait=max(0,next_allowed-time.monotonic())
@@ -133,6 +138,7 @@ async def synthesize(question,evidence,progress,provider='groq'):
             raise SourceError('daily_quota','The shared free daily answer allowance is exhausted. Source excerpts remain available.')
         if wait>120: raise SourceError('quota_wait','Answer capacity is temporarily unavailable. Try again later; excerpts remain available.')
         if wait: await asyncio.sleep(wait)
+        progress['capacity_wait_seconds']=round(wait,2)
         day=datetime.now(timezone.utc).strftime('%Y-%m-%d')
         usage=store.cached('admission-'+day) or {'reserved_tokens':0,'requests':0}
         if usage['reserved_tokens']+reservation>180000 or usage['requests']>=900:
@@ -143,6 +149,7 @@ async def synthesize(question,evidence,progress,provider='groq'):
         # Reserve before the request, even if the response fails. At most one call per minute.
         next_allowed=time.monotonic()+61
         async with httpx.AsyncClient(timeout=35) as c:
+            inference_start=time.monotonic()
             try:
                 if provider=='gemini':
                     r=await c.post('https://generativelanguage.googleapis.com/v1beta/models/'+GEMINI_MODEL+':generateContent',
@@ -159,6 +166,7 @@ async def synthesize(question,evidence,progress,provider='groq'):
                     if r.headers.get('x-ratelimit-remaining-requests'):
                         daily_remaining=int(r.headers['x-ratelimit-remaining-requests'])
                 metrics['calls']+=1
+                progress['synthesis_seconds']=round(time.monotonic()-inference_start,2)
             except httpx.HTTPError:
                 raise SourceError('model_timeout','The model did not respond. Your source excerpts remain available.') from None
         if r.status_code==429:
@@ -171,7 +179,7 @@ async def synthesize(question,evidence,progress,provider='groq'):
         try:
             data=r.json()
             raw=data['candidates'][0]['content']['parts'][0]['text'] if provider=='gemini' else data['choices'][0]['message']['content']
-            result=resolve_spans(json.loads(raw),selected)
+            result=resolve_spans(json.loads(raw),selected,allowed)
         except (KeyError,ValueError,IndexError,ValidationError,TypeError):
             raise SourceError('invalid_answer','The model response could not be verified. Read the available excerpts instead.') from None
         return {**result,'provider':provider,'model':GEMINI_MODEL if provider=='gemini' else MODEL,'evidence':selected}

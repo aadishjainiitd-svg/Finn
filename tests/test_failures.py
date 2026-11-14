@@ -57,7 +57,7 @@ def test_malformed_model_output_rejected():
 def test_queue_is_bounded_and_duplicate_requests_coalesce(monkeypatch):
     async def scenario():
         release=asyncio.Event()
-        async def hold(job,symbol,question):await release.wait()
+        async def hold(job,symbol,question,filing_id=None):await release.wait()
         monkeypatch.setattr(research,'run',hold)
         first=research.submit('TCS','What are the risks?')
         assert research.submit('TCS','What are the risks?')['id']==first['id']

@@ -11,16 +11,16 @@ import psutil
 from .config import DATA, PARSER
 from .network import fetch, SourceError
 from .sources import now
-from .store import db
+from .store import db,put
 
 def normal(text): return ' '.join(re.sub(r'[\x00-\x08\x0b\x0c\x0e-\x1f]','',text).split())
 
-SPEAKER=re.compile(r'(?<!\w)([A-Z][A-Za-z.]*(?:\s+[A-Z][A-Za-z.]*){0,4}):')
+SPEAKER=re.compile(r'(?<!\w)((?:[A-Z][A-Za-z]*|[A-Z]\.)(?:\s+(?:[A-Z][A-Za-z]*|[A-Z]\.)){0,4}):')
 
 def speaker_key(name):return re.sub(r'[^a-z]','',name.lower())
 
-def extraction_version(digest,parser=PARSER):
-    return digest+'-x'+hashlib.sha256(parser.encode()).hexdigest()[:10]
+def extraction_version(digest,parser=PARSER,kind='document'):
+    return digest+'-x'+hashlib.sha256(parser.encode()).hexdigest()[:10]+'-'+kind
 
 def management_names(opening):
     names=[]
@@ -39,6 +39,7 @@ def validate_identity(company, doc, opening):
     # Require every distinctive legal-name token; a shared group name is insufficient.
     if not terms or not all(re.search(r'\b'+re.escape(t)+r'\b',text) for t in terms):
         raise SourceError('issuer_mismatch','PDF issuer does not match the exchange identity. Document quarantined.')
+    if doc['kind']=='filing':return doc['discovery_period']
     if doc['kind']=='annual':
         if not re.search(r'annual\s+report',text): raise SourceError('type_mismatch','PDF is not identifiable as an annual report.')
         year=re.search(r'20\d{2}',doc['discovery_period'])
@@ -72,7 +73,7 @@ async def ingest(company,doc,progress):
         with path.open('rb') as f:
             if f.read(5)!=b'%PDF-': raise SourceError('not_pdf','Source did not return a PDF.')
             f.seek(0); digest=hashlib.file_digest(f,'sha256').hexdigest()
-        version=extraction_version(digest)
+        version=extraction_version(digest,kind=doc['kind'])
         with db() as c:
             old=c.execute('SELECT meta FROM documents WHERE hash=?',(version,)).fetchone()
         if old:
@@ -84,6 +85,7 @@ async def ingest(company,doc,progress):
                 saved['period']=validate_identity(company,doc,opening)
                 saved['management_speakers']=management_names(opening) if doc['kind']=='transcript' else []
                 c.execute('UPDATE documents SET meta=? WHERE hash=?',(json.dumps(saved),version))
+            put('latest-document-'+doc['download_url'],version)
             return saved
         meta={**company,**doc,**download,'original_url':doc['original_url'],'hash':digest,'version':version,'fetched_at':now(),'parser':PARSER,'publication_date':None}
         proc=await asyncio.create_subprocess_exec(sys.executable,'-m','backend.extract_worker',str(path),
@@ -128,6 +130,7 @@ async def ingest(company,doc,progress):
         meta['management_speakers']=management_names(' '.join(opening)) if doc['kind']=='transcript' else []
         meta.update(pages=count,characters=chars,processing_seconds=round(time.monotonic()-started,2),combined_peak_mb=round(peak/1024**2,1))
         with db() as c: c.execute('INSERT INTO documents VALUES (?,?,?,?)',(version,company['symbol'],doc['kind'],json.dumps(meta)))
+        put('latest-document-'+doc['download_url'],version)
         return meta
     except TimeoutError:
         raise SourceError('processing_timeout','Document exceeded the 180-second processing limit.') from None
@@ -162,6 +165,13 @@ def retrieve(documents,question):
                     # Adjacent chunks overlap by 400 characters; scan only their distinct prefix.
                     previous=(previous+' '+r['text'][:1800])[-15000:]
             rows=c.execute('SELECT id,text FROM search WHERE search MATCH ? AND hash=? ORDER BY bm25(search) LIMIT 4',(query,version)).fetchall()
+            if doc['kind']=='annual' and (re.search(r'what does .{1,50} do',question,re.I) or 'business' in words):
+                first=re.findall(r'[a-zA-Z]+',doc.get('name',''))
+                context=[]
+                for context_query in (['"about '+first[0]+'"'] if first else [])+['"about the company"','"business overview"']:
+                    context=c.execute('SELECT id,text FROM search WHERE search MATCH ? AND hash=? ORDER BY bm25(search) LIMIT 1',(context_query,version)).fetchall()
+                    if context:break
+                rows=(context+[r for r in rows if not context or r['id']!=context[0]['id']])[:4]
             if not rows:
                 rows=c.execute('SELECT id,text FROM chunks WHERE hash=? ORDER BY page LIMIT 2',(version,)).fetchall()
             for r in rows:

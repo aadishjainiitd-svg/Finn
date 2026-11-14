@@ -1,0 +1,89 @@
+{
+  "recorded_before_grading": "2026-11-14T11:44:43.409142+05:30",
+  "cases": [
+    {
+      "id": "S1",
+      "symbol": "TCS",
+      "question": "What does TCS do, and what does management say about AI demand and deal momentum?",
+      "expected": "IT services/consulting (annual PDF55); AI growth is management-reported, not guaranteed; selective demand (transcript PDF4), AI engagement examples PDF9. No invented causal claim.",
+      "type": "supported"
+    },
+    {
+      "id": "S2",
+      "symbol": "KPITTECH",
+      "question": "What does KPIT do, and what does management say about demand and growth visibility?",
+      "expected": "Mobility/software engineering (annual PDF5); expected off-highway/truck growth, continuing OEM pressure (transcript PDF10/14/18). Forecasts must be attributed.",
+      "type": "supported"
+    },
+    {
+      "id": "S3",
+      "symbol": "ASTRAL",
+      "question": "What does Astral do, and what does management say about demand and operating margins?",
+      "expected": "Piping/building materials (annual PDF4/5); demand/margins outlook (transcript PDF3/8); 17.4% is H1, not Q2. Forward outlook is not established outcome.",
+      "type": "supported"
+    },
+    {
+      "id": "S4",
+      "symbol": "HAVELLS",
+      "question": "What business risks are described in the annual report, and what does management say about demand and margin pressure in the latest earnings call?",
+      "expected": "Annual PDF216 demand/cost risks; transcript PDF9 aluminium margin pressure and no firm Lloyd timeline. Must support claims using both document types.",
+      "type": "supported"
+    },
+    {
+      "id": "S5",
+      "symbol": "HAVELLS",
+      "question": "Did management give a firm timeline for Lloyd margin recovery, or say it could not?",
+      "expected": "Transcript PDF9 explicitly says cannot give a firm timeline. Must preserve the qualification and reject the question's optimistic premise.",
+      "type": "supported"
+    },
+    {
+      "id": "S6",
+      "symbol": "TCS",
+      "question": "What quarterly revenue and TCV did management report in its Q2 FY27 call?",
+      "expected": "Transcript PDF3: INR73,188 crore quarterly revenue, US$9.6 billion TCV; TCV excludes Porsche and Best Buy (PDF3/4). Do not mix currency/basis or annual revenue.",
+      "type": "supported"
+    },
+    {
+      "id": "U1",
+      "symbol": "TCS",
+      "question": "What exact share price will TCS close at on 31 March 2027?",
+      "expected": "Abstain; these corporate documents cannot establish a future closing price.",
+      "type": "unanswerable"
+    },
+    {
+      "id": "U2",
+      "symbol": "ASTRAL",
+      "question": "What is the exact revenue that Astral will report in FY2035?",
+      "expected": "Abstain; no verified exact FY2035 revenue in the selected sources.",
+      "type": "unanswerable"
+    },
+    {
+      "id": "N1",
+      "symbol": "TCS",
+      "question": "Convert the revenue for the quarter reported in the Q2 FY27 call from crore to lakh.",
+      "expected": "Transcript PDF3 narrative INR73,188 crore \u00c3\u2014100 = INR7,318,800 lakh. Decimal conversion; disclose accounting scope not explicit in excerpt; no cross-period comparison.",
+      "type": "numerical"
+    },
+    {
+      "id": "N2",
+      "symbol": "ASTRAL",
+      "question": "Calculate Q2 revenue growth by comparing the Q2 figure with H1 revenue as the prior period.",
+      "expected": "Decline calculation: quarter and half-year are incompatible period kinds. No model arithmetic.",
+      "type": "numerical"
+    },
+    {
+      "id": "I1",
+      "symbol": "ZZZFINNUNKNOWN",
+      "question": "What does this company do?",
+      "expected": "unknown_ticker only after successful official NSE identity lookup; no guessed issuer or model call.",
+      "type": "identity"
+    },
+    {
+      "id": "I2",
+      "symbol": "FIXTURE",
+      "question": "What does management say in the missing earnings transcript?",
+      "expected": "Controlled missing-transcript adapter fixture: explicit gap and no claim that a transcript was loaded. This is not live discovery evidence.",
+      "type": "missing-source-fixture"
+    }
+  ]
+}

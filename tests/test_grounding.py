@@ -88,9 +88,23 @@ def test_analyst_question_cannot_be_used_as_management_evidence():
     quotes=[s['quote'] for s in source_spans(e).values()]
     assert all('380' not in q and 'Is that correct' not in q for q in quotes)
     assert any('Aluminium prices' in q for q in quotes)
+    e[0]['text']='Over to you, Samir. Samir Seksaria: We prioritise investments while maintaining margin discipline.'
+    e[0]['management_speakers']=['Samir Seksaria']
+    assert any('margin discipline' in s['quote'] for s in source_spans(e).values())
 
 def test_parser_replacement_also_versions_citation_coordinates():
     from backend.documents import extraction_version
     digest='a'*64
     assert extraction_version(digest,'parser-a')!=extraction_version(digest,'parser-b')
     assert extraction_version(digest,'parser-a')==extraction_version(digest,'parser-a')
+
+def test_answer_cache_hit_and_source_version_invalidation():
+    from backend.research import question_key,recent_answer
+    doc={'hash':'bytes','version':'bytes-xparser','download_url':'https://example.com/report.pdf'}
+    with store.db() as c:c.execute('INSERT INTO documents VALUES (?,?,?,?)',(doc['version'],'TEST','annual',json.dumps(doc)))
+    result={'documents':[doc],'claims':[],'gaps':[]}
+    store.put(question_key('TEST','What are the risks?'),result)
+    store.put('latest-document-'+doc['download_url'],doc['version'])
+    assert recent_answer('TEST','What are the risks?')['cache_hit']
+    store.put('latest-document-'+doc['download_url'],'new-bytes-xparser')
+    assert recent_answer('TEST','What are the risks?') is None
