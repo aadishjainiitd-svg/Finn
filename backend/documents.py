@@ -28,8 +28,12 @@ def validate_identity(company, doc, opening):
         if year and year[0] not in text: raise SourceError('period_mismatch','Annual-report year cannot be verified in the document.')
     elif doc['kind']=='transcript' and not ('transcript' in text or ('moderator' in text and 'call' in text)):
         raise SourceError('type_mismatch','PDF is not an earnings-call transcript.')
+    if doc['kind']=='transcript':
+        year=re.search(r'20\d{2}',doc['discovery_period'])
+        if year and year[0] not in text:
+            raise SourceError('period_mismatch','Transcript date does not match the discovery period.')
     # Preserve the actual source period phrase; do not infer fiscal year from fetch date.
-    patterns=[r'(?:quarter|half.year|year)\s+ended\s+[A-Za-z0-9, /-]{6,35}',r'(?:Q[1-4]\s*(?:FY)?\s*\d{2,4})',r'(?:20\d{2}\s*[-–]\s*(?:20)?\d{2})']
+    patterns=[r'(?:quarter|half.year|year)\s+ended\s+\d{1,2}(?:st|nd|rd|th)?\s+[A-Za-z]+,?\s+20\d{2}',r'(?:Q[1-4]\s*(?:FY)\s*\d{2,4})',r'(?:20\d{2}\s*[-–]\s*(?:20)?\d{2})']
     periods=[m[0].strip() for p in patterns for m in list(re.finditer(p,normal(opening),re.I))[:3]]
     return '; '.join(dict.fromkeys(periods))[:180] or doc['discovery_period']+' (source label; period not independently extracted)'
 

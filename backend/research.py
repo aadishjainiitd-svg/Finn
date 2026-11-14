@@ -13,7 +13,7 @@ from .network import SourceError
 jobs={}
 worker=asyncio.Lock()
 inflight={}
-VERSION='retrieval-1-prompt-1-schema-1-'+PARSER+'-'+MODEL
+VERSION='retrieval-1-prompt-2-schema-1-'+PARSER+'-'+MODEL
 
 async def run(job, symbol, question):
     started=time.monotonic()
