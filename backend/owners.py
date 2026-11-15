@@ -13,7 +13,13 @@ def owner(request:Request,response:Response):
     token=request.cookies.get(COOKIE,'')
     key=hashlib.sha256(token.encode()).hexdigest() if 32<=len(token)<=128 else ''
     session=repository.get('_system','sessions',key) if key else None
-    if session and session['expires']>time.time():return session['owner']
+    if session and session['expires']>time.time():
+        if session['expires']-time.time()<30*86400:
+            # Sliding expiry: an active browser keeps its private state.
+            try:repository.save('_system','sessions',key,{'owner':session['owner'],'expires':time.time()+365*86400},expected=session['_version'])
+            except repository.Conflict:pass
+            response.set_cookie(COOKIE,token,max_age=365*86400,httponly=True,secure=https(request),samesite='lax',path='/')
+        return session['owner']
     token=secrets.token_urlsafe(32);key=hashlib.sha256(token.encode()).hexdigest()
     identity=secrets.token_hex(24)
     repository.save('_system','sessions',key,{'owner':identity,'expires':time.time()+365*86400})

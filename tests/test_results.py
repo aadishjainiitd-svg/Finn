@@ -65,3 +65,28 @@ def test_split_columns_fail_closed_on_missing_year_scope_unit_or_groups():
     assert not any(m['metric']=='revenue' for m in corrupt['items'])
     discontinued=parse(source+' Discontinued operations')['tables'][0]
     assert not any(m['metric']=='ebitda_proxy' for m in discontinued['items'])
+
+
+# SEBI half-year layout (modelled on the HAVELLS consolidated statement): six
+# printed dates, a stray column-rule glyph, and serial numbers before each row.
+SEBI='HAVELLS INDIA LIMITED STATEMENT OF UNAUDITED CONSOLIDATED FINANCIAL RESULTS FOR THE QUARTER AND HALF YEAR ENDED SEPTEMBER 30, 2026 (Rs in crores) Quarter Ended Half Year Ended Year Ended S.No Particulars 30-Sep-26 I 30-Jun-26 30-Sep-25 30-Sep-26 30-Sep-25 31-Mar-26 Unaudited Unaudited Audited 1 Income a) Revenue from operations 6,431.99 6,518.19 4,779.33 12,950.18 10,234.68 22,527.77 b) Other Income (refer note 4) 32.61 54.16 86.26 86.77 155.40 524.10 5 Profit before tax (5-6) 472.62 392.29 414.59 864.91 864.34 2,209.57 8 Income tax expense 9 Profit for the period (7-8) 349.22 289.71 318.28 638.93 665.81 1,689.25 10 Other comprehensive income'
+
+def sebi(text=SEBI):return extract(DOC,[{'id':'v1-p9-c0','page':9,'text':text}])
+
+def test_sebi_half_year_layout_selects_quarters_and_keeps_exact_row_evidence():
+    table=sebi()['tables'][0]
+    assert table['scope']=='consolidated' and table['periods']==['2026-09-30','2026-06-30','2025-09-30']
+    values={i['metric']:i['values'] for i in table['items']}
+    assert values=={'revenue':['6431.99','6518.19','4779.33'],'pbt':['472.62','392.29','414.59'],'pat':['349.22','289.71','318.28']}
+    assert all(i['quote'] in i['evidence']['text'] for i in table['items'])
+    # Other income carries a note reference, so no EBITDA proxy is fabricated.
+    assert 'ebitda_proxy' not in values
+
+def test_sebi_layout_fails_closed_on_damaged_dates_units_periods_or_extra_columns():
+    for broken in [SEBI.replace('30-Jun-26','30-Jnu-26'),           # OCR-damaged date is not corrected
+                   SEBI.replace('(Rs in crores)','(~ crore)'),      # corrupt currency glyph
+                   SEBI.replace('ENDED SEPTEMBER 30, 2026','ENDED JUNE 30, 2026'),  # title/column mismatch
+                   SEBI.replace('31-Mar-26','30-Jun-26')]:          # year column off the calendar
+        assert not sebi(broken)['tables']
+    seven=SEBI.replace('2,209.57 8 Income','2,209.57 1,111.11 Income')
+    assert 'pbt' not in {i['metric'] for t in sebi(seven)['tables'] for i in t['items']}

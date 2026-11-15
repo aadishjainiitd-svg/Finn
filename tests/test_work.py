@@ -167,3 +167,30 @@ def test_slow_remote_filing_cache_reads_do_not_starve_the_lease_heartbeat(monkey
         await beat
         return result
     assert asyncio.run(run())['counts']['distinct_filings']==1
+
+
+# Regression: adversarial review F7. One transient storage failure during a
+# heartbeat must not abort a job whose lease is still valid; a lost lease must.
+def test_transient_heartbeat_failure_is_retried_but_lost_lease_stops(monkeypatch):
+    import asyncio
+    real_sleep=asyncio.sleep
+    async def fast(seconds):await real_sleep(0)
+    monkeypatch.setattr(work.asyncio,'sleep',fast)
+    calls=[]
+    def flaky(job,progress):
+        calls.append(1)
+        if len(calls)==1:raise SourceError('storage_unavailable','blip')
+    monkeypatch.setattr(work,'heartbeat',flaky)
+    async def slow(job,progress):
+        while len(calls)<3:await real_sleep(0)
+        progress.update(status='complete',stage='done')
+    monkeypatch.setattr(work,'execute',slow)
+    job=work.enqueue('alice','research',{'symbol':'TCS','question':'q'});asyncio.run(work.run_one(work.claim()))
+    assert work.get('alice',job['id'])['status']=='complete' and len(calls)>=3
+    def lost(job,progress):raise SourceError('lease_lost','gone')
+    monkeypatch.setattr(work,'heartbeat',lost)
+    async def forever(job,progress):
+        while True:await real_sleep(0)
+    monkeypatch.setattr(work,'execute',forever)
+    job=work.enqueue('bob','research',{'symbol':'TCS','question':'q2'});asyncio.run(work.run_one(work.claim()))
+    assert work.get('bob',job['id'])['status']=='error'

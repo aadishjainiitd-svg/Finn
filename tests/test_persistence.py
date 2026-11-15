@@ -166,3 +166,16 @@ def test_same_origin_https_page_behind_tls_proxy_can_mutate_and_cookie_is_secure
         # A different host is still cross-origin, whatever the scheme.
         assert page.post('/api/review',json={'action':'pin','event_id':'e2','value':True},
             headers={**headers,'Origin':'https://evil.invalid'}).status_code==403
+
+
+# Regression: adversarial review F8. Anonymous reads must not write a demo-book
+# row per visitor; the first explicit save still inserts the book.
+def test_anonymous_read_does_not_persist_default_book(monkeypatch):
+    from backend import portfolio
+    with TestClient(app) as page:
+        assert page.get('/api/session').status_code==200
+        owner_rows=[r for r in repository.listing('_system','sessions')]
+        assert len(owner_rows)==1
+        identity=owner_rows[0]['owner']
+        assert repository.get(identity,'state','book') is None
+        assert portfolio.book(identity)['_version']==0

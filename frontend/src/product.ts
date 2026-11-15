@@ -32,3 +32,12 @@ export function inPeriod(event:Event,window:string,review:Review|undefined,start
 
 export const date=(value?:string|null,full=false)=>value?new Intl.DateTimeFormat('en-IN',{timeZone:'Asia/Kolkata',day:'numeric',month:'short',...(full?{year:'numeric' as const}:{})}).format(new Date(value)):'Date unavailable';
 
+
+// Header date in the reference style, e.g. "Sun 15 Nov" (IST).
+export const weekday=(value:Date)=>new Intl.DateTimeFormat('en-IN',{timeZone:'Asia/Kolkata',weekday:'short',day:'numeric',month:'short'}).formatToParts(value).filter(p=>p.type!=='literal').map(p=>p.value).join(' ');
+
+// Per-filing thesis effect (backend: weakens|supports|neutral|unknown). Holding-level
+// health (weakening/broken) is a different field shown in Book.
+export const thesisLabel=(status?:string|null):[string,''|'red'|'green']=>status==='weakens'?['Weakens your thesis','red']:status==='supports'?['Supports your thesis','green']:status==='neutral'?['No thesis effect found','']:['Thesis not assessed',''];
+// Short event type for the card subtitle, from the verified category or kind.
+export const eventType=(e:{kind:string;category?:string;description?:string})=>{if(e.kind==='price')return 'Unusual move';const raw=(e.category||(e.description||'').split(' · ')[0]||'Disclosure').slice(0,40);return raw.charAt(0).toUpperCase()+raw.slice(1);};

@@ -18,7 +18,7 @@ test('mobile review persists, nested evidence opening does not acknowledge, Esca
  await expect(page.locator('[role=dialog]')).toHaveCount(2);await expect(page.getByRole('dialog')).toHaveCount(1);await expect(page.locator('blockquote')).toHaveText(evidence.text);
  await page.keyboard.press('Escape');await expect(page.getByRole('button',{name:'Inspect supporting evidence'})).toBeFocused();
  await page.keyboard.press('Escape');await expect(open).toBeFocused();
- await page.getByRole('button',{name:'Mark done'}).click();await expect(page.getByRole('heading',{name:'0 things need you.'})).toBeVisible();await page.getByRole('button',{name:'Undo last review'}).click();await expect(page.getByRole('button',{name:'Mark done'})).toBeVisible();await page.getByRole('button',{name:'Mark done'}).click();
+ await page.getByRole('button',{name:'Mark done'}).click();await expect(page.getByRole('heading',{name:'0 things need you'})).toBeVisible();await page.getByRole('button',{name:'Undo last review'}).click();await expect(page.getByRole('button',{name:'Mark done'})).toBeVisible();await page.getByRole('button',{name:'Mark done'}).click();
  await page.reload();await page.getByLabel('Digest period').selectOption('14');await page.getByRole('button',{name:'Reviewed · Undo'}).click();await expect(page.getByRole('button',{name:'Mark done'})).toBeVisible();
  for(const width of [390,360,430]){await page.setViewportSize({width,height:844});expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);}
 });

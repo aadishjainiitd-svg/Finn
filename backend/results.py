@@ -24,6 +24,21 @@ METRICS={
 def date_value(text):return datetime.strptime(text.replace(',',''),'%B %d %Y').date()
 
 
+MONTH=r'(?:January|February|March|April|May|June|July|August|September|October|November|December)'
+LONG_DATE=r'(?:'+MONTH+r'\s+\d{1,2},?\s+20\d{2}|\d{1,2}(?:st|nd|rd|th)?\s+'+MONTH+r',?\s+20\d{2})'
+SEBI_TITLE=re.compile(r'Statement of (?:Unaudited |Audited |Reviewed )?(Consolidated|Standalone) (?:Unaudited |Audited |Reviewed )?(?:Financial )?Results for the Quarter and (Half[- ]?Year|Six Months|Nine Months) Ended\s+('+LONG_DATE+')',re.I)
+SEBI_DATE=r'\d{2}-(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)-\d{2}|\d{2}[-.]\d{2}[-.]20\d{2}'
+
+
+def sebi_date(text):
+    """Exact printed date to a date, or None. No correction of damaged text."""
+    cleaned=re.sub(r'(\d)(?:st|nd|rd|th)\b',r'\1',text.replace(',','')).strip()
+    for fmt in ('%d-%b-%y','%d-%m-%Y','%d.%m.%Y','%B %d %Y','%d %B %Y'):
+        try:return datetime.strptime(cleaned,fmt).date()
+        except ValueError:pass
+    return None
+
+
 def quarter_start(end):
     month=end.month-2
     return end.replace(month=month,day=1) if month>0 else end.replace(year=end.year-1,month=month+12,day=1)
@@ -55,7 +70,9 @@ def extract(doc,rows):
     for page,parts in pages.items():
         text=page_text(parts)
         title=re.search(r'Statement of (Consolidated|Standalone) (?:Unaudited |Audited )?(?:Financial )?Results for the Quarter[^.]{0,100}?Ended\s+('+DATE+')',text,re.I)
-        if title:
+        # The labelled three-quarter profile needs its own "quarter ended <date>"
+        # labels; otherwise the SEBI six-date profile below may apply.
+        if title and (re.search(r'quarter ended\s+'+DATE,text[title.end():],re.I) or not SEBI_TITLE.search(text)):
             scope=title[1].lower();header=text[title.end():]
             marker=re.search(r'(?:Continuing operations|Revenue from operations|Interest earned)',header,re.I)
             if not marker:gaps.append(f'Page {page}: column/header boundary unverified.');continue
@@ -71,6 +88,31 @@ def extract(doc,rows):
                 if ends[0]!=date_value(title[2]):continue
             except ValueError:continue
             count=len(dates);header_quotes=[title[0],unit[0],*(m[0] for m in labels)]
+        elif sebi:=SEBI_TITLE.search(text):
+            # SEBI half-year / nine-month profile: "Quarter ended | Half year (or
+            # Six/Nine months) ended | Year ended" over six explicit dates. Dates are
+            # parsed exactly as printed; OCR-damaged dates or units fail closed.
+            scope=sebi[1].lower();header=text[sebi.end():]
+            marker=re.search(r'Revenue from operations|Interest earned',header,re.I)
+            if not marker:gaps.append(f'Page {page}: column/header boundary unverified.');continue
+            header=header[:marker.start()]
+            if not (re.search(r'(?:Quarter|3 months|Three months) ended',header,re.I) and re.search(r'(?:Half[- ]?year|Six months|6 months|Nine months|9 months) ended',header,re.I) and re.search(r'Year ended',header,re.I)):
+                gaps.append(f'Page {page}: quarter/year-to-date/year column groups unverified.');continue
+            unit=re.search(r'(₹|INR|Rs\.?)\s*(?:in\s+)?(crores?|lakhs?|millions?)\b',header,re.I)
+            if not unit:gaps.append(f'Page {page}: currency/unit header could not be verified; no numbers inferred.');continue
+            # A lone extracted column rule (| or I) may sit between dates; no digit is altered.
+            columns=re.search(r'('+SEBI_DATE+r')(?:\s+(?:[|I]\s+)?(?:\(?(?:Un-?audited|Audited|Reviewed)\)?\s+)*('+SEBI_DATE+r')){5}',header,re.I)
+            tokens=re.findall(SEBI_DATE,columns[0],re.I) if columns else []
+            all_ends=[sebi_date(t) for t in tokens]
+            if len(all_ends)!=6 or None in all_ends:gaps.append(f'Page {page}: six printed column dates could not be verified.');continue
+            ends=all_ends[:3]
+            if sebi_date(sebi[3])!=ends[0] or all_ends[3]!=ends[0] or all_ends[4]!=ends[2]:
+                gaps.append(f'Page {page}: column dates do not match the statement period.');continue
+            span=(ends[0]-all_ends[5]).days
+            nine=bool(re.search(r'nine|9 months',sebi[2]+header,re.I))
+            if not ((260<=span<=280) if nine else (170<=span<=185)):
+                gaps.append(f'Page {page}: year column does not match the reporting calendar.');continue
+            count=6;header_quotes=[sebi[0],unit[0],columns[0]]
         else:
             # Explicit six-column profile: month/day cells and their year row
             # are separated in PDF content order. Never infer years by position
@@ -100,7 +142,10 @@ def extract(doc,rows):
         for metric,pattern in METRICS.items():
             regex=r'(?<!\w)('+pattern+r')\s+('+CELL+r'(?:\s+'+CELL+r'){'+str(count-1)+r'})(?![\d.,])'
             for match in re.finditer(regex,text,re.I):
-                if re.match(r'\s+'+CELL+r'(?:\s|$)',text[match.end():]):continue
+                following=text[match.end():]
+                # Another numeric cell means more columns than verified; a lone 1-2
+                # digit serial followed by the next row label is a row number.
+                if re.match(r'\s+'+CELL+r'(?:\s|$)',following) and not re.match(r'\s+\d{1,2}\s+[A-Za-z(]',following):continue
                 source=ref(doc,parts,match[0])
                 if not source:continue
                 cells=re.findall(CELL,match[2]);values=[]

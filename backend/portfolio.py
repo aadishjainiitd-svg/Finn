@@ -24,10 +24,10 @@ class Holding(BaseModel):
 def book(owner):
     saved=repository.get(owner,'state','book')
     if saved:return saved
-    default={'holdings':[{'symbol':s,'weight':None,'thesis':'','sector':'','inputs':[]} for s in PORTFOLIO],
-             'is_demo':True,'label':'Demonstration book · weights and theses not supplied'}
-    try:return repository.save(owner,'state','book',default,expected=0)
-    except repository.Conflict:return repository.get(owner,'state','book')
+    # Served without persisting: anonymous reads (crawlers, health pings) must not
+    # write a row each. The first explicit save inserts it (expected version 0).
+    return {'holdings':[{'symbol':s,'weight':None,'thesis':'','sector':'','inputs':[]} for s in PORTFOLIO],
+            'is_demo':True,'label':'Demonstration book · weights and theses not supplied','_version':0}
 
 
 async def validate_holdings(rows):

@@ -183,9 +183,15 @@ async def assess_batch(progress):
 async def run_one(job):
     progress={**job['progress'],'id':job['id'],'status':'running'}
     async def pulse():
+        renewed=time.time()
         while True:
             await asyncio.sleep(15)
-            await asyncio.to_thread(heartbeat,job,progress.copy())
+            try:
+                await asyncio.to_thread(heartbeat,job,progress.copy());renewed=time.time()
+            except SourceError as exc:
+                # A lost lease stops at once. A transient storage failure is retried
+                # while the last renewed lease still has a safe margin left.
+                if exc.code=='lease_lost' or time.time()-renewed>LEASE-20:raise
     task=asyncio.create_task(execute(job,progress));beat=asyncio.create_task(pulse())
     try:
         done,_=await asyncio.wait([task,beat],return_when=asyncio.FIRST_COMPLETED)
