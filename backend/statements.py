@@ -307,8 +307,15 @@ def trajectory(facts,financial=False,span=5):
     """
     annual=[f for f in facts if f['period_kind']=='annual' and f['value'] is not None]
     if not annual:return None
-    counts={s:len({f['period_end'] for f in annual if f['scope']==s and f['metric']=='revenue'}) for s in ('consolidated','standalone')}
-    scope=max(counts,key=lambda s:(counts[s],s=='consolidated'))
+    # Pick the basis with the most years in the latest five-year window, so older
+    # reports cannot pull the series back to a stale scope; ties go to consolidated.
+    revenue_ends=[f['period_end'] for f in annual if f['metric']=='revenue']
+    if not revenue_ends:return None
+    floor=str(int(max(revenue_ends)[:4])-span+1)
+    counts={s:len({f['period_end'] for f in annual if f['scope']==s and f['metric']=='revenue' and f['period_end'][:4]>=floor}) for s in ('consolidated','standalone')}
+    newest=max(revenue_ends)
+    has_newest={s:any(f['period_end']==newest and f['scope']==s for f in annual if f['metric']=='revenue') for s in counts}
+    scope=max(counts,key=lambda s:(has_newest[s],counts[s],s=='consolidated'))
     if not counts[scope]:return None
     ends=report_ends(facts)
     selected=[f for f in annual if f['scope']==scope]

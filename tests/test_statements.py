@@ -132,3 +132,11 @@ def test_working_capital_days_use_closing_balance_and_same_report_revenue():
     y=next(y for y in trajectory(facts)['years'] if y['fiscal_year']=='2025')
     assert Decimal(y['derived']['receivable_days']['value'])==Decimal(240)/Decimal(1200)*365
     assert Decimal(y['derived']['inventory_days']['value'])==Decimal(120)/Decimal(1200)*365
+
+
+def test_trajectory_scope_follows_latest_window_not_stale_older_years():
+    from backend.statements import trajectory
+    old=report('o23',2023,800,700)+report('o22',2022,700,600)
+    new=report('n26',2026,1200,1000,title='STANDALONE STATEMENT OF PROFIT AND LOSS')
+    path=trajectory(old+new)
+    assert path['scope']=='standalone' and path['years'][-1]['fiscal_year']=='2026' and not path['years'][-1]['gap']
