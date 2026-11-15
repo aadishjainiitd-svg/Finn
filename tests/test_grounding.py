@@ -121,3 +121,34 @@ def test_answer_cache_hit_and_source_version_invalidation():
     assert recent_answer('TEST','What are the risks?')['cache_hit']
     store.put('latest-document-document-'+doc['download_url'],'new-bytes-xparser')
     assert recent_answer('TEST','What are the risks?') is None
+
+
+def test_contrast_quote_retains_same_speaker_caution():
+    from backend.llm import grounded_display
+    prior='The two customers remain under pressure for the next two quarters.'
+    quote='At the same time we see initial growth in other areas.'
+    e={'id':'call-p1','kind':'transcript','text':prior+' '+quote,'speaker_before':'Manager One','management_speakers':['Manager One']}
+    r={'status':'supported','question':'What is the outlook?','evidence':[e],'claims':[{'text':'ignored','citations':[{'evidence_id':e['id'],'quote':quote}]}]}
+    result=grounded_display(r)
+    assert result['claims'][0]['citations'][0]['quote']==prior+' '+quote
+    assert grounded_display(result)==result
+
+def test_compound_annual_risk_question_keeps_risk_passage_without_call():
+    from backend.documents import retrieve
+    doc={'hash':'annual','version':'annual','kind':'annual','name':'Example Limited'}
+    rows=[('annual-p1-c0',1,'ABOUT THE COMPANY '+('We make industrial products. '*25)),('annual-p2-c0',2,'Principal risks include demand uncertainty and credit exposure. '+('Risks and capex require review. '*20))]
+    with store.db() as c:
+        for eid,page,text in rows:
+            c.execute('INSERT INTO chunks VALUES (?,?,?,?)',(eid,'annual',page,text))
+            c.execute('INSERT INTO search VALUES (?,?,?)',(eid,'annual',text))
+    result=retrieve([doc],'What does Example do, and what principal risks does its annual report identify?')
+    assert {e['page'] for e in result}=={1,2}
+    assert 2 in {e['page'] for e in retrieve([doc],'What does Example do, and what does management say about risks?')}
+
+
+def test_dropped_context_does_not_change_answer_on_cache_rerender():
+    from backend.llm import grounded_display
+    evidence=[{'id':str(i),'kind':'annual','text':label+' '+('observation '*count)+'.'} for i,(label,count) in enumerate([('First',101),('Second',110)])]
+    raw={'question':'What does Example do?','status':'supported','evidence':evidence,'claims':[{'text':'ignored','citations':[{'evidence_id':e['id'],'quote':e['text']}]} for e in evidence]}
+    rendered=grounded_display(raw)
+    assert grounded_display(rendered)==rendered

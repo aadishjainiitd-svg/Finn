@@ -13,6 +13,12 @@ def restore():
     if baseline.get('day')==day:
         key='admission-'+day;current=store.cached(key) or {'reserved_tokens':0,'requests':0}
         store.put(key,{k:max(current[k],baseline[k]) for k in ('reserved_tokens','requests')})
+    from .llm import admission_key
+    for baseline in data.get('model_admissions',[]):
+        if baseline.get('day')!=day:continue
+        key=admission_key(baseline['provider'],baseline['model'],day)
+        current=store.cached(key) or {'reserved_tokens':0,'requests':0}
+        store.put(key,{k:max(current[k],baseline[k]) for k in ('reserved_tokens','requests')})
     if not store.cached('brief-snapshot') and data.get('brief'):
         brief=data['brief'];brief['is_demo_seed']=True;brief['source_status']='demo'
         from .brief import filing_revision

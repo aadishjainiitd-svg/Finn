@@ -155,7 +155,8 @@ def retrieve(documents,question):
     words=re.findall(r'[a-zA-Z]{3,}',question.lower())
     stop={'what','which','does','from','this','that','with','have','their','about','were','company','latest','annual','report','transcript','the','and'}
     terms=[w for w in words if w not in stop]
-    expansions={'risk':['risk','challenge','uncertainty'],'outlook':['outlook','expect','demand','growth'], 'margin':['margin','profitability'], 'business':['segment','business','products']}
+    if re.search(r'\bai\b',question,re.I):terms.append('ai')
+    expansions={'risk':['risk','challenge','uncertainty'],'outlook':['outlook','expect','demand','growth'], 'margin':['margin','profitability'], 'business':['segment','business','products'], 'deal':['tcv','order','deal']}
     for key, extra in expansions.items():
         if any(key in w for w in words): terms.extend(extra)
     query=' OR '.join('"'+w+'"' for w in dict.fromkeys(terms)) or '"business"'
@@ -175,12 +176,27 @@ def retrieve(documents,question):
                     continues=index+1<len(all_rows) and all_rows[index+1]['page']==r['page']
                     previous=(previous+' '+(r['text'][:1800] if continues else r['text']))[-15000:]
             rows=c.execute('SELECT id,text FROM search WHERE search MATCH ? AND hash=? ORDER BY bm25(search) LIMIT 4',(query,version)).fetchall()
+            # Reserve a passage for each explicit specialised topic, so a rare
+            # deal keyword cannot crowd every AI passage out of a compound query.
+            if doc['kind']=='transcript':
+                anchors=[]
+                topic_queries=[]
+                if re.search(r'\bai\b',question,re.I):topic_queries.append('"AI"')
+                if re.search(r'\bdeal',question,re.I):topic_queries.append('"TCV" OR "order book" OR "deal"')
+                for topic in topic_queries:
+                    anchors.extend(c.execute('SELECT id,text FROM search WHERE search MATCH ? AND hash=? ORDER BY bm25(search) LIMIT 1',(topic,version)).fetchall())
+                unique={r['id']:r for r in anchors+rows}
+                rows=list(unique.values())[:4]
             if doc['kind']=='annual' and (re.search(r'what does .{1,50} do',question,re.I) or 'business' in words):
                 first=re.findall(r'[a-zA-Z]+',doc.get('name',''))
                 header=r'ABOUT THE COMPANY|Business Overview|BUSINESS OVERVIEW'+('|ABOUT '+re.escape(first[0].upper()) if first else '')
                 candidates=c.execute('SELECT id,text,page FROM chunks WHERE hash=? ORDER BY page,id',(version,)).fetchall()
                 context=[r for r in candidates if re.search(header,r['text']) and len(r['text'])>500][:1]
                 rows=(context+[r for r in rows if not context or r['id']!=context[0]['id']])[:4]
+                call_focused=(re.search(r'\bmanagement\b|earnings.call|concall',question,re.I)
+                    and not re.search(r'\bannual\b|\breport\b|\brisks?\b|\bcapex\b',question,re.I)
+                    and any(d['kind']=='transcript' for d in documents))
+                if context and call_focused and re.search(r'what does .{1,50} do',question,re.I):rows=context
             if not rows:
                 rows=c.execute('SELECT id,text FROM chunks WHERE hash=? ORDER BY page LIMIT 2',(version,)).fetchall()
             for r in rows:

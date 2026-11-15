@@ -60,7 +60,7 @@ def test_numeric_conversion_and_incompatible_period_refusal():
 def test_shared_job_retention_and_filing_coalescing(monkeypatch):
     research.jobs.update({str(n):{'status':'error'} for n in range(40)})
     async def scenario():
-        gate=asyncio.Event()
+    gate=asyncio.Event()
         async def run(job,event):await gate.wait()
         monkeypatch.setattr(brief,'run_filing',run)
         brief.events_by_id['event']={'id':'event','symbol':'TEST','evidence':[],'source_signature':'x','url':'https://example.com/a.pdf'}
@@ -112,3 +112,14 @@ def test_source_connection_pins_validated_address_and_preserves_tls_hostname(mon
     monkeypatch.setattr(network.httpx,'AsyncClient',lambda **kw:client(transport=httpx.MockTransport(response),**kw))
     body,meta=asyncio.run(network.fetch('https://example.com/a.pdf'))
     assert body==b'fixture' and meta['url']=='https://example.com/a.pdf' and len(seen)==1
+
+
+def test_model_budget_is_separate_without_resetting_existing_ledger():
+    day="2026-11-14"
+    old=llm.admission_key("groq","openai/gpt-oss-120b",day)
+    new=llm.admission_key("groq","openai/gpt-oss-20b",day)
+    store.put(old,{"reserved_tokens":178548,"requests":26})
+    store.put(new,{"reserved_tokens":1000,"requests":1})
+    assert old=="admission-"+day and new!=old
+    assert store.cached(old)["reserved_tokens"]==178548
+    assert store.cached(new)["reserved_tokens"]==1000
