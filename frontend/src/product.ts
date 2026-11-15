@@ -62,7 +62,8 @@ export const noticeLine=(e:{kind?:string;title?:string;description?:string})=>{
  let text=raw.replace(/^.{0,120}?\bhas\s+(?:(?:informed|intimated)\s+the\s+Exchange\s+(?:about|regarding|that|of)|submitted\s+to\s+the\s+Exchange,?)\s+/i,'').replace(/^(?:the\s+)?/i,'').trim();
  text=text.charAt(0).toUpperCase()+text.slice(1);
  const norm=(s:string)=>s.toLowerCase().replace(/[^a-z0-9]+/g,' ').trim();
- if(!text||norm(text)===norm(e.title||'')||norm(e.title||'').includes(norm(text)))return '';
+ const t=norm(e.title||''),n=norm(text);
+ if(!n||n===t||t.includes(n)||(t.length>6&&n.startsWith(t)&&n.length-t.length<30))return '';
  return text.length>220?text.slice(0,217).replace(/\s+\S*$/,'')+'…':text;
 };
 

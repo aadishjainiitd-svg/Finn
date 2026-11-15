@@ -223,3 +223,14 @@ textarea{width:100%;box-sizing:border-box}
 .fn-pvdcall{font-size:12px;font-weight:600;color:var(--navy)}
 .fn-pvdentry+.fn-pvdentry{margin-top:8px}
 .fn-pvdentry .fn-num{text-align:left;font-weight:500}
+/* ===== Visual fixes from live review ===== */
+.fn-cardtitle{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.fn-cardtitle .fn-chev{float:right;margin-left:6px}
+.fn-cardtitle{display:-webkit-box}
+.fn-eventline>[role=listitem]{min-width:96px;padding-right:8px}
+.fn-eventline>[role=listitem] *{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fn-sheet-heading{box-shadow:0 1px 0 var(--line);margin-bottom:4px}
+.fn-sheet-heading .fn-c{background:transparent;border:0;box-shadow:none;padding:0}
+.fn-sheetactions .fn-button{justify-content:center;font-weight:600}
+.fn-hd .fn-actions{gap:6px;row-gap:4px;flex-wrap:wrap}
+.fn-hd .fn-actions .fn-hit{min-height:36px}

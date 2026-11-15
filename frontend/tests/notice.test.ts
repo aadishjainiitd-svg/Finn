@@ -19,3 +19,7 @@ test('generic subjects are replaced by the exchange words',()=>{
  assert.deepEqual(cardHeadline({kind:'filing',title:'General Updates',description:'General Updates · X Ltd has informed the Exchange about Approval from the RBI'}),{title:'Approval from the RBI',line:''});
  assert.equal(cardHeadline({kind:'filing',title:'Director appointed for one year',description:'x · X Ltd has informed the Exchange about board change'}).title,'Director appointed for one year');
 });
+
+test('notice line that only extends the title is dropped',()=>{
+ assert.equal(noticeLine({kind:'filing',title:'Change in Director(s)',description:'Change in Director(s) · X Ltd has informed the Exchange about Change in Director(s) of the company.'}),'');
+});
