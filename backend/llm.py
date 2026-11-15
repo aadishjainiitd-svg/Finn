@@ -8,7 +8,7 @@ from datetime import datetime,timezone
 from typing import Literal
 import httpx
 from pydantic import BaseModel, ConfigDict, Field, ValidationError
-from .config import MODEL, GEMINI_MODEL
+from .config import MODEL, GEMINI_MODEL, BULK_MODEL
 from .documents import normal,SPEAKER,speaker_key
 from .network import SourceError
 from . import store
@@ -273,6 +273,8 @@ def validate_answer(data,evidence):
     return answer.model_dump()
 
 async def synthesize(question,evidence,progress,provider='groq',mode='answer'):
+    # Route selection-style work to the cheaper model; user questions keep the stronger one.
+    chosen=BULK_MODEL if mode in ('thesis','research') else MODEL
     global next_allowed,daily_remaining,daily_remaining_day
     selected=[]; size=0
     for e in evidence:
@@ -305,7 +307,7 @@ async def synthesize(question,evidence,progress,provider='groq',mode='answer'):
         if wait: await asyncio.sleep(wait)
         progress['capacity_wait_seconds']=round(wait,2)
         day=datetime.now(timezone.utc).strftime('%Y-%m-%d')
-        ledger=admission_key(provider,GEMINI_MODEL if provider=='gemini' else MODEL,day)
+        ledger=admission_key(provider,GEMINI_MODEL if provider=='gemini' else chosen,day)
         usage=store.cached(ledger) or {'reserved_tokens':0,'requests':0}
         from . import repository,admission
         if repository.configured():
@@ -330,7 +332,7 @@ async def synthesize(question,evidence,progress,provider='groq',mode='answer'):
                 else:
                     r=await c.post('https://api.groq.com/openai/v1/chat/completions',
                         headers={'Authorization':'Bearer '+os.getenv('GROQ_API_KEY','')},json={
-                          'model':MODEL,'messages':[{'role':'system','content':system},{'role':'user','content':user}],
+                          'model':chosen,'messages':[{'role':'system','content':system},{'role':'user','content':user}],
                           'temperature':0,'reasoning_effort':'low','max_completion_tokens':1600,'response_format':{'type':'json_schema','json_schema':{'name':'finn_answer','strict':True,'schema':schema}}})
                     for h,k in [('x-ratelimit-limit-tokens','limit_tokens'),('x-ratelimit-limit-requests','limit_requests')]:
                         if r.headers.get(h): metrics[k]=int(r.headers[h])
@@ -366,11 +368,11 @@ async def synthesize(question,evidence,progress,provider='groq',mode='answer'):
             raw=data['candidates'][0]['content']['parts'][0]['text'] if provider=='gemini' else data['choices'][0]['message']['content']
             if mode=='thesis':
                 observations=resolve_thesis(json.loads(raw),selected,allowed)
-                return {'observations':observations,'provider':provider,'model':MODEL,'policy':'thesis-spans-v1'}
+                return {'observations':observations,'provider':provider,'model':chosen,'policy':'thesis-spans-v1'}
             if mode=='research':
-                return {'observations':resolve_research(json.loads(raw),selected,allowed),'provider':provider,'model':MODEL,'policy':'research-spans-v1'}
+                return {'observations':resolve_research(json.loads(raw),selected,allowed),'provider':provider,'model':chosen,'policy':'research-spans-v1'}
             result=resolve_spans(json.loads(raw),selected,allowed)
         except (KeyError,ValueError,IndexError,ValidationError,TypeError):
             raise SourceError('invalid_answer','The model response could not be verified. Read the available excerpts instead.') from None
-        return grounded_display({**result,'provider':provider,'model':GEMINI_MODEL if provider=='gemini' else MODEL,'evidence':selected,'question':question})
+        return grounded_display({**result,'provider':provider,'model':GEMINI_MODEL if provider=='gemini' else chosen,'evidence':selected,'question':question})
 

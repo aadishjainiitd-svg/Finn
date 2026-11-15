@@ -25,7 +25,11 @@ def book(owner):
     saved=repository.get(owner,'state','book')
     if saved:
         # Books saved before sector labels existed show the demo profile until the owner edits it.
-        return {**saved,'holdings':[{**h,'sector':h.get('sector') or PORTFOLIO_PROFILE.get(h['symbol'],'')} for h in saved.get('holdings',[])]}
+        holdings=[{**h,'sector':h.get('sector') or PORTFOLIO_PROFILE.get(h['symbol'],'')} for h in saved.get('holdings',[])]
+        # An untouched demonstration book (no weight or thesis entered) shows the sample portfolio.
+        if saved.get('is_demo') and not any(h.get('weight') is not None or h.get('thesis') for h in holdings):
+            holdings=[{**h,'weight':str(SAMPLE_BOOK[h['symbol']][0]),'thesis':SAMPLE_BOOK[h['symbol']][1]} if h['symbol'] in SAMPLE_BOOK else h for h in holdings]
+        return {**saved,'holdings':holdings}
     # Served without persisting: anonymous reads (crawlers, health pings) must not
     # write a row each. The first explicit save inserts it (expected version 0).
     return {'holdings':[{'symbol':s,'weight':str(SAMPLE_BOOK[s][0]) if s in SAMPLE_BOOK else None,'thesis':SAMPLE_BOOK.get(s,(None,''))[1],'sector':PORTFOLIO_PROFILE.get(s,''),'inputs':[]} for s in PORTFOLIO],
