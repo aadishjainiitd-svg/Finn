@@ -16,6 +16,7 @@ import {WatchView} from './Watch';
 
 import {ResearchPack} from './ResearchPack';
 import {GuidanceCard} from './Guidance';
+import {PersonBio,personName} from './PersonBio';
 
 import {HoldingDetail} from './Holding';
 
@@ -180,7 +181,7 @@ export default function App(){
 
  {panel.event.results&&<Results result={panel.event.results} onEvidence={e=>{evidenceTrigger.current=document.activeElement as HTMLElement;setNested(e);}}/>}
 
- {panel.event.management_profile&&<div className="fn-c"><h3>Management background</h3><p className="fn-f fn-m">{panel.event.management_profile.label}</p><p className="fn-gap">{panel.event.management_profile.text}</p><button className="fn-hit" onClick={()=>{evidenceTrigger.current=document.activeElement as HTMLElement;setNested(panel.event.management_profile!.evidence);}}>Inspect profile source <Glyph name="file" size={14}/></button></div>}
+ {(()=>{const who=/management|director|appoint|resign|cessation|ceo|cfo/i.test(`${panel.event.title} ${panel.event.description} ${panel.event.reason}`)?personName(`${panel.event.title} ${panel.event.description}`):'';return who?<PersonBio name={who} company={panel.event.name||panel.event.symbol}/>:null;})()}{panel.event.management_profile&&<div className="fn-c"><h3>Management background</h3><p className="fn-f fn-m">{panel.event.management_profile.label}</p><p className="fn-gap">{panel.event.management_profile.text}</p><button className="fn-hit" onClick={()=>{evidenceTrigger.current=document.activeElement as HTMLElement;setNested(panel.event.management_profile!.evidence);}}>Inspect profile source <Glyph name="file" size={14}/></button></div>}
 
  <div className="fn-grid2 fn-verdicts"><GuidanceCard symbol={panel.event.symbol} onEvidence={e=>{evidenceTrigger.current=document.activeElement as HTMLElement;setNested(e);}}/><div className="fn-c"><h3 className="fn-label">Your thesis</h3><Pill tone={panel.event.thesis?thesisLabel(panel.event.thesis_status)[1]:''}>{panel.event.thesis?thesisLabel(panel.event.thesis_status)[0]:'Add a thesis'}</Pill><p>{panel.event.thesis||'Capture your reason for owning this stock in Book.'}</p></div></div><div className="fn-sheetactions"><button className="fn-button" onClick={()=>{const symbol=panel.event.symbol;close();navigate('research',symbol);}}>Research {panel.event.symbol} <Glyph name="arrow"/></button></div>
 

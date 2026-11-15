@@ -77,3 +77,9 @@ export const cardHeadline=(e:{kind?:string;title?:string;description?:string})=>
  const line=noticeLine(e);const title=displayTitle(e.title||'');
  return GENERIC.test(e.title||'')&&line?{title:line,line:''}:{title,line};
 };
+
+/** Name of the person a management-change notice is about, if stated. */
+export function personName(text:string){
+ const m=text.match(/\b(?:Mr|Ms|Mrs|Dr|Shri|Smt)\.?\s+((?:[A-Z]\.\s?)*[A-Z][a-z]+(?:\s+(?:[A-Z]\.\s?)*[A-Z][a-z]+){0,3})/);
+ return m?m[1].replace(/\s+/g,' ').trim():'';
+}

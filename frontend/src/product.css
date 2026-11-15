@@ -216,3 +216,10 @@ textarea{width:100%;box-sizing:border-box}
 .fn-pulse{display:grid;grid-template-columns:repeat(auto-fill,minmax(64px,1fr));gap:4px}
 .fn-pulse .fn-tile{min-width:0}
 .fn-pulse{grid-template-columns:repeat(auto-fill,minmax(78px,1fr))}.fn-tile b{font-size:10px;letter-spacing:0}
+/* Promised vs delivered */
+.fn-pvd{margin:6px 0 12px}
+.fn-pvd h4{font-size:14px;margin-bottom:6px}
+.fn-pvdrow{display:grid;grid-template-columns:92px 1fr;gap:10px;padding:10px 0;border-top:1px solid #eef0f4}
+.fn-pvdcall{font-size:12px;font-weight:600;color:var(--navy)}
+.fn-pvdentry+.fn-pvdentry{margin-top:8px}
+.fn-pvdentry .fn-num{text-align:left;font-weight:500}

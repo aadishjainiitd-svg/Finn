@@ -40,3 +40,14 @@ def test_questions_segments_and_two_ranges_are_not_scored():
     assert paint['scope']=='segment: paint' and percent_verdict(paint,[],'2030-01-01')[0]=='not_comparable'
     volume=percent_target('Our guidance of double-digit volume growth and 12% volume growth stays.',CALL)
     assert percent_verdict(volume,[],'2030-01-01')[0]=='not_comparable'
+
+
+def test_promised_vs_delivered_lists_each_call_once_and_shows_progress():
+    from backend.report_insights import promised_vs_delivered
+    calls=[{'version':'a','period':'Q2 FY25','fetched_at':'2'},{'version':'b','period':'Q2 FY25','fetched_at':'1'},{'version':'c','period':'Q1 FY25','fetched_at':'0'}]
+    target={'label':'Revenue growth 10–12% · FY25','metric':'revenue_growth','symbol':'TEST'}
+    items=[{'evidence':{'version':'b'},'target':target,'status':'not_due','reason':'r','quote':'q','actual':None}]
+    q=lambda end,v:{'symbol':'TEST','period_kind':'quarter','metric':'revenue','value':v,'period_end':end,'evidence_id':'t1','scope':'consolidated','quote':'x','evidence':{}}
+    rows=promised_vs_delivered(calls,items,[q('2024-09-30','111'),q('2023-09-30','100')])
+    assert [r['call'] for r in rows]==['Q2 FY25','Q1 FY25']
+    assert rows[0]['entries'][0]['delivered']['value']=='11.0' and rows[1]['note']

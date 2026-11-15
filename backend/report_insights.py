@@ -252,6 +252,52 @@ def commitment_ledger(documents,facts=(),today=None):
                 if item['status'] in ('revised','withdrawn'):continue
                 item.update(status='not_comparable',reason='Multiple guidance statements for this metric and period require revision/order review; excluded from the kept count.')
     met=sum(i['status']=='met' for i in items);missed=sum(i['status']=='missed' for i in items)
-    return {'items':items,'met':met,'missed':missed,'evaluable':met+missed,'kept_percent':100*met/(met+missed) if met+missed else None,
+    by_call=promised_vs_delivered(calls,items,facts)
+    return {'items':items,'by_call':by_call,'met':met,'missed':missed,'evaluable':met+missed,'kept_percent':100*met/(met+missed) if met+missed else None,
         'coverage':'Candidate commitments from retrieved management passages, not an exhaustive transcript audit.',
         'limitation':'No promise receives kept-count credit without a comparable target and actual. Revised or withdrawn targets never count as met.'}
+
+
+def latest_quarter_growth(facts,symbol):
+    """Newest quarterly revenue with its year-ago column from the same results table."""
+    from .numbers import decimal
+    quarters=[f for f in facts if f.get('symbol')==symbol and f.get('period_kind')=='quarter' and f.get('metric')=='revenue' and f.get('value') is not None]
+    for current in sorted(quarters,key=lambda f:f['period_end'],reverse=True):
+        year,rest=current['period_end'][:4],current['period_end'][4:]
+        prior=next((f for f in quarters if f['period_end']==str(int(year)-1)+rest and f.get('evidence_id')==current.get('evidence_id') and f.get('scope')==current.get('scope')),None)
+        if prior and decimal(prior['value'])>0:
+            return {'period_end':current['period_end'],'value':f"{(decimal(current['value'])/decimal(prior['value'])-1)*100:.1f}",
+                    'scope':current.get('scope'),'quote':current.get('quote'),'evidence':current.get('evidence'),
+                    'label':'Revenue growth vs the same quarter last year, both columns from one results table'}
+    return None
+
+
+def promised_vs_delivered(calls,items,facts):
+    """The last four calls, newest first: what management guided on each call
+    and what has been delivered so far. Calls without numerical guidance are
+    listed so the four-quarter coverage is explicit."""
+    ordered=sorted({(c.get('version') or c.get('id') or str(i)):c for i,c in enumerate(calls)}.values(),key=lambda c:c.get('fetched_at') or '',reverse=True)
+    def call_key(c):
+        import re as _re
+        m=_re.search(r'Q([1-4])\s*(?:FY|CY)\s*[\'’]?(?:20)?(\d{2})',c.get('period') or c.get('discovery_period') or '',_re.I)
+        return (int(m[2]),int(m[1])) if m else (0,0)
+    groups={}
+    for c in sorted(ordered,key=call_key,reverse=True):
+        groups.setdefault(c.get('period') or c.get('discovery_period') or c.get('title'),[]).append(c)
+    rows=[]
+    for label,versions in list(groups.items())[:4]:
+        call=versions[0];ids={v.get('version') for v in versions if v.get('version')}
+        guided=[i for i in items if i['evidence'].get('version') in ids and i.get('target') and i['target'].get('label')]
+        entries=[]
+        for item in guided:
+            target=item['target'];delivered=None
+            if item.get('actual'):
+                delivered={'value':item['actual']['value'],'unit':item['actual'].get('unit'),'quote':item['actual'].get('quote'),'evidence':item['actual'].get('evidence'),'label':'Reported for the guided year'}
+            elif item['status']=='not_due' and target.get('metric')=='revenue_growth':
+                progress=latest_quarter_growth(facts,target.get('symbol'))
+                if progress:delivered={**progress,'unit':'percent','label':'Progress so far · '+progress['label']}
+            entries.append({'promise':target['label'],'status':item['status'],'reason':item['reason'],'quote':item['quote'],
+                            'speaker':item.get('speaker'),'evidence':item['evidence'],'delivered':delivered})
+        rows.append({'call':label,'evidence':{k:call.get(k) for k in ('title','original_url','version','period')},
+                     'entries':entries,'note':None if entries else 'No numerical management guidance passed the checks in this call.'})
+    return rows
