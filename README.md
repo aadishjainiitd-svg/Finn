@@ -4,7 +4,7 @@ A mobile investor brief and primary-source research workspace for the ENAM hirin
 
 **[Open FINN](https://finn-enam-yije.onrender.com)** · [AI build history](docs/AI_BUILD_HISTORY.md) · [Evidence audit](docs/EVIDENCE_AUDIT.md) · [Demo and submission draft](docs/SUBMISSION.md)
 
-Release status, 15 November: the implemented scope is deployed on Render Free and the hosted unfamiliar-company research gate passes. TCS, KPITTECH and ASTRAL have audited production-model answers. One broader HAVELLS question is explicitly partial; the audit distinguishes grounding correctness from completeness. No blanket claim of 12 fully answered questions is made.
+Release status, 15 November: the implemented scope is deployed on Render Free and the hosted unfamiliar-company research gate passes. TCS, KPITTECH and ASTRAL have audited production-model answers. The previously partial HAVELLS question now covers report risks, demand outlook and specific margin pressure; the deployed answer and citations are verified. Unanswerable questions still abstain.
 
 ## What works
 
@@ -39,6 +39,6 @@ No accounts, portfolio editing, native notifications, live quotes, commitment tr
 
 See [TESTING.md](TESTING.md) for executable checks, [QA review](docs/QA_REVIEW.md), [hosted feasibility measurements](docs/FEASIBILITY_RESULTS.md), and [research audit](docs/EVIDENCE_AUDIT.md). Tests distinguish live requests from controlled failure fixtures and cached replays.
 
-Executed checks: 53 Python tests, 8 Node tests and 7 Playwright browser tests pass; production Vite build succeeds. The 12-case audit checks 17 displayed claims and 26 exact citations, with one disclosed partial answer. [Hosted verification](docs/hosted-verification.json) records CROMPTON's measured extraction and citations.
+Executed checks: 56 Python tests, 8 Node tests and 7 Playwright browser tests pass; production Vite build succeeds. The 12-case audit checks 17 displayed claims and 26 exact citations, including the repaired HAVELLS case. [Hosted verification](docs/hosted-verification.json) records CROMPTON’s measured extraction and citations. [HAVELLS repair verification](docs/havells-verification.json) records the fresh deployed answer and identical cached replay.
 
 Next: improve compound-question coverage, add durable budget/cache storage, and test prioritisation with investors. Recent usage not included in a saved baseline can be lost on a Free-service restart; provider free-tier enforcement remains authoritative. Deferred product features remain deferred. [Implementation log](docs/IMPLEMENTATION_LOG.md) and [checkpoint](docs/RESUME.md) retain the repair and verification record. The covering email is prepared but has not been sent.

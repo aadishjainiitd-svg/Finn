@@ -1,6 +1,6 @@
 # FINN — focused PRD
 
-> Current implementation status (15 November 2026): approved scope is implemented and deployed on Render Free. Production Groq 120B, hosted CROMPTON research, restart provenance and final mobile workflows are verified. One broad HAVELLS evaluation answer is explicitly partial. See [final audit](EVIDENCE_AUDIT.md), [implemented architecture](../ARCHITECTURE.md), [QA results](QA_REVIEW.md) and [checkpoint](RESUME.md). Historical planning-only statements below are retained as the decision record, not current authorisation. No deferred feature was added.
+> Current implementation status (15 November 2026): approved scope is implemented and deployed on Render Free. Production Groq 120B, hosted CROMPTON research, restart provenance and final mobile workflows are verified. The earlier HAVELLS partial answer is resolved and verified on the deployed app; see the HAVELLS repair record in the audit. See [final audit](EVIDENCE_AUDIT.md), [implemented architecture](../ARCHITECTURE.md), [QA results](QA_REVIEW.md) and [checkpoint](RESUME.md). Historical planning-only statements below are retained as the decision record, not current authorisation. No deferred feature was added.
 
 14 November 2026 · Planning only. The two-workflow scope, 6–8 hour budget and Render Free hosting are agreed; implementation details below are recommendations, not evidence of a working product.
 

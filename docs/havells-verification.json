@@ -1,0 +1,135 @@
+{
+  "checked_at": "2026-11-15T04:59:37.779107+00:00",
+  "revision": "2477c701ce1b",
+  "method": "Fresh deployed source discovery/extraction and Groq120B synthesis; subsequent hosted cached-answer and evidence-API checks",
+  "case": "S4",
+  "question": "What business risks are described in the annual report, and what does management say about demand and margin pressure in the latest earnings call?",
+  "status": "supported",
+  "wall_seconds": 32.28,
+  "capacity_wait_seconds": 0,
+  "synthesis_seconds": 1.24,
+  "provider_usage": {
+    "prompt_tokens": 4768,
+    "completion_tokens": 352,
+    "total_tokens": 5120
+  },
+  "documents": [
+    {
+      "kind": "annual",
+      "period": "2025-26",
+      "pages": 442,
+      "hash": "cb8976c68422277f7f8e83047cdedbe4f5c210f574f886fd8f141316ea82e00f",
+      "url": "https://www.bseindia.com/xml-data/corpfiling/AttachHis/91649597-75d8-410c-b359-b79e40e6bd6b.pdf",
+      "processing_seconds": 25.14,
+      "combined_peak_mb": 187.9
+    },
+    {
+      "kind": "transcript",
+      "period": "Q2 FY27",
+      "pages": 17,
+      "hash": "0effb7c786969f224e4025efc8df194ba6d9273f0460f8e374a8fdbf7c8f79d0",
+      "url": "https://www.bseindia.com/xml-data/corpfiling/AttachHis/160d9e40-34d9-4f66-8c1f-e1c50f663569.pdf",
+      "processing_seconds": 1.83,
+      "combined_peak_mb": 144.1
+    }
+  ],
+  "claims": [
+    {
+      "text": "Annual report: Management Discussion and Analysis Overview and Outlook FY 2025-26 continued to witness global trade volatility arising from the United States\u2019 tariff actions and ongoing geopolitical conflicts.",
+      "nature": "reported",
+      "citations": [
+        {
+          "evidence_id": "cb8976c68422277f7f8e83047cdedbe4f5c210f574f886fd8f141316ea82e00f-x19a2624d52-annual-p216-c0",
+          "quote": "Management Discussion and Analysis Overview and Outlook FY 2025-26 continued to witness global trade volatility arising from the United States\u2019 tariff actions and ongoing geopolitical conflicts."
+        }
+      ]
+    },
+    {
+      "text": "Management: Looking ahead, while macroeconomic uncertainties persist and commodity prices remain elevated, we enter the festive season with a positive outlook on both demand and margins.",
+      "nature": "reported",
+      "citations": [
+        {
+          "evidence_id": "0effb7c786969f224e4025efc8df194ba6d9273f0460f8e374a8fdbf7c8f79d0-x19a2624d52-transcript-p3-c1",
+          "quote": "Looking ahead, while macroeconomic uncertainties persist and commodity prices remain elevated, we enter the festive season with a positive outlook on both demand and margins."
+        }
+      ]
+    },
+    {
+      "text": "Management: Lloyd also delivered healthy revenue growth, supported by both volume and value growth. Margins, however, remained subdued with raw material inflation, as well as seasonal underabsorption during the off-season.",
+      "nature": "reported",
+      "citations": [
+        {
+          "evidence_id": "0effb7c786969f224e4025efc8df194ba6d9273f0460f8e374a8fdbf7c8f79d0-x19a2624d52-transcript-p3-c1",
+          "quote": "Lloyd also delivered healthy revenue growth, supported by both volume and value growth. Margins, however, remained subdued with raw material inflation, as well as seasonal underabsorption during the off-season."
+        }
+      ]
+    }
+  ],
+  "evidence": [
+    {
+      "id": "cb8976c68422277f7f8e83047cdedbe4f5c210f574f886fd8f141316ea82e00f-x19a2624d52-annual-p216-c0",
+      "symbol": "HAVELLS",
+      "kind": "annual",
+      "period": "2025-26",
+      "page": 216,
+      "hash": "cb8976c68422277f7f8e83047cdedbe4f5c210f574f886fd8f141316ea82e00f",
+      "url": "https://www.bseindia.com/xml-data/corpfiling/AttachHis/91649597-75d8-410c-b359-b79e40e6bd6b.pdf",
+      "fetched_at": "2026-11-15T04:58:17.740208+00:00"
+    },
+    {
+      "id": "0effb7c786969f224e4025efc8df194ba6d9273f0460f8e374a8fdbf7c8f79d0-x19a2624d52-transcript-p3-c1",
+      "symbol": "HAVELLS",
+      "kind": "transcript",
+      "period": "Q2 FY27",
+      "page": 3,
+      "hash": "0effb7c786969f224e4025efc8df194ba6d9273f0460f8e374a8fdbf7c8f79d0",
+      "url": "https://www.bseindia.com/xml-data/corpfiling/AttachHis/160d9e40-34d9-4f66-8c1f-e1c50f663569.pdf",
+      "fetched_at": "2026-11-15T04:58:42.352280+00:00"
+    }
+  ],
+  "all_quotes_exact": true,
+  "cache_replay_identical": true,
+  "related_live_regressions": [
+    {
+      "case": "S3",
+      "method": "Fresh local API / Groq120B, retrieval9/prompt8; final context renderer separately regression-tested",
+      "status": "supported",
+      "wall_seconds": 46.16,
+      "all_quotes_exact": true,
+      "provider_usage": {
+        "prompt_tokens": 5121,
+        "completion_tokens": 442,
+        "total_tokens": 5563
+      }
+    },
+    {
+      "case": "S5",
+      "method": "Fresh local API / Groq120B, retrieval9/prompt8; final context renderer separately regression-tested",
+      "status": "supported",
+      "wall_seconds": 60.14,
+      "all_quotes_exact": true,
+      "provider_usage": {
+        "prompt_tokens": 4550,
+        "completion_tokens": 182,
+        "total_tokens": 4732
+      }
+    }
+  ],
+  "python_tests": 56,
+  "model": "openai/gpt-oss-120b",
+  "paid_usage_enabled": false,
+  "local_final": {
+    "method": "Local research.run with actual free Groq request; existing primary PDF cache",
+    "status": "supported",
+    "wall_seconds": 62.55,
+    "citation_count": 5,
+    "words": 136,
+    "all_quotes_exact": true,
+    "coverage": "BCP report risk, qualified demand, cables/aluminium and Lloyd margin drivers, explicit H1 and portfolio context"
+  },
+  "mobile_verified": {
+    "viewport": "390x844",
+    "partial_warning": false,
+    "Lloyd_segment_and_Q2FY27_page3_verified": true
+  }
+}

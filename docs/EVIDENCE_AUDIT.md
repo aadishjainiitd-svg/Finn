@@ -1,12 +1,12 @@
 # FINN final evidence audit
 
-15 November 2026. Application revision `78ba67e62a68028e984d5c7c2615be4e28715738`, Render **Free**, Groq **openai/gpt-oss-120b**. [Prototype](https://finn-enam-yije.onrender.com) · [Machine-readable evaluation](evaluation-results.json) · [Hosted record](hosted-verification.json).
+15 November 2026. Application revision `2477c701ce1b0c9a0d7f4ecce3985d0ef017ecb9`, Render **Free**, Groq **openai/gpt-oss-120b**. [Prototype](https://finn-enam-yije.onrender.com) · [Machine-readable evaluation](evaluation-results.json) · [Hosted record](hosted-verification.json).
 
-The source, portfolio, supported-claim, numerical-safety and bounded-failure contracts are verified. One broad research case is partial rather than fully answered. This is disclosed below, not scored as a full semantic-completeness pass. No universal ticker coverage, investment accuracy or production availability is claimed.
+The source, portfolio, supported-claim, numerical-safety and bounded-failure contracts are verified. The previously partial HAVELLS S4 now explicitly covers each requested topic. Unsupported questions still abstain; a supported answer is not an exhaustive risk inventory. No universal ticker coverage, investment accuracy or production availability is claimed.
 
 ## Research evaluation
 
-Expectations in [evaluation-cases.json](evaluation-cases.json) were recorded before grading. Eight requests used fresh Groq 120B generation on 15 November; two numerical cases are deterministic, one identity lookup rejects the unknown ticker, and one missing-source case is an isolated fixture. Primary PDFs had been fetched and versioned by the real pipeline; some source/cache reuse is expected. Final renderer responses were replayed from cache, then checked again after the last idempotence fix. They were unchanged. These are not eleven new document downloads or twelve fresh model calls.
+Expectations in [evaluation-cases.json](evaluation-cases.json) were recorded before grading. The initial eight requests used fresh Groq 120B generation on 15 November; two numerical cases are deterministic, one identity lookup rejects the unknown ticker, and one missing-source case is an isolated fixture. Primary PDFs had been fetched and versioned by the real pipeline; some source/cache reuse is expected. Final renderer responses were replayed from cache, then checked again after the last idempotence fix. The initial replay was unchanged. S4 was subsequently repaired and replaced by the final fresh hosted result described below. These are not twelve fresh model calls in one final sweep; unchanged cases retain their earlier validation.
 
 All **17 displayed claims / 26 citation references** pass exact quote membership, byte-hash identity and PDF-page checks. Semantic inspection checked the meaning and attribution, not just string matching:
 
@@ -15,7 +15,7 @@ All **17 displayed claims / 26 citation references** pass exact quote membership
 | S1 — TCS business, AI, deals | Supported. Annual PDF55 identifies IT services/consulting. Call PDF12/7 attributes AI observations to management; PDF3 retains US$9.6bn TCV and exclusion of Porsche/Best Buy. |
 | S2 — KPIT demand/visibility | Supported. Annual PDF5 identifies mobility engineering. Growth forecasts remain management statements; the positive observation retains the preceding warning of continued pressure from two OEMs. No invented causal timeline. |
 | S3 — ASTRAL demand/margins | Supported. Annual PDF4 business context; call PDF2/8 demand and margins. The 17.4% margin is **H1**, not Q2, and the volume-growth antecedent is preserved. |
-| S4 — HAVELLS broad risks/demand/margins | **Partial.** Annual PDF216 supports demand/cost risks; call PDF9 supports contribution-margin volatility. It does not fully cover the requested latest-call demand and specific margin-pressure explanation. The UI explicitly says the selected passages do not cover every part. This is the remaining completeness limitation. |
+| S4 — HAVELLS broad risks/demand/margins | **Supported after repair.** Hosted annual PDF216 identifies trade/geopolitical risks; call PDF3 retains macro/commodity qualifications on demand outlook and identifies Lloyd’s raw-material inflation and off-season underabsorption as margin pressures. Every quote resolves through the deployed evidence API. |
 | S5 — firm Lloyd recovery timeline | Supported. Call PDF9 explicitly avoids a firm timeline; medium-term profitability remains an aspiration, not a deadline. |
 | S6 — quarterly revenue/TCV | Supported. Call PDF3 reports INR73,188 crore and US$9.6bn. Currency and period remain distinct; the deal-value exclusion is retained. |
 | U1/U2 — future share price / FY2035 revenue | Correct abstention; no exact future outcome invented. |
@@ -28,7 +28,7 @@ The preliminary 20B candidate failed ASTRAL with HTTP400 and was not promoted. I
 
 ## Hosted unfamiliar-company gate
 
-CROMPTON is outside the three prepared examples. Generic discovery resolves Crompton Greaves Consumer Electricals Limited, ISIN `INE299U01018`, and validates both primary documents. On the final application revision:
+CROMPTON is outside the three prepared examples. Generic discovery resolves Crompton Greaves Consumer Electricals Limited, ISIN `INE299U01018`, and validates both primary documents. On the earlier verified application revision `78ba67e62a68`:
 
 | Measurement | Annual report | Earnings call |
 |---|---:|---:|
@@ -44,7 +44,7 @@ Real hosted source checks observed 63 TCS Yahoo daily bars and three TCS NSE dis
 
 ## Reliability, quotas and remaining limits
 
-- 53 Python, 8 Node and 7 browser tests pass. [QA review](QA_REVIEW.md) separates controlled failure fixtures from real browser/source requests. Document replacement and parser-version tests reject cross-version citations; cached-answer rendering is idempotent, including dropped and mixed-source context.
+- 56 Python tests pass after the HAVELLS repair. The unchanged frontend retains its earlier 8 Node and 7 browser test passes. [QA review](QA_REVIEW.md) separates controlled failure fixtures from real browser/source requests. Document replacement and parser-version tests reject cross-version citations; cached-answer rendering is idempotent, including dropped and mixed-source context.
 - Groq response headers verified 8,000 token and 1,000 request limits. The [official free-tier table](https://console.groq.com/docs/rate-limits) documents 30 RPM / 200,000 TPD; those two values were not independently exposed by the observed headers. FINN admits one flight per minute, reserves schema/evidence/output within 7,600 tokens, and applies 180,000-token / 900-request daily caps. No paid route was enabled.
 - Gemini billing disabled is user-confirmed; account-specific limits remain unverified. Automatic fallback is disabled. Groq and xAI Grok are different services.
 - Render sleeps and discards writable files. Saved browser excerpts and dated seeds preserve provenance; they do not permanently archive PDFs. A known quota baseline restores, but uncheckpointed usage can be lost on restart; provider free enforcement is the final backstop.
@@ -52,3 +52,15 @@ Real hosted source checks observed 63 TCS Yahoo daily bars and three TCS NSE dis
 - No OCR, BSE-only identity support, full financial-table calculations, configurable portfolio, alerts or commitment tracking. No deferred feature was added.
 
 Final restart and signed-out public-link outcomes are recorded in [hosted verification](hosted-verification.json), [QA review](QA_REVIEW.md) and the [implementation log](IMPLEMENTATION_LOG.md). The submission email remains unsent.
+
+## HAVELLS repair — final deployed verification
+
+Revision `2477c701ce1b`, `retrieval-9-prompt-10`, deployed to the same Render Free service. Root cause: broad BM25 matches placed the specific call passage eighth, outside the 10,500-character evidence budget. Demand/margin topic reservations now put relevant passages early. The prompt allocates report risk, demand and margin-driver coverage within the source-word budget; segment-dependent margin excerpts retain the preceding same-speaker identification.
+
+The new retrieval regression failed before the fix. **56 Python tests pass** afterward, including context/idempotence checks. Fresh local ASTRAL demand/margins and HAVELLS no-firm-timeline regressions remain supported with exact quotes. Same-harness scoped code review found no remaining material issue; it was not independent-model consensus.
+
+The final local S4 run contains BCP risk, qualified demand outlook, cables/aluminium pressure, Lloyd-specific costs and H1/rest-of-portfolio context: five citations, 136 source words, idempotent rendering. The independent fresh **hosted S4 completed in 32.28s** and selects three passages: annual trade/geopolitical risk, qualified demand outlook and Lloyd-specific pressure. Its three displayed citations passed exact text/hash/page checks through `/api/evidence`; the next API request returned an identical cached answer. The original expectation examples and earlier failed/overlong attempts remain recorded; the two successful runs select different supported passages, not identical output. The no-firm-Lloyd-timeline qualification is separately checked by S5.
+
+The real 390px mobile replay displays all three topics, no partial warning, and the Lloyd name, Q2 FY27 period and PDF page 3 in the evidence sheet. [Answer](screenshots/mobile-havells-final.jpg) · [Evidence](screenshots/mobile-havells-evidence.jpg) · [Structured results](havells-verification.json).
+
+No quota/grounding guard was relaxed. The deployment seed includes the current local reservation plus conservative reservations for the two known earlier hosted calls; ledgers were not reset. Gemini remains disabled. The CROMPTON/restart measurements above are from the prior revision; they were not rerun for this retrieval-only repair. Earlier saved browser answers remain dated observations; resubmitting the original HAVELLS question obtains the repaired result.

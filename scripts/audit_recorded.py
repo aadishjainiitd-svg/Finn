@@ -29,7 +29,7 @@ for path in sorted((ROOT / 'data/evaluation').glob('*.json')):
         'final_replay_seconds': replay['wall_seconds'], 'final_replay_cached': job.get('id') == 'cache',
         'claim_count': len(answer.get('claims', [])), 'citation_count': len(citations),
         'all_quotes_exact': True, 'citations': citations,
-        'coverage': 'Partial: does not fully cover latest-call demand and specific margin pressure; not a full pass.' if replay['case'] == 'S4' else 'See semantic audit.'})
+        'coverage': 'Partial: inspect the documented missing topics; not a full completeness pass.' if answer.get('status') == 'partial' else 'See semantic audit.'})
 rows.append({'case': 'I2', 'method': 'Controlled missing-transcript fixture in pytest, not live discovery',
              'status': 'passed'})
 result = {'audited_at': datetime.now(timezone.utc).isoformat(),

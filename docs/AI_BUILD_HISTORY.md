@@ -883,3 +883,65 @@ The recorded evaluation contains 17 claims and 26 citations. All 26 quotes match
 CROMPTON now completes the hosted research path: both documents were identified and processed, and the answer cites each. The 341-page annual report took 27.6 seconds and peaked at 424.7 MB combined memory, below the 440 MB guard.
 
 The last code review caught a cache-rendering edge case that could make a mixed-source answer disappear on replay. I’ve fixed it and added a regression test; all 53 Python tests pass.
+
+## HAVELLS repair follow-up — actual visible-message export
+
+Exported 15 November from the active follow-up turn. Tool content and private reasoning excluded; the active turn may be incomplete. Final results are in the audit and implementation log.
+
+### User
+
+Can you fix the remaining partial HAVELLS answer before submission, rerun the relevant checks, and update the deployed app and audit?
+
+
+### Assistant
+
+I’ll inspect the HAVELLS case and its source passages, fix the coverage gap, then rerun the focused evaluation and regression checks before deploying and updating the audit.
+
+
+### Assistant
+
+I’m using gstack’s investigation workflow to trace the gap through retrieval and answer generation. The existing answer uses two points for annual-report risks, leaving little coverage of demand and margin pressure in the latest call.
+
+
+### Assistant
+
+The root cause is now reproduced: the relevant call passage is retrieved eighth, then dropped by the 10,500-character evidence budget. The model therefore never sees the passage explaining steady demand and aluminium-related margin pressure.
+
+I’ll reserve early evidence slots for those explicitly requested topics and adjust the prompt to cover each topic. The change will stay within retrieval, prompting, cache versioning and regression tests, with the audit updated afterward.
+
+
+### Assistant
+
+The regression test now reproduces the missing-passage problem before the fix. Gstack’s state helper failed on a Windows path permission, so no scope lock was acquired; I’m keeping the stated file boundary manually and will review the diff before publication.
+
+
+### Assistant
+
+The fix passes all 54 Python tests, and the code review found no material issue in the scoped change. The fresh ASTRAL demand/margins check also passed, including the H1 margin qualification. HAVELLS is now running through the same free-tier admission limits.
+
+
+### Assistant
+
+The new retrieval finds the missing call evidence, but the first answer still spent too many words on annual-report context and quoted a segment margin comment without naming the segment. I caught that in the source audit.
+
+I’ve tightened the source-text budget and made that margin excerpt retain its identifying sentence. The HAVELLS timeline regression also passes: it still says management gave no firm recovery deadline.
+
+
+### Assistant
+
+The audit now preserves the segment context in margin excerpts, and all 56 Python tests pass. I’m checking the final concise answer, then I’ll test the same question on Render and verify each deployed citation before removing the partial-answer limitation from the audit.
+
+
+### Assistant
+
+The final local HAVELLS answer now covers all three requested areas: annual-report risks, the qualified demand outlook, and specific margin pressures. Its five citations match the sources exactly, the H1 and segment qualifications are retained, and the answer is 136 words.
+
+I’m deploying this version now. The audit will mark S4 resolved only after the hosted check passes.
+
+
+### Assistant
+
+The hosted HAVELLS request completed in 32.28 seconds. It now answers each requested area: annual-report risks, management’s qualified demand outlook, and Lloyd-specific margin pressure from raw-material costs and off-season underabsorption. Every displayed quote resolves to the correct source page, and the cached replay is identical.
+
+The local run also selected the cables/aluminium explanation. I’ll record the different passage selections in the audit rather than imply the two runs returned identical answers.
+

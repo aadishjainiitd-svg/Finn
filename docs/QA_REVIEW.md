@@ -1,6 +1,6 @@
 # FINN implementation review
 
-15 November 2026. Status: scoped code review, executable regressions and final hosted/mobile revalidation complete. Historical observations below retain their dates. Broad HAVELLS case S4 is explicitly partial; the current [evidence audit](EVIDENCE_AUDIT.md) supersedes the earlier capacity/TCS blockers.
+15 November 2026. Status: scoped code review, executable regressions and final hosted/mobile revalidation complete. Historical observations below retain their dates. Broad HAVELLS case S4 is now repaired and hosted-verified; the current [evidence audit](EVIDENCE_AUDIT.md) supersedes the earlier capacity/TCS blockers.
 
 Scope: FINN's backend, source jobs, mobile Brief/Research and shared evidence sheet. Owned local service and isolated browser fixtures; live source/provider observations are recorded separately. No external messages sent or paid plans enabled.
 
@@ -68,4 +68,10 @@ Local replay notes are retained under `.gstack/qa-final/browser/exploration-002.
 - Real final-code restart: healthy at the 51.23-second probe window, old CROMPTON citation HTTP410, saved browser quote/page/period/hash retained with a visible warning. [Capture](screenshots/mobile-restart-final.jpg). The console contained the expected 410 resource error from this deliberate test; no unexpected JavaScript exception was observed.
 - Earlier same-turn 390×420 reduced-height check kept the focused question and submit control above navigation. This approximates reduced keyboard space; it is not a physical keyboard test. Earlier 360px, desktop, CSS reflow and reduced-motion checks remain recorded above.
 
-Remaining limits: physical iOS/Android keyboard and screen-reader testing are not executed; source/provider availability can change; S4 has bounded partial coverage. Twelve completely answered semantic cases are not claimed. The runtime and mandatory grounding/failure contracts are supported by the listed evidence.
+Remaining limits: physical iOS/Android keyboard and screen-reader testing are not executed; source/provider availability can change; S4 now covers the three requested topics. Universal retrieval coverage is not claimed. The runtime and mandatory grounding/failure contracts are supported by the listed evidence.
+
+## HAVELLS follow-up
+
+56 Python tests pass after a demonstrated failing retrieval regression and two segment-context cases. Existing 8 Node/7 Playwright results remain prior checks on unchanged frontend code; no full new browser-fixture sweep is claimed. Fresh S3 and S5 provider regressions pass. Fresh deployed S4 on 2477c701ce1b completes in 32.28s; every citation resolves and cache replay is identical. Actual 390×844 browser replay shows the complete three-topic answer and correctly attributed Lloyd excerpt. New screenshots are linked in the audit. Earlier runtime/restart results retain their recorded revision.
+
+The gstack investigation helper could not acquire its Windows state lock (permission/path failure); no lock ownership or cleanup success is claimed. Scope was kept manually to retrieval/prompt/cache version, grounding regressions and the requested verification documents. The same-harness reviewer rechecked the final small diff and found no material issue. No unrelated skill-routing changes were made.

@@ -1,5 +1,5 @@
 {
-  "audited_at": "2026-11-15T04:15:04.321206+00:00",
+  "audited_at": "2026-11-15T05:01:58.660845+00:00",
   "method": "Fresh Groq 120B requests on 15 November; final renderer replayed from cache. Exact quoted text/hash/page checked here; semantic review documented separately. I2 is a fixture.",
   "cases": [
     {
@@ -325,18 +325,18 @@
     },
     {
       "case": "S4",
-      "status": "partial",
-      "fresh_surface": "http://127.0.0.1:8000",
-      "fresh_wall_seconds": 62.14,
+      "status": "supported",
+      "fresh_surface": "https://finn-enam-yije.onrender.com",
+      "fresh_wall_seconds": 32.28,
       "provider": "groq",
       "model": "openai/gpt-oss-120b",
       "provider_usage": {
-        "prompt_tokens": 4826,
-        "completion_tokens": 340,
-        "total_tokens": 5166
+        "prompt_tokens": 4768,
+        "completion_tokens": 352,
+        "total_tokens": 5120
       },
-      "final_replay_seconds": 0.03,
-      "final_replay_cached": true,
+      "final_replay_seconds": 32.28,
+      "final_replay_cached": false,
       "claim_count": 3,
       "citation_count": 3,
       "all_quotes_exact": true,
@@ -350,32 +350,32 @@
           "hash": "cb8976c68422277f7f8e83047cdedbe4f5c210f574f886fd8f141316ea82e00f",
           "parser": "pdfium-5.15.2-pages-v3",
           "url": "https://www.bseindia.com/xml-data/corpfiling/AttachHis/91649597-75d8-410c-b359-b79e40e6bd6b.pdf",
-          "fetched_at": "2026-11-14T07:37:10.746164+00:00"
+          "fetched_at": "2026-11-15T04:58:17.740208+00:00"
         },
         {
-          "id": "cb8976c68422277f7f8e83047cdedbe4f5c210f574f886fd8f141316ea82e00f-x19a2624d52-annual-p216-c0",
-          "symbol": "HAVELLS",
-          "kind": "annual",
-          "period": "2025-26",
-          "page": 216,
-          "hash": "cb8976c68422277f7f8e83047cdedbe4f5c210f574f886fd8f141316ea82e00f",
-          "parser": "pdfium-5.15.2-pages-v3",
-          "url": "https://www.bseindia.com/xml-data/corpfiling/AttachHis/91649597-75d8-410c-b359-b79e40e6bd6b.pdf",
-          "fetched_at": "2026-11-14T07:37:10.746164+00:00"
-        },
-        {
-          "id": "0effb7c786969f224e4025efc8df194ba6d9273f0460f8e374a8fdbf7c8f79d0-x19a2624d52-transcript-p9-c1",
+          "id": "0effb7c786969f224e4025efc8df194ba6d9273f0460f8e374a8fdbf7c8f79d0-x19a2624d52-transcript-p3-c1",
           "symbol": "HAVELLS",
           "kind": "transcript",
           "period": "Q2 FY27",
-          "page": 9,
+          "page": 3,
           "hash": "0effb7c786969f224e4025efc8df194ba6d9273f0460f8e374a8fdbf7c8f79d0",
           "parser": "pdfium-5.15.2-pages-v3",
           "url": "https://www.bseindia.com/xml-data/corpfiling/AttachHis/160d9e40-34d9-4f66-8c1f-e1c50f663569.pdf",
-          "fetched_at": "2026-11-14T07:37:16.988712+00:00"
+          "fetched_at": "2026-11-15T04:58:42.352280+00:00"
+        },
+        {
+          "id": "0effb7c786969f224e4025efc8df194ba6d9273f0460f8e374a8fdbf7c8f79d0-x19a2624d52-transcript-p3-c1",
+          "symbol": "HAVELLS",
+          "kind": "transcript",
+          "period": "Q2 FY27",
+          "page": 3,
+          "hash": "0effb7c786969f224e4025efc8df194ba6d9273f0460f8e374a8fdbf7c8f79d0",
+          "parser": "pdfium-5.15.2-pages-v3",
+          "url": "https://www.bseindia.com/xml-data/corpfiling/AttachHis/160d9e40-34d9-4f66-8c1f-e1c50f663569.pdf",
+          "fetched_at": "2026-11-15T04:58:42.352280+00:00"
         }
       ],
-      "coverage": "Partial: does not fully cover latest-call demand and specific margin pressure; not a full pass."
+      "coverage": "See semantic audit."
     },
     {
       "case": "S5",
