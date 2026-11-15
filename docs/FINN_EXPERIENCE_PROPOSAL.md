@@ -1,6 +1,6 @@
 # FINN experience proposal
 
-> Current implementation status (14 November 2026): approved scope is implemented and deployed. Hosted source/document processing passes, including post-build CROMPTON after a bounded PDFium cache fix. Final release acceptance is still open for free model capacity and the broad TCS question. See [current audit](EVIDENCE_AUDIT.md), [QA results](QA_REVIEW.md) and [checkpoint](RESUME.md). Historical planning-only statements below are retained as the decision record, not current authorisation. No deferred feature was added.
+> Current implementation status (15 November 2026): approved scope is implemented and deployed on Render Free. Production Groq 120B, hosted CROMPTON research, restart provenance and final mobile workflows are verified. One broad HAVELLS evaluation answer is explicitly partial. See [final audit](EVIDENCE_AUDIT.md), [implemented architecture](../ARCHITECTURE.md), [QA results](QA_REVIEW.md) and [checkpoint](RESUME.md). Historical planning-only statements below are retained as the decision record, not current authorisation. No deferred feature was added.
 
 14 November 2026. Recommendation for the agreed 6-8 hour build; not an approved visual design system or a rendered prototype.
 

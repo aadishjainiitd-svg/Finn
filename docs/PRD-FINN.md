@@ -1,6 +1,6 @@
 # FINN — focused PRD
 
-> Current implementation status (14 November 2026): approved scope is implemented and deployed. Hosted source/document processing passes, including post-build CROMPTON after a bounded PDFium cache fix. Final release acceptance is still open for free model capacity and the broad TCS question. See [current audit](EVIDENCE_AUDIT.md), [QA results](QA_REVIEW.md) and [checkpoint](RESUME.md). Historical planning-only statements below are retained as the decision record, not current authorisation. No deferred feature was added.
+> Current implementation status (15 November 2026): approved scope is implemented and deployed on Render Free. Production Groq 120B, hosted CROMPTON research, restart provenance and final mobile workflows are verified. One broad HAVELLS evaluation answer is explicitly partial. See [final audit](EVIDENCE_AUDIT.md), [implemented architecture](../ARCHITECTURE.md), [QA results](QA_REVIEW.md) and [checkpoint](RESUME.md). Historical planning-only statements below are retained as the decision record, not current authorisation. No deferred feature was added.
 
 14 November 2026 · Planning only. The two-workflow scope, 6–8 hour budget and Render Free hosting are agreed; implementation details below are recommendations, not evidence of a working product.
 
@@ -56,7 +56,7 @@ The brief refreshes on opening and while active. This is the prototype's push ex
 
 Scope-preserving review correction: collapse only positively assessed routine subtypes, never generic categories or failed extractions. Account for every fetched filing. The demo must include a second visit showing less repeated reading, an outstanding item and separate source-coverage status; this demonstrates behavior, not measured retention.
 
-**Technology:** React/TypeScript/Vite, plain CSS, FastAPI/Python, page-based PDF extraction, SQLite FTS5, and bounded Groq synthesis with a tested Gemini fallback. See [architecture and acceptance](FINN_ARCHITECTURE.md) and [component audit](FINN_COMPONENT_REVIEW.md).
+**Technology:** React/TypeScript/Vite, plain CSS, FastAPI/Python, page-based PDF extraction, SQLite FTS5, and bounded Groq synthesis; Gemini automatic fallback remains disabled pending verified account quotas. See [architecture and acceptance](FINN_ARCHITECTURE.md) and [component audit](FINN_COMPONENT_REVIEW.md).
 
 **Assumptions:** focused work really remains 6–8 hours; Render account access and model credentials are usable; primary documents are discoverable and contain extractable text. No universal ticker/PDF coverage claim. The user selected Render Free; source, extraction and model capability checks remain technical gates, not additional product decisions.
 

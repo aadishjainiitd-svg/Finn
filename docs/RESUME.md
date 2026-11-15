@@ -1,29 +1,24 @@
-# FINN resumable checkpoint
+# FINN final checkpoint
 
-14 November 2026. User authorised implementation, free hosting and publication; no further routine confirmation required. No paid usage. Do not send the submission email.
+15 November 2026. Implementation and final runtime verification are complete; package publication and public-link checks are recorded with the final delivery. No email sent.
 
-Workspace: `C:/Users/ASUS/Desktop/ENAM`. Public repo: `aadishjainiitd-svg/Finn`. App: `https://finn-enam-yije.onrender.com`. Owned Render service: `srv-dbruffbrjlhs73cl08bg`, Free Singapore. Do not modify unrelated services.
+- App: https://finn-enam-yije.onrender.com
+- Repository: https://github.com/aadishjainiitd-svg/Finn
+- Final application revision: `78ba67e62a68028e984d5c7c2615be4e28715738`. Later commits may change only documents, verification helpers and screenshots; no app redeploy is needed for those.
+- Render: existing FINN Free Singapore service `srv-dbruffbrjlhs73cl08bg`; do not touch unrelated services or enable paid usage.
+- Runtime: repaired `.venv/Scripts/python.exe`, Python 3.12.14. Node 24.21. Provider Groq `openai/gpt-oss-120b`. Gemini fallback disabled; billing disabled is confirmed but account limits remain unverified.
+- Tests: 53 Python, 8 Node, 7 Playwright; Vite build. Final hosted CROMPTON supported, both PDFs, 35.27s; annual peak424.3 MB below440 MB guard. Real restart plus saved-excerpt mobile state verified. See [hosted record](hosted-verification.json) and [QA](QA_REVIEW.md).
+- Evaluation: 17 claims / 26 exact references across the 12-case set; broad HAVELLS S4 is explicitly partial. No claim of twelve fully answered questions. See [audit](EVIDENCE_AUDIT.md).
+- Submission: [covering email and demo](SUBMISSION.md), [README](../README.md), [as-built architecture](../ARCHITECTURE.md), [actual sanitised AI history](AI_BUILD_HISTORY.md). Deadline15 November EOD IST; target21:00 IST. Candidate reviews and sends the email.
 
-Current measured parser deployment: `2468e895483642c11c4c4d81d329bc77bc411f31`. Local changes and subsequent commits may be newer; inspect Git status and `/health` before resuming. See [implementation log](IMPLEMENTATION_LOG.md), [audit](EVIDENCE_AUDIT.md), and [QA review](QA_REVIEW.md).
+## Operational limits
 
-## Remaining release gates
+Render Free sleeps and loses caches; browser retains one answer and local review state. Restarted missing citations return410 with the captured excerpt, never replacement text. Known quota seed baselines restore; uncheckpointed usage may be lost and provider free limits remain authoritative. No OCR, universal ticker guarantee, intraday quotes, configurable portfolio or deferred features.
 
-1. Gemini billing disabled is confirmed; RPM, TPM and RPD for `gemini-3.5-flash-lite` are still requested. Do not ask for more keys or enable automatic fallback without verified account limits and separate admission. Groq primary is `openai/gpt-oss-120b`; Groq and xAI Grok are different services.
-2. Do not reset the Groq ledger. Today's known baseline is 178,548 reserved tokens / 26 requests, versus FINN's 180,000 / 900 cap. This is conservative admission, not an observed provider exhaustion. If account limits arrive, implement/test bounded Gemini routing; otherwise the next legitimate UTC-day reset is 15 November 05:30 IST.
-3. Rerun broad TCS case S1 and a focused CROMPTON question when free capacity is available. S1 currently has a correct but incomplete annual-report answer. CROMPTON's annual report and transcript now pass live extraction; no synthesized answer is claimed.
-4. Finish any current hosted/UI revalidation, secret scan and public-link checks, then update the evidence audit and submission draft. Do not change expectations to make results pass.
+## Safe continuation
 
-## Commands and evidence
+Secrets only in ignored `.env` / `.env.deploy` and server environment. Never print them or publish `data/`, `tmp/`, raw logs, recruiter PDFs or private reasoning. Public files were scanned for exact secret values before publication. Raw evidence remains ignored locally.
 
-- Python: `.venv/Scripts/python.exe`; tests: `python -m pytest -q`.
-- Frontend: `npm --prefix frontend test`, `npm --prefix frontend run build`; Playwright: `npm --prefix frontend run test:e2e` with Vite on 5173.
-- Live cases: `python scripts/evaluate_live.py <base-url> S1`; held-out: `python scripts/host_probe.py CROMPTON`. These can use provider capacity.
-- Render: `python scripts/render_control.py status|deploy|restart`. The helper checks Free plan and targets only saved FINN service state.
-- Secrets exist only in ignored `.env` / `.env.deploy` and Render server environment. Never print them or include them in history exports. Do not publish `data/`, `tmp/`, raw logs, recruiter PDFs or private reasoning.
-- Raw live evidence is ignored under `data/`; public metadata is in `docs/evaluation-results.json`. Browser fixtures are deliberately separate from live source results.
+Local Git HEAD predates plugin-published commits; modified files include already-published work. Preserve local history. A mixed reset was rejected; do not retry blindly. Use a read-only fetch/diff or GitHub plugin with an expected-head lease. Application and documents were published through the authorised GitHub plugin.
 
-## Invariants to retain
-
-Two destinations only: Brief and Research, shared evidence sheet. Opening never acknowledges. Every filing remains reachable; unknown/failed assessment stays pending. Late responses cannot replace a newer question/sheet. Price and filing coverage update without automatic event reordering. Exact source versions, page numbers, negation, units and periods remain intact. The PDF cache workaround reopens every 32 pages without raising the memory guard; parser v3 gets distinct citation identities.
-
-Submission deadline: 15 November EOD IST; target 21:00 IST. Draft email and demo in [SUBMISSION.md](SUBMISSION.md). Completion requires honest acceptance evidence, not just a live URL.
+Commands: `python -m pytest -q`; `npm --prefix frontend test`; `npm --prefix frontend run build`; `npm --prefix frontend run test:e2e` with Vite on5173. Live probes consume capacity: `python scripts/host_probe.py SYMBOL`; `python scripts/restart_probe.py SYMBOL` actually restarts FINN. Do not run them as routine status checks. Render helper `status` is read-only.

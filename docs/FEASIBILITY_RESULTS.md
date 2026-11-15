@@ -26,7 +26,7 @@ Manual audit of the initial answer found an unsupported consequence: it paraphra
 
 The model attached one annual-report quote to an overlapping chunk whose last sentence was truncated. The resolver now checks exact membership in another *supplied* chunk of the same hash and PDF page, with a unique match required. It never repairs unknown IDs, changes quote text, searches a different page, or uses a newer document. This is deterministic source resolution, not a semantic entailment guarantee. The 12-case manual evaluation remains required.
 
-## Limits and outstanding gate work
+## Historical intermediate gate notes (superseded below)
 
 - Corrected hosted full run is in progress; do not mark the gate passed from local tests alone.
 - Groq's [official free-tier limits](https://console.groq.com/docs/rate-limits) list 30 RPM, 1,000 RPD, 8,000 TPM and 200,000 TPD. Token admission reserves prompt, evidence and output conservatively, permits one synthesis per minute, and uses a 180,000-token/900-request local daily ceiling. Provider enforcement remains authoritative across an ephemeral-cache loss; process restart waits a full minute. No automatic retries or bulk filing synthesis.
@@ -51,3 +51,13 @@ A Render replacement stalled after a successful build without starting its appli
 The final answer format constrains the model to supplied passage IDs. The server attaches exact source text. Transcript passages offered for synthesis are complete sentences attributed to management through source introductions; analyst questions are excluded. This fixed the observed management/analyst attribution error. It does not eliminate the need for the planned manual semantic audit. Duplicate references and answer brevity remain product-polish work.
 
 PDFium's runtime licence and provenance changes are recorded in THIRD_PARTY_NOTICES.md and the implementation log. Citations now include a parser fingerprint as well as document SHA, page and chunk. Earlier measurements and failures above are retained as the investigation history; they are not current success claims.
+
+## Final release verification — 15 November
+
+Final application revision `78ba67e62a68028e984d5c7c2615be4e28715738` is live on the same Render Free service. Python 3.12.14 repair and deployed build succeed. Production remains Groq `openai/gpt-oss-120b`; the 20B candidate was not promoted. No paid usage or Gemini automatic fallback was enabled.
+
+CROMPTON, outside the prepared set, completed generic identity/discovery, annual/transcript extraction and supported synthesis in **35.27 seconds**. Annual: 341 pages, 19,853,481 bytes, 28.20 seconds, 424.3 MB sampled combined peak. Call: 17 pages, 559,632 bytes, 1.81 seconds, 150.6 MB. Both documents verified; four exact citation references, no document gaps. The guard remains 440 MB. [Structured record](hosted-verification.json).
+
+A real final-code restart returned healthy at the **51.23-second probe window**. The old citation returned HTTP410; the mobile sheet kept the saved quote and provenance and displayed the version-unavailable warning. This is measured probe time, not a cold-start SLA. Replacement bytes are separately tested with controlled fixtures.
+
+Hosted source checks observed 63 TCS Yahoo bars and three TCS NSE disclosures. Portfolio coverage was 15/15 for both sources, with 86 distinct filings. Source timestamps distinguish cached successful fetches from new requests. The current evaluation and limitations are in [EVIDENCE_AUDIT.md](EVIDENCE_AUDIT.md); historical blockers above are not current release status.

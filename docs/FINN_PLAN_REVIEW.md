@@ -1,6 +1,6 @@
 # FINN — sequential plan review
 
-> Current implementation status (14 November 2026): approved scope is implemented and deployed. Hosted source/document processing passes, including post-build CROMPTON after a bounded PDFium cache fix. Final release acceptance is still open for free model capacity and the broad TCS question. See [current audit](EVIDENCE_AUDIT.md), [QA results](QA_REVIEW.md) and [checkpoint](RESUME.md). Historical planning-only statements below are retained as the decision record, not current authorisation. No deferred feature was added.
+> Current implementation status (15 November 2026): approved scope is implemented and deployed on Render Free. Production Groq 120B, hosted CROMPTON research, restart provenance and final mobile workflows are verified. One broad HAVELLS evaluation answer is explicitly partial. See [final audit](EVIDENCE_AUDIT.md), [implemented architecture](../ARCHITECTURE.md), [QA results](QA_REVIEW.md) and [checkpoint](RESUME.md). Historical planning-only statements below are retained as the decision record, not current authorisation. No deferred feature was added.
 
 14 November 2026, IST. Review target: recruiter PDFs, PRD-FINN, FINN_ARCHITECTURE, FINN_BUILD_PLAN, FINN_EXPERIENCE_PROPOSAL, component audit and recorded data validation. No AGENTS.md found. User explicitly requested CEO HOLD SCOPE → design → engineering, scope-preserving document corrections, and a final approval stop.
 
@@ -103,7 +103,7 @@ Combined incremental estimate: **75–115 minutes**, using most of the former tw
 
 ### Blockers and revised build order
 
-Before implementation: final plan approval. Once authorised, T1 must establish Render/model account access and native build compatibility, then run the fresh-ticker primary-documentpath on Render and measure memory, time and quota. A failed mandatory source/generalisation gate blocks a submission-ready claim; a scripted demo cannot clear it.
+Before implementation: final plan approval. Once authorised, T1 must establish Render/model account access and native build compatibility, then run the fresh-ticker primary-document path on Render and measure memory, time and quota. A failed mandatory source/generalisation gate blocks a submission-ready claim; a scripted demo cannot clear it.
 
 1. 0:00–0:20: repo, health shell, runtime/version and credential checks.
 2. 0:20–1:30: hosted fresh ticker → report + transcript → supported answer; price/NSE access and resource measurements.

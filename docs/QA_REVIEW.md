@@ -1,6 +1,6 @@
 # FINN implementation review
 
-14 November 2026. Status: scoped code review and executable regressions pass; final hosted revalidation is in progress. Release capacity and TCS completion remain open.
+15 November 2026. Status: scoped code review, executable regressions and final hosted/mobile revalidation complete. Historical observations below retain their dates. Broad HAVELLS case S4 is explicitly partial; the current [evidence audit](EVIDENCE_AUDIT.md) supersedes the earlier capacity/TCS blockers.
 
 Scope: FINN's backend, source jobs, mobile Brief/Research and shared evidence sheet. Owned local service and isolated browser fixtures; live source/provider observations are recorded separately. No external messages sent or paid plans enabled.
 
@@ -23,14 +23,14 @@ The pinned-address implementation follows the [official HTTPX extension](https:/
 
 ## Executed tests
 
-- 48 Python tests passed. They cover exact citations, replacement/parser/kind identity, source failure states, unknown ticker, daily arithmetic, numerical unit/period boundaries, missing transcript, model 429, bounded jobs and a cancelled real child process with partial-state cleanup.
+- 53 Python tests passed on 15 November. They cover exact citations, replacement/parser/kind identity, source failure states, unknown ticker, daily arithmetic, numerical unit/period boundaries, missing transcript, model 429, bounded jobs, retrieval coverage, cache-render idempotence and a cancelled real child process with partial-state cleanup.
 - 8 Node tests passed: explicit acknowledgement, Undo, both revision/acknowledgement race orders, late discovery and check windows.
 - 7 Playwright browser tests passed at 390px/360px: persistence, evidence opening without acknowledgement, keyboard/focus/Escape, both research-response race orders, coverage loss, lost citation versions, failed first check and stale filing response after navigation.
 - Python emits a TestClient dependency deprecation warning. Vite emits Radix `use client` bundling warnings; this is a client-rendered React application, and browser behavior is tested.
 
 These controlled fixtures are not claims of live exchange availability or provider quota. Real measurements are in [FEASIBILITY_RESULTS.md](FEASIBILITY_RESULTS.md); final evidence results will be recorded separately.
 
-## Design review in progress
+## Design review and release replays
 
 Initial real gstack browser at 390×844: calm reading hierarchy, two destinations, visible source coverage. First glance goes to “Your brief”, coverage, then the first event. That first event exposed a real misclassification: a director biography mentioning Fraud & Vigilance triggered a credit-risk reason. Positive event patterns and an issuer-written subject fixed it. A negated default statement is also covered by regression testing.
 
@@ -59,4 +59,13 @@ Gstack usage was adapted to the available Windows host: its headless browse CLI 
 
 Local replay notes are retained under `.gstack/qa-final/browser/exploration-002.json` through `exploration-011.json` (ignored; these include pre-fix observations). Public screenshots and the committed tests provide the reviewable evidence. Fixtures do not prove real endpoint availability.
 
-Remaining limits: physical iOS/Android keyboard and screen-reader testing are not executed; source/provider availability can change; broad TCS completion and new-company synthesis remain capacity-blocked. A full 12-case acceptance pass is not claimed.
+## Final replay — 15 November
+
+- Repaired Python 3.12.14 venv; 53 Python, 8 Node and 7 Playwright tests pass. Vite production build passes. Last review found two cache-render edge cases (dropped first claim and mixed citations); regressions and same-harness re-review close both. All recorded evaluation answers, seeds and the held-out answer remain unchanged through the final renderer.
+- Live final app revision `78ba67e62a68`: ASTRAL shows a dated demonstration label, collapsed annual company context, focused demand/margins answer, and explicit H1 margin wording. [Final capture](screenshots/mobile-research-final.jpg).
+- At 390×844, the dated 14-day Brief shows HDFCBANK's decision and Evidence action within one viewport. No horizontal overflow; all measured fully visible buttons/selects are at least 44×44px. [Brief](screenshots/mobile-brief-final.jpg), [evidence](screenshots/mobile-evidence-final.jpg).
+- Actual HDFCBANK opening/closing left Mark reviewed unchanged. Explicit acknowledgement survived reload as Reviewed/Undo in the 14-day window. Undo restored Mark reviewed. The adjacent item remained outstanding. These were real API/browser interactions, not fixtures.
+- Real final-code restart: healthy at the 51.23-second probe window, old CROMPTON citation HTTP410, saved browser quote/page/period/hash retained with a visible warning. [Capture](screenshots/mobile-restart-final.jpg). The console contained the expected 410 resource error from this deliberate test; no unexpected JavaScript exception was observed.
+- Earlier same-turn 390×420 reduced-height check kept the focused question and submit control above navigation. This approximates reduced keyboard space; it is not a physical keyboard test. Earlier 360px, desktop, CSS reflow and reduced-motion checks remain recorded above.
+
+Remaining limits: physical iOS/Android keyboard and screen-reader testing are not executed; source/provider availability can change; S4 has bounded partial coverage. Twelve completely answered semantic cases are not claimed. The runtime and mandatory grounding/failure contracts are supported by the listed evidence.

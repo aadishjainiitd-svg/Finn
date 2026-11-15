@@ -4,12 +4,12 @@ A mobile investor brief and primary-source research workspace for the ENAM hirin
 
 **[Open FINN](https://finn-enam-yije.onrender.com)** · [AI build history](docs/AI_BUILD_HISTORY.md) · [Evidence audit](docs/EVIDENCE_AUDIT.md) · [Demo and submission draft](docs/SUBMISSION.md)
 
-Release status: the product is deployed and the hosted feasibility gate passed. Final acceptance remains open: FINN's conservative Groq allowance currently blocks new synthesis, and the broad TCS demo is explicitly partial. Prepared answers, Brief and source evidence remain available. See the audit for exact outcomes; no blanket 12/12 pass is claimed.
+Release status, 15 November: the implemented scope is deployed on Render Free and the hosted unfamiliar-company research gate passes. TCS, KPITTECH and ASTRAL have audited production-model answers. One broader HAVELLS question is explicitly partial; the audit distinguishes grounding correctness from completeness. No blanket claim of 12 fully answered questions is made.
 
 ## What works
 
 - **Brief:** 15 fixed NSE holdings; separate filing/price coverage; company groups, explainable priority, pending assessments and accessible routine items. Every fetched filing is accounted for. Since review / Today / 7 days / 14 days, explicit Mark reviewed and Undo.
-- **Research:** generic NSE-symbol identity, annual-report and transcript discovery, bounded PDF processing and page-cited answers. TCS, KPITTECH and ASTRAL examples are dated real-pipeline observations. HAVELLS passed live unseen-company research; CROMPTON passed post-implementation hosted document processing, with synthesis capacity still blocked.
+- **Research:** generic NSE-symbol identity, annual-report and transcript discovery, bounded PDF processing and page-cited answers. TCS, KPITTECH and ASTRAL examples are dated real-pipeline observations. HAVELLS and post-build CROMPTON passed live hosted research using both document types. CROMPTON completed on the final code revision in 35.27 seconds.
 - **Evidence:** exact excerpts, issuer, period, PDF page, original URL, retrieval time and source version. A missing server version after restart yields an explicit saved-excerpt notice; citations are never redirected to replacement text.
 - **Numbers:** completed-session price/volume signals and constrained narrative unit conversion use Decimal. Incompatible periods, unknown accounting bases and unsupported questions produce limits or abstention.
 
@@ -25,7 +25,7 @@ Deployment credentials belong only in ignored `.env.deploy`, never in the app en
 
 ## Architecture and deliberate limits
 
-One FastAPI process serves React/Vite and serialises PDF ingestion into a bounded subprocess. SQLite FTS5 retrieves page-local chunks. No vector database, agent framework, Redis, Docling, LlamaIndex, Instructor, yfinance wrapper or GPL NSE wrapper is required. [Architecture](docs/FINN_ARCHITECTURE.md) · [Component review](docs/FINN_COMPONENT_REVIEW.md) · [Third-party notices](THIRD_PARTY_NOTICES.md).
+One FastAPI process serves React/Vite and serialises PDF ingestion into a bounded subprocess. SQLite FTS5 retrieves page-local chunks. No vector database, agent framework, Redis, Docling, LlamaIndex, Instructor, yfinance wrapper or GPL NSE wrapper is required. [Implemented architecture](ARCHITECTURE.md) · [Component review](docs/FINN_COMPONENT_REVIEW.md) · [Third-party notices](THIRD_PARTY_NOTICES.md).
 
 Source classes: Yahoo daily bars; official NSE identity/disclosures; issuer/BSE/NSE reports and calls, discovered via Screener. Screener is an index, never research evidence. Public endpoint access is not a production market-data redistribution licence. Source availability is observed, not guaranteed.
 
@@ -39,4 +39,6 @@ No accounts, portfolio editing, native notifications, live quotes, commitment tr
 
 See [TESTING.md](TESTING.md) for executable checks, [QA review](docs/QA_REVIEW.md), [hosted feasibility measurements](docs/FEASIBILITY_RESULTS.md), and [research audit](docs/EVIDENCE_AUDIT.md). Tests distinguish live requests from controlled failure fixtures and cached replays.
 
-Next: resolve free synthesis capacity, improve the TCS question's retrieval coverage, then durable budget/cache storage and investor feedback on ranking. Deferred product features remain deferred. [Implementation log](docs/IMPLEMENTATION_LOG.md) and [resumable checkpoint](docs/RESUME.md) record exact remaining work.
+Executed checks: 53 Python tests, 8 Node tests and 7 Playwright browser tests pass; production Vite build succeeds. The 12-case audit checks 17 displayed claims and 26 exact citations, with one disclosed partial answer. [Hosted verification](docs/hosted-verification.json) records CROMPTON's measured extraction and citations.
+
+Next: improve compound-question coverage, add durable budget/cache storage, and test prioritisation with investors. Recent usage not included in a saved baseline can be lost on a Free-service restart; provider free-tier enforcement remains authoritative. Deferred product features remain deferred. [Implementation log](docs/IMPLEMENTATION_LOG.md) and [checkpoint](docs/RESUME.md) retain the repair and verification record. The covering email is prepared but has not been sent.

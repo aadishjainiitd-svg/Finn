@@ -1,0 +1,121 @@
+{
+  "revision": "78ba67e62a68028e984d5c7c2615be4e28715738",
+  "method": "Live Render extraction and Groq 120B synthesis, not a fixture or prepared seed",
+  "status": "supported",
+  "company": {
+    "symbol": "CROMPTON",
+    "name": "Crompton Greaves Consumer Electricals Limited",
+    "isin": "INE299U01018",
+    "exchange": "NSE"
+  },
+  "elapsed_seconds": 35.27,
+  "documents": [
+    {
+      "kind": "annual",
+      "period": "2025-26",
+      "pages": 341,
+      "bytes": 19853481,
+      "combined_peak_mb": 424.3,
+      "processing_seconds": 28.2,
+      "hash": "0b0d8d9f1f4010b7aba279407e6bd5748e29429d2f5649900eef1b31d235b45c",
+      "url": "https://www.bseindia.com/xml-data/corpfiling/AttachHis/685e1a8a-ced3-47bd-a15e-3509e7db4bd3.pdf"
+    },
+    {
+      "kind": "transcript",
+      "period": "Q2 FY27",
+      "pages": 17,
+      "bytes": 559632,
+      "combined_peak_mb": 150.6,
+      "processing_seconds": 1.81,
+      "hash": "558069e9d71312173470db47c8f72ba277cec780ebf1d8aae090702c414513a1",
+      "url": "https://www.bseindia.com/xml-data/corpfiling/AttachHis/b6ca15fa-ca99-4b81-89d7-ed91ffbd96e0.pdf"
+    }
+  ],
+  "provider_usage": {
+    "prompt_tokens": 4982,
+    "completion_tokens": 461,
+    "total_tokens": 5443
+  },
+  "gaps": [],
+  "citations": [
+    {
+      "id": "558069e9d71312173470db47c8f72ba277cec780ebf1d8aae090702c414513a1-x19a2624d52-transcript-p4-c0",
+      "symbol": "CROMPTON",
+      "isin": "INE299U01018",
+      "kind": "transcript",
+      "period": "Q2 FY27",
+      "page": 4,
+      "hash": "558069e9d71312173470db47c8f72ba277cec780ebf1d8aae090702c414513a1",
+      "url": "https://www.bseindia.com/xml-data/corpfiling/AttachHis/b6ca15fa-ca99-4b81-89d7-ed91ffbd96e0.pdf"
+    },
+    {
+      "id": "558069e9d71312173470db47c8f72ba277cec780ebf1d8aae090702c414513a1-x19a2624d52-transcript-p4-c0",
+      "symbol": "CROMPTON",
+      "isin": "INE299U01018",
+      "kind": "transcript",
+      "period": "Q2 FY27",
+      "page": 4,
+      "hash": "558069e9d71312173470db47c8f72ba277cec780ebf1d8aae090702c414513a1",
+      "url": "https://www.bseindia.com/xml-data/corpfiling/AttachHis/b6ca15fa-ca99-4b81-89d7-ed91ffbd96e0.pdf"
+    },
+    {
+      "id": "0b0d8d9f1f4010b7aba279407e6bd5748e29429d2f5649900eef1b31d235b45c-x19a2624d52-annual-p124-c0",
+      "symbol": "CROMPTON",
+      "isin": "INE299U01018",
+      "kind": "annual",
+      "period": "2025-26",
+      "page": 124,
+      "hash": "0b0d8d9f1f4010b7aba279407e6bd5748e29429d2f5649900eef1b31d235b45c",
+      "url": "https://www.bseindia.com/xml-data/corpfiling/AttachHis/685e1a8a-ced3-47bd-a15e-3509e7db4bd3.pdf"
+    },
+    {
+      "id": "0b0d8d9f1f4010b7aba279407e6bd5748e29429d2f5649900eef1b31d235b45c-x19a2624d52-annual-p124-c0",
+      "symbol": "CROMPTON",
+      "isin": "INE299U01018",
+      "kind": "annual",
+      "period": "2025-26",
+      "page": 124,
+      "hash": "0b0d8d9f1f4010b7aba279407e6bd5748e29429d2f5649900eef1b31d235b45c",
+      "url": "https://www.bseindia.com/xml-data/corpfiling/AttachHis/685e1a8a-ced3-47bd-a15e-3509e7db4bd3.pdf"
+    }
+  ],
+  "all_quotes_exact": true,
+  "restart": {
+    "operation": "real Render restart",
+    "symbol": "CROMPTON",
+    "elapsed_seconds": 51.23,
+    "evidence_status": 410,
+    "correct": true,
+    "saved_citation": {
+      "evidence_id": "558069e9d71312173470db47c8f72ba277cec780ebf1d8aae090702c414513a1-x19a2624d52-transcript-p4-c0",
+      "quote": "The industry is currently facing commodity cost pressures and unpredictable geopolitical developments."
+    },
+    "revision": "78ba67e62a68",
+    "browser_saved_excerpt_notice_verified": true
+  },
+  "source_access": {
+    "filings": {
+      "status": "live",
+      "checked_at": "2026-11-15T04:15:04.632801+00:00",
+      "count": 3
+    },
+    "price": {
+      "status": "live",
+      "checked_at": "2026-11-15T04:15:07.724587+00:00",
+      "count": 63
+    }
+  },
+  "portfolio_coverage": {
+    "holdings": 15,
+    "filings_success": 15,
+    "prices_success": 15,
+    "counts": {
+      "fetched_filings": 86,
+      "distinct_filings": 86,
+      "exact_duplicates": 0,
+      "pending": 74,
+      "routine": 0
+    },
+    "source_checked_at": "2026-11-15T04:15:04.632801+00:00"
+  }
+}
