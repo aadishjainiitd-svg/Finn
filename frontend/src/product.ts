@@ -44,3 +44,11 @@ export const eventType=(e:{kind:string;category?:string;description?:string})=>{
 
 // Readable title for a threaded results event; original filing titles are unchanged.
 export const displayTitle=(title:string)=>{const m=title.match(/results period ended (\d{4}-\d{2}-\d{2})/);return m?'Results for the period ended '+date(m[1],true):title;};
+/** Icon colour family for an event: price, results, people, capital, or other filing. */
+export const typeTone=(e:{kind?:string;category?:string;title?:string;reason?:string})=>{
+ if(e.kind==='price')return 'price';
+ const text=`${e.category||''} ${e.title||''} ${e.reason||''}`.toLowerCase();
+ if(/result|earning|financial/.test(text))return 'results';
+ if(/director|appoint|management|resign|ceo|cfo|auditor/.test(text))return 'people';
+ if(/dividend|capital|allot|buyback|bonus|split|rating|debt|borrow/.test(text))return 'capital';
+ return 'filing';};

@@ -116,6 +116,16 @@ test('desktop width uses a side rail and a centred sheet; tablet keeps bottom na
  expect(tablet!.height).toBeLessThan(90);expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
 });
 
+test('first visit with nothing in 24 hours opens on the last 14 days and says so',async({page})=>{
+ await fixture(page);const old=new Date(Date.now()-5*86400000).toISOString();
+ await page.route('**/api/today',r=>r.fulfill({json:{...brief,events:[{...event,published_at:old,checked_at:old}]}}));
+ const now=Date.now()/1000;
+ await page.route('**/api/session',r=>r.fulfill({json:{book:{holdings:brief.coverage.map(c=>({symbol:c.symbol,weight:null,thesis:'',inputs:[],sector:''})),is_demo:true,_version:1,label:'Fixture'},
+  review:{reviewed:{},pins:{},feedback:{},promotions:[],eligible:{},visit:{opened_at:now,active_at:now,cutoff:now-86400,first:true,returning:false},_version:1},storage:{mode:'fixture',recovery:'Fixture'},telegram:{configured:false}}}));
+ await page.goto('/');await expect(page.getByText(/so this first look covers the last 14 days/)).toBeVisible();
+ await expect(page.locator('#period')).toHaveValue('14');await expect(page.getByRole('button',{name:/TCS.*Director appointed/})).toBeVisible();
+});
+
 test('installed production shell reloads offline without acknowledging an item',async({page,context})=>{
  test.skip(!process.env.FINN_E2E_URL,'Requires a production preview with the actual service worker.');
  await fixture(page);await page.goto('/');
