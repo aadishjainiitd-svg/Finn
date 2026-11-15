@@ -1,10 +1,11 @@
 import React,{useState} from 'react';
 import type {Evidence} from './types';
 import {Glyph,Notice,Pill} from './ui';
+import type {TrajectoryData} from './Trajectory';
 type Fact={metric:string;reported_label:string;crore:string|null;scope:string;period_start:string;period_end:string;quote:string;evidence_id:string;headers:{quote:string;evidence_id:string}[]};
 type Calculation={value:string;formula:string;operands:string[]};
 type Year={ratios?:Record<string,Calculation>;year:string;scope:string;facts:string[];growth:{metric:string;percent:string;current:string;prior:string;formula:string}[];earnings_proxy:(Calculation&{margin_percent:string;label:string})|null;cash_conversion:Calculation|null;cash_bridge:{computed_closing:string;reported_closing:string;residual:string;reconciled:boolean;formula:string;operands:Record<string,string>}|null;cash_buckets:{label:string;facts:string[];note:string}[]};
-export type FinancialsData={scope:string;industry_schema?:string;coverage:string;years:Year[];facts:Record<string,Fact>;evidence:Record<string,Evidence>};
+export type FinancialsData={scope:string;industry_schema?:string;coverage:string;years:Year[];trajectory?:TrajectoryData|null;facts:Record<string,Fact>;evidence:Record<string,Evidence>};
 const number=(value:string|null|undefined)=>value==null?'Unavailable':Number(value).toLocaleString('en-IN',{maximumFractionDigits:2});
 export function Financials({data,onEvidence,idPrefix='research'}:{data?:FinancialsData;onEvidence:(e:Evidence)=>void;idPrefix?:string}){
  const [selected,setSelected]=useState('');const year=data?.years.find(y=>y.year===selected)||data?.years[0];

@@ -65,6 +65,28 @@ test('Research keeps scope warning and five-year source headers inspectable',asy
  await page.keyboard.press('Escape');await expect(page.getByRole('button',{name:/Inspect header, row/})).toBeFocused();
 });
 
+test('five-year trajectory keeps gaps empty, marks restatements and opens the cited row',async({page})=>{
+ await fixture(page);
+ const source={...evidence,id:'fx-traj',kind:'annual',version:'v25',period:'Annual report 2025',text:'Revenue from operations 24 1,200.00 1,000.00'};
+ const fact=(crore:string,end:string,restatement:string)=>({metric:'revenue',reported_label:'Revenue from operations',crore,scope:'consolidated',period_start:end.slice(0,4)+'-01-01',period_end:end,quote:source.text,evidence_id:'fx-traj',restatement,headers:[]});
+ const gap=(fiscal_year:string)=>({fiscal_year,period_end:null,gap:true,values:{},restated:{},growth:{},derived:{}});
+ const trajectory={scope:'consolidated',scope_basis:['Labelled on the statement page'],year_end:'12-31',notes:[],complete:false,gaps:['2021','2022','2023'],coverage:'',allocation:null,
+  years:[gap('2021'),gap('2022'),gap('2023'),
+   {fiscal_year:'2024',period_end:'2024-12-31',gap:false,values:{revenue:'f24'},restated:{revenue:{newer:'f24',older:'f24old'}},growth:{},derived:{}},
+   {fiscal_year:'2025',period_end:'2025-12-31',gap:false,values:{revenue:'f25'},restated:{},growth:{revenue:{percent:'20.0',current:'f25',prior:'f24',formula:'100 × (current / prior − 1)'}},derived:{}}]};
+ const financials={scope:'consolidated',coverage:'Fixture',years:[],trajectory,evidence:{'fx-traj':source},
+  facts:{f25:fact('1200','2025-12-31','as_presented_in_v25'),f24:fact('1000','2024-12-31','as_presented_in_v25'),f24old:fact('990','2024-12-31','as_presented_in_v24')}};
+ await page.route('**/api/research-pack/TEST',r=>r.fulfill({json:{pack:{company:{symbol:'TEST',name:'Fixture issuer'},documents:[source],gaps:[],sections:[],facts:[],checked_at:date,coverage_note:'Fixture only',financials}}}));
+ await page.goto('/');await page.getByRole('button',{name:'Research',exact:true}).click();await page.getByLabel('Research any NSE ticker').fill('TEST');await page.getByRole('button',{name:'Open saved research'}).click();
+ await expect(page.getByRole('heading',{name:'Five-year trajectory'})).toBeVisible();await expect(page.getByText('2 of 5 years',{exact:true})).toBeVisible();
+ await expect(page.getByRole('img',{name:/2023: not read; 2024: 1,000 crore; 2025: 1,200 crore/})).toBeVisible();
+ await expect(page.getByText('+20.0%')).toBeVisible();await expect(page.getByText('1 restated value')).toBeVisible();
+ await expect(page.getByRole('button',{name:'Read older annual reports for 2021, 2022, 2023'})).toBeVisible();
+ await expect(page.getByText(/no allocation is shown/)).toBeVisible();
+ await page.getByRole('button',{name:'2025 revenue: 1,200. Open source row'}).click();await expect(page.locator('blockquote')).toHaveText(source.text);
+ await page.keyboard.press('Escape');await expect(page.getByRole('button',{name:'2025 revenue: 1,200. Open source row'})).toBeFocused();
+ expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
+});
 
 test('installed production shell reloads offline without acknowledging an item',async({page,context})=>{
  test.skip(!process.env.FINN_E2E_URL,'Requires a production preview with the actual service worker.');

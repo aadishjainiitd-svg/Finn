@@ -58,3 +58,65 @@ def test_balance_ratios_require_both_borrowing_rows_and_comparable_opening_capit
     assert 'debt_equity' not in missing['ratios']
     wrong=[{**f,'period_end':'2024-03-31'} if f['year']=='2024' and f['metric']=='total_assets' else f for f in parsed]
     assert 'roce' not in analyse(wrong)['years'][0]['ratios']
+
+
+def report(version,year,revenue,prior_revenue,pat=(200,100),title='CONSOLIDATED STATEMENT OF PROFIT AND LOSS',month='December 31'):
+    doc={'symbol':'TEST','version':version,'kind':'annual'}
+    text=(f'{title} For the year ended {month}, {year} (INR in Crores) {month}, {year} {month}, {year-1} Income '
+          f'Revenue from operations 24 {revenue:,.2f} {prior_revenue:,.2f} Profit for the year {pat[0]:.2f} {pat[1]:.2f} ')
+    return extract(doc,[{'id':version+'-p1-c0','page':1,'text':text}])
+
+
+def test_trajectory_prefers_newest_report_marks_restatement_and_keeps_gaps():
+    from backend.statements import trajectory
+    facts=report('v25',2025,1200,1000)+report('v24',2024,990,900)
+    path=trajectory(facts)
+    assert [y['fiscal_year'] for y in path['years']]==['2021','2022','2023','2024','2025']
+    assert path['gaps']==['2021','2022'] and not path['complete']
+    y2024=next(y for y in path['years'] if y['fiscal_year']=='2024')
+    assert y2024['values']['revenue']['value']=='1000.00' and y2024['values']['revenue']['restatement'].endswith('v25')
+    assert y2024['restated']['revenue']['older']['value']=='990.00'
+    # Growth for 2024 comes from the 2024 report's own pair, never across reports.
+    assert y2024['growth']['revenue']['percent']=='10.0'
+    assert y2024['growth']['revenue']['prior']['restatement'].endswith('v24')
+    assert next(y for y in path['years'] if y['fiscal_year']=='2023')['growth']=={}
+
+
+def test_trajectory_breaks_series_at_year_end_change():
+    from backend.statements import trajectory
+    facts=report('v25',2025,1200,1000,month='March 31')+report('v23',2023,800,700)
+    path=trajectory(facts)
+    assert path['notes'] and all(y['period_end'] is None or y['period_end'].endswith('03-31') for y in path['years'])
+
+
+def test_cash_allocation_reconciles_to_operating_cash_and_reported_closing_cash():
+    from decimal import Decimal
+    from backend.statements import trajectory
+    text=('CONSOLIDATED STATEMENT OF CASH FLOWS For the year ended December 31, 2025 (INR in Crores) December 31, 2025 December 31, 2024 '
+          'Purchase of property, plant and equipment (30.00) (20.00) Net cash flow used in investing activities (50.00) (25.00) '
+          'Dividend paid (40.00) (30.00) Net cash flow from / (used in) financing activities (45.00) (35.00) '
+          'Net cash flow from operating activities 100.00 90.00 Effects of exchange (loss) / gain on cash and cash equivalents 1.00 0.00 '
+          'Cash and cash equivalents (opening balance) 50.00 20.00 Cash and cash equivalents (closing balance) 56.00 50.00 ')
+    facts=report('v25',2025,1200,1000)+extract({'symbol':'TEST','version':'v25','kind':'annual'},[{'id':'v25-p2-c0','page':2,'text':text}])
+    allocation=trajectory(facts)['allocation']
+    row=next(r for r in allocation['years'] if r['fiscal_year']=='2025')
+    uses={u['label']:Decimal(u['value']) for u in row['uses']}
+    assert uses['Capex']==30 and uses['Dividends']==40 and uses['Acquisitions']==0
+    assert not next(u for u in row['uses'] if u['label']=='Acquisitions')['reported']
+    assert sum(uses.values())+Decimal(row['net_change'])==Decimal(row['cfo'])
+    assert row['check']['reconciled'] and allocation['reconciled_years']==2
+
+
+def test_unlabelled_scope_glyph_declaration_and_whole_number_columns():
+    doc={'symbol':'TEST','version':'w1','kind':'annual'}
+    page=('Statement of Profit and Loss (H crore) Note Year ended March 31, 2026 Year ended March 31, 2025 '
+          'Revenue from operations 12 2,67,021 2,55,324 Other income 13 4,402 3,962 Profit for the year 49,454 48,797 ')
+    declaration='These standalone financial statements have been prepared in Indian Rupee (H) which is the functional currency.'
+    rows=[{'id':'w1-p1-c0','page':1,'text':page},{'id':'w1-p2-c0','page':2,'text':declaration}]
+    parsed={f['metric']+f['year']:f for f in extract(doc,rows)}
+    assert parsed['revenue2026']['crore']=='267021' and parsed['revenue2025']['crore']=='255324'
+    assert parsed['other_income2026']['crore']=='4402'
+    assert parsed['revenue2026']['scope']=='standalone' and 'Only set' in parsed['revenue2026']['scope_basis']
+    assert not extract(doc,[rows[0],{**rows[1],'text':declaration.replace('(H)','(J)')}])
+    running=[{**rows[0],'text':'Consolidated Financial Statements '+page},rows[1]]
+    assert not extract(doc,running)
