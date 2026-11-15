@@ -70,7 +70,7 @@ Watches support confirmed sentence/speech rules, exact threshold preview and ref
 ## Interruption / processes
 
 - Retained v8 replay (`scripts/retained_assessment_probe.py`, session 68910) was running when user said STOP. It was explicitly interrupted with Ctrl+C and exited 1. **Do not claim v8 live replay passed.** Some public assessment rows may already have been updated, but the final snapshot/report may still be v7. Safe to rerun this idempotent retained-source upgrade after resuming; preserve source freshness timestamps. Last completed v7 replay: 133 filings, 38 pending, 153.59 seconds.
-- `docs/retained-assessment-before-v8.json` preserves the prior result. `retained-assessment-verification.json` must be checked for its actual policy before use.
+- The earlier `retained-assessment-before-v8.json` snapshot was removed from the repository (recoverable from Git history). `retained-assessment-verification.json` must be checked for its actual policy before use.
 - Backend 8015 was stopped earlier. Vite preview 5174 was last known running. Older 8000/8001/5173 were deliberately untouched. Process inventory attempt after stop was denied by Windows CIM permissions, so do not assume those processes are alive; inspect ports safely before launch.
 - No background implementation agent should be relied upon. Prior `/root/adversarial_review` exists in the old account but its work is not needed for continuation. No new delegation used here.
 
