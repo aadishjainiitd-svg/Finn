@@ -13,7 +13,7 @@ export function Glyph({name,size=19}:{name:string;size?:number}){
 }
 export function Pill({children,tone=''}:{children:React.ReactNode;tone?:string}){return <span className={'fn-tag '+tone}>{children}</span>;}
 export function Notice({children,error=false}:{children:React.ReactNode;error?:boolean}){return <div className={'fn-note '+(error?'error':'')} role={error?'alert':'status'}>{children}</div>;}
-export function Sheet({title,children,onClose,trigger}:{title:string;children:React.ReactNode;onClose:()=>void;trigger?:HTMLElement|null}){
+export function Sheet({title,header,children,onClose,trigger}:{title:string;header?:React.ReactNode;children:React.ReactNode;onClose:()=>void;trigger?:HTMLElement|null}){
  const returnFocus=useRef(document.activeElement as HTMLElement|null);
  const id=useRef(crypto.randomUUID());const closeRef=useRef(onClose);closeRef.current=onClose;
  useEffect(()=>{
@@ -29,7 +29,7 @@ export function Sheet({title,children,onClose,trigger}:{title:string;children:Re
  },[]);
  const dismiss=()=>{const stack:string[]=history.state?.finnSheets||[];if(stack.at(-1)===id.current)history.back();else closeRef.current();};
  return <Dialog.Root open onOpenChange={open=>{if(!open)dismiss();}}><Dialog.Portal><Dialog.Overlay className="fn-overlay"/><Dialog.Content className="fn-sheet" aria-describedby={undefined} onCloseAutoFocus={e=>{const target=trigger||returnFocus.current;if(target?.isConnected){e.preventDefault();target.focus({preventScroll:true});}}}>
- <div className="fn-handle"/><div className="fn-row fn-sheet-heading"><Dialog.Title>{title}</Dialog.Title><Dialog.Close className="fn-close" aria-label={'Close '+title}><Glyph name="close"/></Dialog.Close></div>
+ <div className="fn-handle"/><div className="fn-row fn-sheet-heading">{header?<><Dialog.Title className="sr-only">{title}</Dialog.Title><div className="fn-grow">{header}</div></>:<Dialog.Title>{title}</Dialog.Title>}<Dialog.Close className="fn-close" aria-label={'Close '+title}><Glyph name="close"/></Dialog.Close></div>
  <div className="fn-bd">{children}</div></Dialog.Content></Dialog.Portal></Dialog.Root>;
 }
 export function Skeleton(){return <div className="fn-skeleton" role="status" aria-label="Loading"><div/><div/><div/></div>;}

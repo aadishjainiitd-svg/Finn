@@ -134,8 +134,8 @@ test('quarterly results distinguish current and comparator columns with nested s
  await fixture(page);const source={quote:evidence.text,evidence};
  const results={tables:[{scope:'consolidated',industry_schema:'general',page:1,periods:['2026-09-30','2026-06-30','2025-09-30'],unit:'₹ crore',headers:[source,source,source,source,source],items:[{metric:'revenue',label:'Total revenue from operations',values:['120','100','80'],qoq:'20',yoy:'50',...source}],comparison_basis:'Controlled test fixture; not investment data'}],gaps:[]};
  await page.route('**/api/today',r=>r.fulfill({json:{...brief,events:[{...event,results}]}}));
- await page.goto('/');await page.getByRole('button',{name:/TCS.*Director appointed/}).click();await page.getByText('Results first cut · verified rows').click();
- await expect(page.getByRole('cell',{name:'20%',exact:true})).toBeVisible();await expect(page.getByRole('cell',{name:'50%',exact:true})).toBeVisible();
+ await page.goto('/');await page.getByRole('button',{name:/TCS.*Director appointed/}).click();await expect(page.getByText('Results first cut · verified rows')).toBeVisible();
+ await expect(page.getByRole('cell',{name:'+20%',exact:true})).toBeVisible();await expect(page.getByRole('cell',{name:'+50%',exact:true})).toBeVisible();
  await page.getByText('Inspect operands and filing pages').click();await page.getByRole('button',{name:'Inspect quarter column 2'}).click();
  await expect(page.locator('blockquote')).toHaveText(evidence.text);await page.goBack();await expect(page.getByRole('button',{name:'Inspect quarter column 2'})).toBeFocused();
 });

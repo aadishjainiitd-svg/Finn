@@ -41,3 +41,6 @@ export const weekday=(value:Date)=>new Intl.DateTimeFormat('en-IN',{timeZone:'As
 export const thesisLabel=(status?:string|null):[string,''|'red'|'green']=>status==='weakens'?['Weakens your thesis','red']:status==='supports'?['Supports your thesis','green']:status==='neutral'?['No thesis effect found','']:['Thesis not assessed',''];
 // Short event type for the card subtitle, from the verified category or kind.
 export const eventType=(e:{kind:string;category?:string;description?:string})=>{if(e.kind==='price')return 'Unusual move';const raw=(e.category||(e.description||'').split(' · ')[0]||'Disclosure').slice(0,40);return raw.charAt(0).toUpperCase()+raw.slice(1);};
+
+// Readable title for a threaded results event; original filing titles are unchanged.
+export const displayTitle=(title:string)=>{const m=title.match(/results period ended (\d{4}-\d{2}-\d{2})/);return m?'Results for the period ended '+date(m[1],true):title;};

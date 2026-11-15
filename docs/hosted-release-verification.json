@@ -1,14 +1,14 @@
 {
   "kind": "Hosted release verification; no model calls; probe-owned anonymous sessions only",
   "before-restart": {
-    "checked_at": "2026-11-15T09:55:01.829097+00:00",
-    "revision": "98ac63899373",
+    "checked_at": "2026-11-15T10:42:49.009301+00:00",
+    "revision": "0821166f5b64",
     "checks": {
       "health_revision": {
         "passed": true,
-        "detail": "98ac63899373"
+        "detail": "0821166f5b64"
       },
-      "cold_or_warm_health_seconds": 0.56,
+      "cold_or_warm_health_seconds": 0.45,
       "storage_persistent_postgres": {
         "passed": true,
         "detail": "persistent_postgres"
