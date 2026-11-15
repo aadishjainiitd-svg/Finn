@@ -164,3 +164,43 @@ def test_mixed_citations_keep_the_same_budget_on_cache_rerender():
     rendered=grounded_display(raw)
     assert rendered['claims'][0]['citations'][0]['evidence_id']=='call'
     assert grounded_display(rendered)==rendered
+
+
+def test_compound_demand_margin_passage_survives_evidence_budget():
+    from backend.documents import retrieve
+    from backend.llm import source_spans
+    doc={'hash':'call','version':'call','kind':'transcript','name':'Example Limited',
+         'management_speakers':['Manager One']}
+    distractor='Manager One: Business risks described management say pressure earnings call. '
+    target='Manager One: Consumer demand remains steady despite inflation. Aluminium prices reduced contribution margins against a strong prior-year base. '
+    rows=[(f'call-p{i}-c0',i,(distractor*29)[:2100]) for i in range(1,5)]
+    rows.append(('call-p5-c0',5,target+'Other background. '*100))
+    with store.db() as c:
+        # Other indexed reports make demand/margin common corpus terms while
+        # the compound question's rarer words dominate the ordinary BM25 list.
+        for i in range(20):
+            c.execute('INSERT INTO search VALUES (?,?,?)',(f'other-{i}','other','Consumer demand and margins. '*90))
+        for eid,page,text in rows:
+            c.execute('INSERT INTO chunks VALUES (?,?,?,?)',(eid,'call',page,text))
+            c.execute('INSERT INTO search VALUES (?,?,?)',(eid,'call',text))
+    selected=retrieve([doc],'What business risks are described in the annual report, and what does management say about demand and margin pressure in the latest earnings call?')
+    assert selected[0]['id']=='call-p5-c0'
+    quotes=[s['quote'] for s in source_spans(selected[:1]).values()]
+    assert any('demand remains steady' in q for q in quotes)
+    assert any('Aluminium prices reduced' in q for q in quotes)
+
+
+@pytest.mark.parametrize('prior,quote',[
+    ('The appliance segment delivered healthy revenue growth.',
+     'Margins, however, remained subdued with raw material inflation.'),
+    ('For H1, cables contribution margins were approximately 15%.',
+     'In the rest of the portfolio, margins held up well.')])
+def test_segment_margin_quote_keeps_its_identifying_sentence(prior,quote):
+    from backend.llm import grounded_display
+    e={'id':'call','kind':'transcript','text':prior+' '+quote,
+       'speaker_before':'Manager One','management_speakers':['Manager One']}
+    raw={'status':'supported','question':'What affected margins?','evidence':[e],
+         'claims':[{'text':'ignored','citations':[{'evidence_id':'call','quote':quote}]}]}
+    result=grounded_display(raw)
+    assert result['claims'][0]['citations'][0]['quote']==prior+' '+quote
+    assert grounded_display(result)==result

@@ -15,7 +15,7 @@ jobs={}
 worker=asyncio.Lock()
 inflight={}
 background_active=False
-VERSION='retrieval-8-prompt-7-schema-4-'+PARSER+'-'+MODEL
+VERSION='retrieval-9-prompt-10-schema-4-'+PARSER+'-'+MODEL
 
 def question_key(symbol,question,filing_id=None):
     signature=None

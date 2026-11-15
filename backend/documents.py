@@ -183,6 +183,8 @@ def retrieve(documents,question):
                 topic_queries=[]
                 if re.search(r'\bai\b',question,re.I):topic_queries.append('"AI"')
                 if re.search(r'\bdeal',question,re.I):topic_queries.append('"TCV" OR "order book" OR "deal"')
+                if re.search(r'\bdemand\b',question,re.I) and re.search(r'\bmargins?\b',question,re.I):
+                    topic_queries.extend(['"demand"','"margin" OR "margins"'])
                 for topic in topic_queries:
                     anchors.extend(c.execute('SELECT id,text FROM search WHERE search MATCH ? AND hash=? ORDER BY bm25(search) LIMIT 1',(topic,version)).fetchall())
                 unique={r['id']:r for r in anchors+rows}
