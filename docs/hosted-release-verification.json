@@ -1,14 +1,14 @@
 {
   "kind": "Hosted release verification; no model calls; probe-owned anonymous sessions only",
   "before-restart": {
-    "checked_at": "2026-11-15T10:42:49.009301+00:00",
-    "revision": "0821166f5b64",
+    "checked_at": "2026-11-15T14:25:41.645229+00:00",
+    "revision": "0be0c560f8e2",
     "checks": {
       "health_revision": {
         "passed": true,
-        "detail": "0821166f5b64"
+        "detail": "0be0c560f8e2"
       },
-      "cold_or_warm_health_seconds": 0.45,
+      "cold_or_warm_health_seconds": 0.38,
       "storage_persistent_postgres": {
         "passed": true,
         "detail": "persistent_postgres"
@@ -44,14 +44,14 @@
     }
   },
   "after-restart": {
-    "checked_at": "2026-11-15T09:55:58.777226+00:00",
-    "revision": "98ac63899373",
+    "checked_at": "2026-11-15T14:57:58.764499+00:00",
+    "revision": "0be0c560f8e2",
     "checks": {
       "health_revision": {
         "passed": true,
-        "detail": "98ac63899373"
+        "detail": "0be0c560f8e2"
       },
-      "cold_or_warm_health_seconds": 0.19,
+      "cold_or_warm_health_seconds": 0.45,
       "storage_persistent_postgres": {
         "passed": true,
         "detail": "persistent_postgres"

@@ -2,6 +2,8 @@
 
 ## Read this first
 
+**Update, 15 November 2026 evening:** the expanded release is now deployed (`0be0c56`, partial release). The latest state is in the final checkpoint at the end of this file; the paragraphs below describe the earlier account handoff and are kept as history.
+
 The user explicitly stopped work to move to another account and wants completion within the next hour. No further implementation, tests, commit or deployment was done after that stop. Handoff documentation and reference copies only were created. **The complete expanded FINN is NOT finished or deployed.** A one-hour target is a constraint, not evidence that all outstanding acceptance criteria can be satisfied. Do not quietly drop requirements or claim a full release if they cannot be met.
 
 Workspace: `C:/Users/ASUS/Desktop/ENAM`. Reopen this exact folder; do not create a new project. Current shell PowerShell. Python `.venv/Scripts/python.exe` works (3.12.14); Node 24.21 and frontend dependencies are installed. `rg` unavailable. Read AGENTS.md if one has since appeared; none was found previously.
@@ -183,13 +185,13 @@ In-host adversarial subagent completed (backend read in full except statements/f
 | F12 | Disabled scheduler → 503 → 27-minute workflow retry | **Fixed**: 404; regression test |
 | F15 | Thesis quota error fails a good refresh | **Fixed**: recorded as `thesis_gap` |
 | F16 | Ops redaction misses DB URL/scheduler token | **Fixed** |
-| F2 | Any visitor can drain the shared daily Groq allowance | Open, product decision (per-owner sub-quota). Ledger itself is never reset |
-| F3 | Scheduler capacity counts disabled rows, no per-owner rule cap | Open; scheduler disabled |
-| F7 | One failed heartbeat aborts a long job | Open |
-| F8 | Cookieless GETs create session + demo-book rows; no session GC, fixed 365-day expiry | Open; storage-growth risk on Neon Free |
+| F2 | Any visitor can drain the shared daily Groq allowance | **Fixed in `0be0c56`**: rolling 24-hour share per browser (15 questions/builds, 40 filing reads). Clearing cookies gives a new share; ledger never reset |
+| F3 | Scheduler capacity counts disabled rows, no per-owner rule cap | **Fixed in `0be0c56`**: only enabled rules/reminders count; 25 enabled watches per browser |
+| F7 | One failed heartbeat aborts a long job | **Fixed in `0821166`** |
+| F8 | Cookieless GETs create session + demo-book rows; no session GC, fixed 365-day expiry | **Fixed**: no demo-book write, sliding expiry (`0821166`), expired session rows pruned hourly (`0be0c56`) |
 | F9 | Shared snapshot never pruned beyond 14-day label | Open, retention policy vs never-bury-unread |
 | F11 | Public research packs/assessments grow durable evidence | Open |
-| F13 | Errored scheduler slot cannot be retried | Open |
+| F13 | Errored scheduler slot cannot be retried | **Fixed in `0be0c56`** |
 | F14 | Large NSE feed row rewritten; save timeout can mark fresh feed stale | Open |
 
 New regression tests were added after the fixes; only ISSUE-001's test was shown red before its fix. Full suite **149 passed**.
@@ -205,3 +207,35 @@ Deploy `dep-dbso1r3l550s7390eel0` went live at ~09:54 UTC; `/health` revision `9
 - Live browser at 390px: five tabs, no horizontal overflow, no console errors. First-visit Today shows "No items in this view. Coverage is incomplete." with a 14-day look-back (honest, but an empty-looking first screen for reviewers).
 - Not verified: hosted memory under research workloads, cold start after sleep, quota-failure UX on host, fresh generative answers (allowance exhausted), scheduler (disabled; secret presence unknown).
 - Rollback: redeploy `2477c701ce1b` from Render (earlier narrow release). `FINN_DATABASE_URL` is now set on the service; the old revision ignores it.
+
+### Product round 2 — deployed `0821166` (live 10:42 UTC)
+
+- Today matches the reference structure: tiers "Needs you N / Worth knowing N / Buried N" (default Needs you; recap day view keeps an internal all-mode), header "Sun 15 Nov", headline without trailing period, pulse width = entered weights only when every holding has one (else equal, caption says so), card shows company name + ticker and "event type, weight" subtitle. Measured tokens already matched spec (header 18/16/16, h1 26/500, card 13/14 r18, headline 15/500, nav 8/6/10).
+- Bug fixed: card/event-sheet thesis pill compared against holding-level `weakening`; per-filing values are `weakens/supports/neutral/unknown`, so adverse evidence never showed. Shared `thesisLabel`.
+- Results: SEBI quarter + half-year/nine-month six-date profile (exact date parsing, column groups, calendar span, explicit ₹/INR/Rs unit, citations); serial-number guard. Survey of 38 retained results filings: verified tables 1 → 3 (TCS, HAVELLS consolidated ×2). HAVELLS Q2 FY27 revenue 6,431.99 / 6,518.19 / 4,779.33, PBT 472.62 / 392.29 / 414.59, PAT 349.22 / 289.71 / 318.28 hand-checked against p9 text. TATA POWER/TITAN fail closed on corrupt currency glyphs; ICICI/BHARTIARTL/ITC column-major layouts remain unsupported (no zipping).
+- F7 fixed (transient heartbeat retry, lost lease stops). F8 partly fixed (no demo-book write per anonymous read; sliding session expiry; session rows still created per cookieless visitor, no GC).
+- Validation: 153 Python, 11 frontend, 20 Playwright (Edge) passed; hosted probe 9/9 PASS on `0821166`. Restart persistence not re-run on this revision (passed on `98ac638`).
+
+### Product round 3 — event sheet (`d5cae8f`)
+
+- Event sheet now follows the reference: one header row (tile red for needs-you / amber for price, company + ticker, "event type · date" or "N filings in one", close; dialog keeps sr-only accessible title), 22px/1.15 title with the reason as muted subline (threaded "results period ended YYYY-MM-DD" shown as "Results for the period ended 30 Sept 2026"), timeline card, evidence card, results comparison open by default (columns 33/22/22/22%, 13px right-aligned, 11px muted header with period "Sept 26" rather than a fiscal-quarter label to avoid April–March assumptions, signed coloured QoQ/YoY, value tap opens its cited row, footnote "₹ crore. Results PDF, page N. Tap a number to open it."), small muted "Their guidance" / "Your thesis" labels with 5px pill margin, "Why it ranks here" with traceable values, "Worth your time?" Mattered/Noise pills, Ask bar.
+- Deliberate e2e expectation change: quarterly test no longer clicks the (now open) summary and expects signed "+20%"/"+50%".
+- Not done: guidance verdicts still "No comparable guidance" (no guidance/actual pairing yet); the reference's plain-language headline ("Fuel cost ate the growth") is not generated — FINN shows the filing title plus classification reason rather than an unsupported summary.
+
+## Final checkpoint — 15 November 2026 evening (current state)
+
+**Live:** revision `0be0c56` on `srv-dbruffbrjlhs73cl08bg` (Render Free, Neon Postgres). Published by fast-forward pushes from temporary indexes; local `main` and index untouched.
+
+| Revision | Content |
+|---|---|
+| `333b873` | Statement reader widened under explicit rules (unlabelled statements → standalone with stated basis, whole-number tables, day-first/year-only headers, late titles, glyph mapped only by the same document). Five-year trajectory (newest presentation per year, restatements cited, same-statement growth, empty unread years, break at year-end change) and reconciled cash allocation. ABB 2025 output unchanged. |
+| `0be0c56` | Percent guidance (management-only; revenue growth scored met/missed from one statement; margins indicative vs EBITDA proxy, never counted; segment/two-range/volume guidance unscored) and event-sheet guidance card. Revenue mix only when segments sum to the segment total and to reported revenue. Per-browser 24 h model share (F2), expired session pruning (F8), scheduler capacity/rule cap (F3), errored-slot retry (F13), slimmer research responses. |
+
+**Verified:** hosted probe 9/9 on `0be0c56`; after-restart phase PASS (revision, Postgres, stored digest, private pin survived) after a Render restart (API 200; the 40-line log window did not reach the startup line). Local: 169 Python, 11 frontend, 23 Playwright (Edge, 390 px). Hosted ABB research rebuilt from five annual reports and four calls: 2021–2025 standalone, revenue 6,934 → 13,203 crore, cash allocation ties to closing cash 3/3 years. Locally reconciled revenue mixes: HAVELLS, TCS (computed segment growth equals its printed column), ASTRAL.
+
+**Model usage today:** the ABB rebuild made one fresh Groq call (`openai/gpt-oss-120b`) for its research summary; the durable ledger admitted it. A later test question was refused with `daily_quota` — the allowance was not reset or raised. Fresh-answer quality on this revision is therefore unverified; the hosted quota-refusal path is verified.
+
+**Still open:** held-out evaluation; exact reference visual/gesture checks; two more hand-checked quarterly tables and bank layouts; column-layout segment tables (ABB); hosted memory under multi-report research for other companies; scheduler activation (secret presence unknown); F9, F11, F14 (retention/scale). Hosted guidance and mix appear only for companies whose research has been rebuilt on this revision (ABB has neither: column-layout segments and no qualifying management guidance).
+
+**Submission:** `docs/SUBMISSION.md` refreshed for `0be0c56`. No email sent; the candidate sends it.
+
