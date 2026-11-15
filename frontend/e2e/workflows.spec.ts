@@ -26,7 +26,7 @@ test('mobile review persists, nested evidence opening does not acknowledge, Esca
 for(const order of ['old-first','new-first'])test('late research response cannot replace selected company: '+order,async({page})=>{
  await fixture(page);let finishOld:()=>void=()=>{},finishNew:()=>void=()=>{};let oldSeen=false,newSeen=false;
  await page.route('**/api/research',async r=>{const symbol=r.request().postDataJSON().symbol;await new Promise<void>(resolve=>{if(symbol==='TCS'){finishOld=resolve;oldSeen=true;}else{finishNew=resolve;newSeen=true;}});await r.fulfill({json:{id:symbol,status:'complete',result:answer(symbol)}});});
- await page.goto('/');await page.getByRole('button',{name:'Ask',exact:true}).click();await page.getByLabel('NSE company symbol').fill('TCS');await page.getByRole('button',{name:'Investigate company'}).click();await expect.poll(()=>oldSeen).toBe(true);
+ await page.goto('/');await page.getByRole('button',{name:'Ask Assistant',exact:true}).click();await page.getByLabel('NSE company symbol').fill('TCS');await page.getByRole('button',{name:'Investigate company'}).click();await expect.poll(()=>oldSeen).toBe(true);
  await page.getByLabel('NSE company symbol').fill('INFY');await page.getByRole('button',{name:'Investigate company'}).click();await expect.poll(()=>newSeen).toBe(true);
  if(order==='old-first'){finishOld();await page.waitForTimeout(50);finishNew();}else{finishNew();await expect(page.getByText('INFY fixture answer')).toBeVisible();finishOld();}
  await expect(page.getByText('INFY fixture answer')).toBeVisible();await expect(page.getByText('TCS fixture answer')).toHaveCount(0);
@@ -34,7 +34,7 @@ for(const order of ['old-first','new-first'])test('late research response cannot
 
 test('generation failure retains document coverage, missing-source gap and evidence',async({page})=>{
  await fixture(page);await page.route('**/api/research',r=>r.fulfill({json:{id:'quota',status:'error',stage:'Could not complete',error:{code:'daily_quota',message:'Shared answer allowance reached.'},documents:[{...evidence,kind:'transcript',period:'Q2 FY27'}],evidence:[evidence],gaps:[{kind:'annual',message:'Document processing exceeded the hosting memory budget.'}]}}));
- await page.goto('/');await page.getByRole('button',{name:'Ask',exact:true}).click();await page.getByLabel('NSE company symbol').fill('TEST');await page.getByRole('button',{name:'Investigate company'}).click();
+ await page.goto('/');await page.getByRole('button',{name:'Ask Assistant',exact:true}).click();await page.getByLabel('NSE company symbol').fill('TEST');await page.getByRole('button',{name:'Investigate company'}).click();
  await expect(page.getByText('Shared answer allowance reached.')).toBeVisible();await expect(page.getByText('Earnings call · Q2 FY27')).toBeVisible();await expect(page.getByText(/Annual report: Document processing exceeded/)).toBeVisible();await expect(page.getByText('The sources are still here')).toBeVisible();
 });
 
@@ -162,7 +162,7 @@ test('installed production shell reloads offline without acknowledging an item',
 test('book Ask uses an explicit saved scope and shows missing-company coverage',async({page})=>{
  await fixture(page);let payload:any=null;
  await page.route('**/api/research',r=>{payload=r.request().postDataJSON();return r.fulfill({json:{id:'book-answer',status:'complete',result:{...answer('BOOK'),status:'partial',gaps:[{kind:'coverage',message:'INFY: no readable retained primary documents.'}]}}});});
- await page.goto('/');await page.getByRole('button',{name:'Ask',exact:true}).click();
+ await page.goto('/');await page.getByRole('button',{name:'Ask Assistant',exact:true}).click();
  await page.getByLabel('Question scope').selectOption('portfolio');
  await page.getByLabel('What do you want to understand?').fill('What risks are disclosed across my book?');
  await page.getByRole('button',{name:'Investigate book'}).click();
@@ -183,7 +183,7 @@ test('browser Back closes only the top sheet and retains the underlying item',as
  await page.goBack();await expect(page.locator('[role=dialog]')).toHaveCount(0);await expect(open).toBeFocused();
  await expect(page.getByRole('button',{name:'Mark done'})).toBeVisible();
  await open.click();await page.getByRole('button',{name:'Ask about this event'}).click();
- await expect(page.getByRole('heading',{name:'Ask with sources'})).toBeVisible();
+ await expect(page.getByRole('heading',{name:'Ask Assistant'})).toBeVisible();
  await page.goBack();await expect(page.locator('[role=dialog]')).toHaveCount(0);
 });
 
@@ -217,7 +217,7 @@ test('tab navigation preserves input and scroll across browser Back',async({page
  await fixture(page);await page.goto('/');await page.getByRole('button',{name:'Book',exact:true}).click();
  await page.getByLabel('Find a holding').fill('TEST');await page.evaluate(()=>scrollTo(0,600));
  await expect.poll(()=>page.evaluate(()=>scrollY)).toBeGreaterThan(500);
- await page.getByRole('button',{name:'Ask',exact:true}).click();
+ await page.getByRole('button',{name:'Ask Assistant',exact:true}).click();
  await page.getByLabel('NSE company symbol').fill('ABB');
  await page.goBack();await expect(page.getByRole('button',{name:'Book',exact:true})).toHaveAttribute('aria-current','page');
  await expect(page.getByLabel('Find a holding')).toHaveValue('TEST');
@@ -240,7 +240,7 @@ test('return playback is the recap even when Today is filtered to another period
  await page.getByLabel('From',{exact:true}).fill('2020-01-01');await page.getByLabel('To',{exact:true}).fill('2020-01-02');
  await page.getByRole('button',{name:'Listen to this recap'}).click();
  await expect(page.getByText(/FINN return recap/)).toContainText('Director appointed for one year');
- await expect(page.getByText(/Reads the same retained day-by-day return recap/)).toBeVisible();
+ await expect(page.getByText(/Reads your return recap aloud/)).toBeVisible();
 });
 
 

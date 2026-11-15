@@ -174,3 +174,45 @@ h3{font-weight:500}
 .fn-addthesis{font-size:13px;color:var(--blue);font-weight:500;padding:8px 0;min-height:40px;text-align:left}
 /* Minimum touch size everywhere it was short */
 button[aria-label^="Speak"],.fn-mic{min-width:44px;min-height:44px}
+/* Pulse: named tiles */
+.fn-pulse{display:flex;flex-wrap:wrap;gap:4px;height:auto;margin-top:14px}
+.fn-pulse .fn-tile{flex-basis:62px;min-width:62px;border-radius:8px;padding:5px 6px;display:flex;flex-direction:column;gap:1px;line-height:1.15;text-align:left}
+.fn-tile b{font-size:10px;font-weight:600;letter-spacing:.02em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fn-tile em{font-style:normal;font-size:11px;font-variant-numeric:tabular-nums}
+.fn-tile.up{background:#1f7a55;color:#eafff4}
+.fn-tile.dn{background:#a8443d;color:#fff1ef}
+.fn-tile.flat{background:#33415f;color:#d9deea}
+.fn-tile.na{background:#2a3757;color:#9aa5bd}
+/* ===== Round 3 polish ===== */
+/* Sheets: consistent inner padding so text never touches the edge */
+.fn-sheet .fn-bd{padding:12px 20px 18px;gap:12px}
+.fn-sheet-heading{padding-left:20px;padding-right:12px}
+/* Spoken brief player */
+.fn-player{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:12px;display:flex;flex-direction:column;gap:10px}
+.fn-playerbtns{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:6px}
+.fn-play{justify-content:center;gap:6px;background:var(--gold);color:#2e1d00}
+.fn-ctrl{min-height:44px;border-radius:12px;border:1px solid var(--line);background:#f6f7fa;color:var(--ink);font-weight:500;font-size:13px}
+.fn-ctrl:disabled{opacity:.45}
+.fn-ctrl[aria-pressed=true]{background:var(--navy);color:#fff;border-color:var(--navy)}
+.fn-speed{display:flex;align-items:center;gap:6px}
+.fn-speed .fn-ctrl{min-height:36px;padding:0 12px}
+.fn-points{margin:8px 0 0;padding-left:18px;display:flex;flex-direction:column;gap:8px}
+.fn-points li{line-height:1.45}
+.fn-points li::marker{color:var(--gold)}
+/* Form action rows */
+.fn-formactions{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px;align-items:center}
+.fn-formactions .fn-button{flex:1 1 160px;justify-content:center}
+.fn-button.secondary{border:1px solid var(--line);background:var(--surface);color:var(--navy)}
+.fn-button:disabled{opacity:.55;cursor:not-allowed}
+form.fn-c label+input,form.fn-c label input{margin-top:6px}
+.fn-speakq{width:100%;justify-content:center;margin-top:6px}
+/* Ask: full-width form */
+.research-form{max-width:none!important;border:1px solid var(--line);box-shadow:var(--shadow)}
+/* File picker */
+input[type=file]{width:100%;font-size:13px;border:1px dashed #c9cfdb;border-radius:12px;padding:10px;background:var(--surface)}
+input[type=file]::file-selector-button{border:0;border-radius:9px;background:var(--navy);color:#fff;padding:8px 12px;margin-right:10px;font:inherit;font-weight:500;cursor:pointer}
+textarea{width:100%;box-sizing:border-box}
+@media(min-width:768px){.fn-playerbtns{grid-template-columns:1.6fr 1fr 1fr 1fr}}
+.fn-pulse{display:grid;grid-template-columns:repeat(auto-fill,minmax(64px,1fr));gap:4px}
+.fn-pulse .fn-tile{min-width:0}
+.fn-pulse{grid-template-columns:repeat(auto-fill,minmax(78px,1fr))}.fn-tile b{font-size:10px;letter-spacing:0}

@@ -7,7 +7,7 @@ from datetime import datetime
 from decimal import Decimal
 from pydantic import BaseModel,Field,ConfigDict
 from . import repository
-from .config import PORTFOLIO,PORTFOLIO_PROFILE
+from .config import PORTFOLIO,PORTFOLIO_PROFILE,SAMPLE_BOOK
 from .sources import identity,ticker
 from .network import SourceError
 
@@ -28,8 +28,8 @@ def book(owner):
         return {**saved,'holdings':[{**h,'sector':h.get('sector') or PORTFOLIO_PROFILE.get(h['symbol'],'')} for h in saved.get('holdings',[])]}
     # Served without persisting: anonymous reads (crawlers, health pings) must not
     # write a row each. The first explicit save inserts it (expected version 0).
-    return {'holdings':[{'symbol':s,'weight':None,'thesis':'','sector':PORTFOLIO_PROFILE.get(s,''),'inputs':[]} for s in PORTFOLIO],
-            'is_demo':True,'label':'Demonstration book · weights and theses not supplied','_version':0}
+    return {'holdings':[{'symbol':s,'weight':str(SAMPLE_BOOK[s][0]) if s in SAMPLE_BOOK else None,'thesis':SAMPLE_BOOK.get(s,(None,''))[1],'sector':PORTFOLIO_PROFILE.get(s,''),'inputs':[]} for s in PORTFOLIO],
+            'is_demo':True,'label':'Sample portfolio · illustrative weights and theses, editable','_version':0}
 
 
 async def validate_holdings(rows):
