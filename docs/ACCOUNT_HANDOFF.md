@@ -168,3 +168,40 @@ Workflow skills are agent tools only; nothing was added to FINN requirements, bu
 - **ISSUE-001 fixed:** `backend/owners.py` rejected every same-origin write behind Render's TLS proxy (Origin `https://host` vs app-seen `http://host`) and set the session cookie without `Secure` there. Now compares host only and marks the cookie Secure when the page or `X-Forwarded-Proto` is https. Regression test red→green; full suite **146 passed**. QA report: `.gstack/qa-reports/run-20261115T094418Z/` (ignored, local).
 - Informational, pre-existing (not in this diff): `/api/research` per-IP limiter keys on `request.client.host`, which is Render's proxy address without forwarded-IP trust, so all visitors share one 5/minute bucket; unauthenticated `/api/source-check/{symbol}` triggers live upstream fetches.
 - `scripts/render_control.py set-database` added: copies the local `FINN_DATABASE_URL` to the existing Free service via Render's env-var API and prints only the status code.
+
+### Adversarial review triage and publication (this session)
+
+In-host adversarial subagent completed (backend read in full except statements/facts/report_insights and most of results.py; most frontend components only grepped; fixtures summary-only). Findings and dispositions:
+
+| ID | Finding | Disposition |
+|---|---|---|
+| F1 | Two cookieless refreshes occupy both global slots for an hour | **Fixed**: long jobs (refresh, research pack, thesis) hold at most one slot; regression test |
+| F4 | Non-SourceError on one filing aborts every later refresh | **Fixed**: recorded as pending with error and skipped; regression test |
+| F5 | Whole-text regex re-run per sentence, on the event loop | **Fixed**: computed once; classification via `asyncio.to_thread` |
+| F6 | Sync Postgres inside async handlers | **Partly fixed**: `/api/jobs`, `/api/evidence`, filing assessment now sync handlers; `start_research` and `assess` writes remain |
+| F10 | Research limiter keyed on proxy IP | **Fixed**: keyed on browser session |
+| F12 | Disabled scheduler → 503 → 27-minute workflow retry | **Fixed**: 404; regression test |
+| F15 | Thesis quota error fails a good refresh | **Fixed**: recorded as `thesis_gap` |
+| F16 | Ops redaction misses DB URL/scheduler token | **Fixed** |
+| F2 | Any visitor can drain the shared daily Groq allowance | Open, product decision (per-owner sub-quota). Ledger itself is never reset |
+| F3 | Scheduler capacity counts disabled rows, no per-owner rule cap | Open; scheduler disabled |
+| F7 | One failed heartbeat aborts a long job | Open |
+| F8 | Cookieless GETs create session + demo-book rows; no session GC, fixed 365-day expiry | Open; storage-growth risk on Neon Free |
+| F9 | Shared snapshot never pruned beyond 14-day label | Open, retention policy vs never-bury-unread |
+| F11 | Public research packs/assessments grow durable evidence | Open |
+| F13 | Errored scheduler slot cannot be retried | Open |
+| F14 | Large NSE feed row rewritten; save timeout can mark fresh feed stale | Open |
+
+New regression tests were added after the fixes; only ISSUE-001's test was shown red before its fix. Full suite **149 passed**.
+
+**Published:** commit `98ac638993731891e1e037c53b1801b085b3c849`, parent `2d94932` (fast-forward push, no force), built from a temporary index: 169 files, local `main` ref and index untouched (still `2468e89`; working tree equals the commit except `.claude/launch.json` and `docs/NEXT_ACCOUNT_PROMPT.txt`, intentionally unpublished). Pre-push exact-secret scan of the 169 files: zero hits.
+**Render:** `FINN_DATABASE_URL` set on `srv-dbruffbrjlhs73cl08bg` (status 200, value not printed); deploy `dep-dbso1r3l550s7390eel0` of `98ac638` started. Scheduler secret presence in GitHub Actions could not be checked (no authenticated GitHub API/plugin in this session).
+
+### Hosted verification of `98ac638` (this session, no model calls)
+
+Deploy `dep-dbso1r3l550s7390eel0` went live at ~09:54 UTC; `/health` revision `98ac63899373`. `scripts/release_probe.py` (probe-owned anonymous sessions; token kept only in ignored `data/`) → `docs/hosted-release-verification.json`:
+- PASS: storage `persistent_postgres`; session cookie Secure+HttpOnly; `/api/today` 200 from stored snapshot (97 distinct filings, 6 pending, 16 routine; snapshot checked_at 07:54 UTC); same-origin write 200 behind proxy; cross-origin 403; missing app header 403; second session isolated; cited evidence 200.
+- Restart: Render restart issued; logs confirm a new uvicorn process served the re-check; private pin survived.
+- Live browser at 390px: five tabs, no horizontal overflow, no console errors. First-visit Today shows "No items in this view. Coverage is incomplete." with a 14-day look-back (honest, but an empty-looking first screen for reviewers).
+- Not verified: hosted memory under research workloads, cold start after sleep, quota-failure UX on host, fresh generative answers (allowance exhausted), scheduler (disabled; secret presence unknown).
+- Rollback: redeploy `2477c701ce1b` from Render (earlier narrow release). `FINN_DATABASE_URL` is now set on the service; the old revision ignores it.

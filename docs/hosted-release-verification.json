@@ -1,0 +1,69 @@
+{
+  "kind": "Hosted release verification; no model calls; probe-owned anonymous sessions only",
+  "before-restart": {
+    "checked_at": "2026-11-15T09:55:01.829097+00:00",
+    "revision": "98ac63899373",
+    "checks": {
+      "health_revision": {
+        "passed": true,
+        "detail": "98ac63899373"
+      },
+      "cold_or_warm_health_seconds": 0.56,
+      "storage_persistent_postgres": {
+        "passed": true,
+        "detail": "persistent_postgres"
+      },
+      "session_cookie_secure_httponly": {
+        "passed": true,
+        "detail": ""
+      },
+      "today_stored_snapshot": {
+        "passed": true,
+        "detail": "status 200; counts {'distinct_filings': 97, 'pending': 6, 'routine': 16}; checked_at 2026-11-15T07:54:06.335958+00:00"
+      },
+      "same_origin_write_behind_proxy": {
+        "passed": true,
+        "detail": "status 200"
+      },
+      "cross_origin_write_rejected": {
+        "passed": true,
+        "detail": "status 403"
+      },
+      "missing_app_header_rejected": {
+        "passed": true,
+        "detail": "status 403"
+      },
+      "second_session_isolated": {
+        "passed": true,
+        "detail": ""
+      },
+      "cited_evidence_resolves": {
+        "passed": true,
+        "detail": "status 200"
+      }
+    }
+  },
+  "after-restart": {
+    "checked_at": "2026-11-15T09:55:58.777226+00:00",
+    "revision": "98ac63899373",
+    "checks": {
+      "health_revision": {
+        "passed": true,
+        "detail": "98ac63899373"
+      },
+      "cold_or_warm_health_seconds": 0.19,
+      "storage_persistent_postgres": {
+        "passed": true,
+        "detail": "persistent_postgres"
+      },
+      "today_stored_snapshot": {
+        "passed": true,
+        "detail": "status 200; counts {'distinct_filings': 97, 'pending': 6, 'routine': 16}; checked_at 2026-11-15T07:54:06.335958+00:00"
+      },
+      "private_pin_survived_restart": {
+        "passed": true,
+        "detail": ""
+      }
+    }
+  }
+}
