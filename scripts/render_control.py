@@ -12,7 +12,7 @@ load_dotenv(ROOT / '.env.deploy')
 STATE = ROOT / 'data/render-service.json'
 BASE = 'https://api.render.com/v1'
 action = sys.argv[1]
-secrets = [v for k, v in os.environ.items() if k.endswith('API_KEY') and v]
+secrets = [v for k, v in os.environ.items() if v and (k.endswith('API_KEY') or k in ('FINN_DATABASE_URL', 'FINN_SCHEDULER_TOKEN'))]
 
 
 def clean(text):
@@ -72,6 +72,13 @@ with httpx.Client(headers={'Authorization': 'Bearer ' + os.environ['RENDER_API_K
         elif action == 'deploy':
             response = client.post(BASE + '/services/' + sid + '/deploys', json={'clearCache': 'do_not_clear'})
             print(clean(json.dumps({'status': response.status_code, 'result': response.json()})))
+        elif action == 'set-database':
+            # Copies the locally verified Neon URL to the existing Free service.
+            # The value is sent only to Render's API and is never printed.
+            value = os.environ['FINN_DATABASE_URL']
+            response = client.put(BASE + '/services/' + sid + '/env-vars/FINN_DATABASE_URL', json={'value': value})
+            print(json.dumps({'status': response.status_code, 'operation': 'set FINN_DATABASE_URL', 'plan': 'free'}))
+            response.raise_for_status()
         elif action == 'restart':
             response = client.post(BASE + '/services/' + sid + '/restart')
             print(json.dumps({'status': response.status_code, 'operation': 'restart'}))

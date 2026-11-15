@@ -22,6 +22,24 @@ def test_unknown_citation_and_modified_quote_rejected():
     a['claims'][0]['citations'][0]['quote']='Demand was stronger'
     with pytest.raises(SourceError):validate_answer(a,e)
 
+
+def test_clipped_retrieval_hit_keeps_original_preceding_chunk_without_relabelling():
+    from backend.documents import retrieve
+    from backend.llm import source_spans
+    doc={'version':'v','hash':'h','kind':'transcript','symbol':'ABB','management_speakers':['Sanjeev Sharma']}
+    full='Sanjeev Sharma: We are investing quite heavily in increasing our capacity, because we expect in 2027, 2028, we will be struggling to meet those demand.'
+    clipped='28, we will be struggling to meet those demand. We are investing.'
+    with store.db() as c:
+        for index,text in enumerate((full,clipped)):
+            eid=f'v-p21-c{index}'
+            c.execute('INSERT INTO chunks VALUES (?,?,?,?)',(eid,'v',21,text))
+            c.execute('INSERT INTO search VALUES (?,?,?)',(eid,'v',text))
+    selected=retrieve([doc],'What qualifications challenge demand?')
+    assert selected[0]['id']=='v-p21-c0'
+    spans=source_spans(selected)
+    assert any('2027, 2028' in s['quote'] and s['evidence']['id']=='v-p21-c0' for s in spans.values())
+    assert not any(s['quote'].startswith('28,') for s in spans.values())
+
 def test_same_url_replacement_never_relabels_old_citation():
     ids=[]
     for text in ('Revenue was 100 crore.','Revenue was 200 crore.'):
@@ -204,3 +222,16 @@ def test_segment_margin_quote_keeps_its_identifying_sentence(prior,quote):
     result=grounded_display(raw)
     assert result['claims'][0]['citations'][0]['quote']==prior+' '+quote
     assert grounded_display(result)==result
+
+
+
+def test_numeric_chunk_fragment_and_interleaved_columns_are_not_narrative_evidence():
+    from backend.llm import source_spans,grounded_display
+    bad=['28, we will be struggling to meet those demand.',
+         'Geopolitical developments, commodity price volatility, Mitigation plans are developed for key risks.']
+    for quote in bad:
+        evidence={'id':'broken-p1','kind':'annual','symbol':'TEST','text':quote}
+        assert not source_spans([evidence])
+        result=grounded_display({'status':'supported','provider':'groq','evidence':[evidence],
+            'claims':[{'text':'Unsupported paraphrase','citations':[{'evidence_id':evidence['id'],'quote':quote}]}]})
+        assert not result['claims'] and result['status']=='insufficient_evidence'

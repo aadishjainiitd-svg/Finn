@@ -1,4 +1,33 @@
+> **ACCOUNT TRANSFER / USER STOP — 15 November 2026.** Read [ACCOUNT_HANDOFF.md](ACCOUNT_HANDOFF.md) before continuing. It supersedes the active counts/process notes below. Implementation stopped at the user's request. Latest full run 142 Python tests; final calendar/classification changes passed targeted tests but need a full rerun. Final zero-inference ABB follow-up passed in 13.22s. Current policies are claim-linked-v8 / event-context-v4. Six pending retained-text reviews completed; two annotations corrected. V8 live retained replay was interrupted on STOP (exit 1), so no v8 replay pass is claimed. Expanded app remains local, incomplete, uncommitted and undeployed. Telegram disabled. User intends to add the Actions secret; completion is unconfirmed.
+
+# Latest continuation — 15 November 2026
+
+Expanded implementation remains local and incomplete. See [current resumable checkpoint](RESUME.md) for authoritative current process/test/gate state; earlier counts below are historical.
+
+Neon persistence gates passed. Added exact-font/cited TCS quarterly results, owner-scoped follow-ups, guarded balanced research, balance-sheet ratios, reused holding research, older-report reads, conservative commitment ranges/revisions, v7 classification corrections and source-backed reminder rescheduling. Routine meeting logistics require positive evidence; important approvals/funding/retirement/order events remain visible. Telegram disabled.
+
+Live ABB older-report build: five annual reports/four calls, 69.06s, largest local measured extraction peak 122.6MB. Only two comparable statement years passed; no five-year cash acceptance. V7 retained replay: 133 filings/38 pending, 153.59s, no freshness fabricated. 50-file calibration includes six outstanding full-context reviews; not a held-out accuracy estimate. Follow-up generation reached the conservative free allowance; quota remains enforced. An exact-qualification path is undergoing separate zero-model live verification.
+
+Latest full run 141 Python; eight Node, 20 production-browser checks and build pass. No deployment/commit, formal gstack clearance, email or Telegram delivery. Remaining criteria and current probe are in RESUME.md.
+
+---
+
 # FINN implementation log
+
+## Integrated implementation — active, 15 November 2026
+
+- User authorised the complete integrated plan and approved mockup. They selected Neon Free and are provisioning it; `FINN_DATABASE_URL` is still absent. Telegram is an optional delivery channel, not required for the core app; it remains disconnected and no message has been sent.
+- Reproduced the Infosys Prize/disclaimer defect against recorded primary-source chunks: three new regressions failed before the fix. Priority now requires an event-bearing source passage, and that same passage supplies its evidence. Old assessment policy is invalidated without changing the filing's byte-based review identity. Recorded source upgrade preserves fetch timestamps.
+- Added a Postgres/SQLite repository, opaque per-browser owner cookies, same-origin mutation checks, optimistic versions, atomic book validation/import, visit/review/pin/feedback state and immutable retained evidence. Installed pinned `psycopg[binary] 3.3.9` in the existing venv; Hanken Grotesk and its OFL licence are bundled locally. This does not prove Neon compatibility or hosted retention.
+- Added five-tab React shell with exact navy/amber tokens, a 430px cap and 46px raised Ask button, event/evidence sheets, Book editing/import, saved Watch drafts and deterministic 30-session price/volume replay. Existing research/citation implementation is reused in `frontend/src/legacy.tsx`; the obsolete two-tab App component was removed from that module. Many expanded research/scheduling modules are still incomplete; the build is not release-ready.
+- Local CUA inspection of the real app at `127.0.0.1:8015`, 390px: Hanken computed font, Ask width 46px, no horizontal overflow, Book navigation works. This is not exact visual sign-off. Found and corrected oldest-first tie order and first-visit eligibility. Browser fixtures exposed missing nested-sheet focus restoration; corrected and the focused regression passes. Six other updated workflow tests passed in the previous run; rerun all after final changes.
+- Executed full Python suite at an intermediate checkpoint: 70 passed; 8 existing Node tests passed. Subsequent event/repository subset: 11 passed (including atomic quota reservation and conservative event grouping). Vite/TypeScript build passed before latest event enrichment changes. Actual free-provider requests, Neon, expanded document processing memory, restart/deployment and Telegram delivery have not been validated in this implementation.
+- Known remaining integration work: durable job recovery and private Ask history, complete stored-read/source-refresh pipeline for editable books, numerical extraction/period guards and all research sections, thesis/promise comparisons, full event/thread review migration, scheduling/reminders/Telegram outbox, PWA, Stats, full feature acceptance/evidence audit, hosted gate and submission refresh. No commits or deployment in this implementation yet.
+- Checkpoint close: private history/completed-job ownership and durable quota admission added; conservative event enrichment connected. Final local checks: **76 Python, 8 Node, 7 Playwright fixture tests**, TypeScript/Vite build pass. Exact-secret scan of 67 text files: zero matches. Actual Neon/hosted/provider checks remain unexecuted. See `INTEGRATED_IMPLEMENTATION_STATUS.md` for the full remaining acceptance work.
+
+## Planning checkpoint — integrated target review, 15 November 2026
+
+Reviewed supplied integrated plan, feature prompt, exact HTML/screenshot, recruiter PDFs, current code/tests and live app. Saved [final change plan](FINN_INTEGRATED_CHANGE_PLAN.md), [decisions](FINN_DECISIONS.md) and [verification distinctions](INTEGRATED_REVIEW_EVIDENCE.json); updated planning authority links. Re-ran 56 Python/8 Node checks successfully. Confirmed live INFY ranking/evidence mismatch; no fix applied because the current request forbids application changes. No installation, build, commit, deployment or submission sending performed. Next work requires implementation authorisation; all historical entries below describe the prior release.
 
 ## Checkpoint 0 — implementation authorised, 14 November 2026 IST
 
@@ -95,3 +124,36 @@ Current blocker is account access, not a validated runtime incompatibility. No m
 - The retrieval regression failed before correction; 56 Python tests now pass. Fresh S3/S5 regression requests pass. Earlier local S4 drafts were retained and rejected for excessive annual text or incomplete segment context. Final local S4 has five exact citations / 136 words; hosted S4 selects three different supported passages and covers all requested topics.
 - Final app 2477c701ce1b0c9a0d7f4ecce3985d0ef017ecb9, deployment dep-dbsjn48n74is73a3f8ng, Render Free. Fresh hosted S4 completed in 32.28s; citation API text/hash/page checks and identical cached replay passed. 390px actual browser answer and Lloyd evidence sheet verified; screenshots saved.
 - Quota ledger preserved; seed baseline reconciled conservatively to 111,442 reserved tokens / 15 requests before the new hosted call. No paid usage or Gemini fallback. Same-harness review clear; Windows gstack state helper failed, so no scope-lock success claimed. Audit/submission/checkpoint updated with the resolved limitation and distinct live/cache/fixture provenance. No email sent.
+
+
+## 15 November — Neon and restart-safe work
+
+Live Neon contract probe passed (docs/neon-verification.json): TLS client connection, isolated writes, eight-writer CAS, immutable replacement and separate Python process recovery. Initial connection failed because pooled Neon rejects startup options; moved statement_timeout to SET LOCAL in transactions. pg_stat_ssl reports no server-hop TLS; only client-to-pooler encryption is verified. No end-to-end encryption claim. No paid settings changed.
+
+Local implementation: batched evidence retention; durable public-source allowlist (private questions excluded); FTS rehydration; owner-scoped leased queue with heartbeat, bounded recovery and stale-completion fencing; explicit refresh command for editable books; snapshot retention; Telegram explicitly disabled. Thread IDs stay stable and routine children do not reopen material review; child review migration added. Refresh UI and Book sector/input controls connected.
+
+Executed: 81 Python tests passed; TypeScript/Vite build passed after repairing a JSX closure caught by compiler. New queue/recovery/cache tests are SQLite fixtures, not hosted worker validation. Deployment remains unchanged. Full expanded research, scheduler, visual acceptance and hosted memory gates remain open.
+
+
+## 15 November — Neon gate and integrated build continuation
+
+Live Neon TLS client connection, owner/CAS isolation, immutable replacement and process/HTTP restart recovery passed. Fixed pooler startup options and added bounded psycopg connection reuse. Actual ABB two-report/four-call discovery/extraction, NSE/Yahoo queued refresh and repaired demand/backlog answer are recorded in separate verification JSONs. Local memory results are not Render results.
+
+Added durable leased work/public snapshots/FTS recovery; explicit source refresh; tab-specific review windows, thread migration, Undo, pin/category promotion; Research pack and stored financials; strict annual statement facts, linked currency/date/scope headers, Decimal comparisons/cash reconciliation, compact source catalogue; attributed commitment candidates and two-source wording changes; book-scoped Ask and scoped saved questions; owner-only usage; disabled authenticated schedule workflow and reminder-status foundations; versioned PWA offline shell. Telegram remains disabled.
+
+A real production offline test first failed because public assets' `Vary: Origin` headers differed between precache and module requests. Fixed matching only within the same-origin public-asset allowlist; rerun passed, including no private API caches and no false offline save. Live 390px ABB revenue evidence opens PDF p.288 and returns focus.
+
+Checks: 99 Python / 8 Node / 10 production-browser fixture tests pass, TypeScript/Vite build passes. Existing dependency warnings remain. Expanded plan is not complete and has not been deployed; next requirements and exact evidence are in INTEGRATED_IMPLEMENTATION_STATUS.md. No final gstack or full semantic/visual/hosted acceptance claimed.
+
+
+## 15 November — live portfolio queue, source boundaries and mobile continuity
+
+Real 18-company identity/source refresh completed after reproducing and fixing a lease failure: synchronous Neon metadata reads starved the async heartbeat; preparation now runs in a thread. 32 batches / 96 attachments / 775.84 s locally; all feeds live, one absent attachment and five pending assessments. Preserve the failed-run report. No blanket semantic acceptance implied.
+
+Retained-source audit reproduced ABB accounting-definition false acquisition and CERA newspaper other-issuer contamination. Sentence-bound transaction patterns and newspaper cover-only/pending/retrieval exclusion fix those cases; real replay retained. Current quarterly adapter rejects ABB's unreadable currency glyph and malformed numbers; no fabricated first-cut metrics. Explicit annual minimum targets can match like-for-like reported facts; real ABB still has zero evaluable promises.
+
+Added current-source/thesis-version-scoped interpretations, immutable private history, contradiction retention, bounded adverse-ranking adjustment and explicit evidence-backed user broken judgement. Uses existing Groq quota path, never paid fallback. Default book has no invented theses. Live single-filing check in progress; fixtures establish structural correctness only.
+
+Mobile browser checks now include separate pinned unfinished items, tab forms/scroll Back/Forward, nested-sheet Back, Stats route and return-recap speech matching the recap rather than filtered Today. Build passed, 17 browser fixtures passed before adding thesis coverage. Ordinary test isolation is now global for both SQLite databases; a previous fixture gap was discovered and its exact synthetic local rows removed. Neon was not touched by ordinary tests. Latest executed full pass before final small edits: 116 Python.
+
+Expanded acceptance, exact visual comparison, broader semantic/numerical coverage and hosted verification remain open. No new deployment or publication. Telegram stays disabled.

@@ -2,7 +2,7 @@
 import json
 from datetime import datetime,timezone
 from .config import ROOT
-from . import store
+from . import store,repository
 
 def restore():
     path=ROOT/'seed/demo.json'
@@ -26,7 +26,7 @@ def restore():
             if event['kind']!='filing':continue
             evidence=event.get('evidence',[])
             content_hash=evidence[0]['hash'] if evidence else None
-            if content_hash:
+            if content_hash and not repository.configured():
                 key='latest-document-filing-'+event['url']
                 if not store.cached(key):store.put(key,evidence[0].get('version',content_hash))
             event['revision']=filing_revision(event['source_signature'],content_hash)

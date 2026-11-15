@@ -57,13 +57,13 @@ def validate_identity(company, doc, opening):
         end=int(re.search(r'20\d{2}',doc['discovery_period'])[0])
         match=re.search(str(end-1)+r'\s*[-–]\s*(?:'+str(end)+'|'+str(end)[2:]+r')\b',text)
         if match:return match[0]
-        match=re.search(r'year\s+ended\s+\d{1,2}(?:st|nd|rd|th)?\s+[a-z]+,?\s+'+str(end),text)
+        match=re.search(r'year\s+ended\s+(?:\d{1,2}(?:st|nd|rd|th)?\s+[a-z]+|[a-z]+\s+\d{1,2}(?:st|nd|rd|th)?),?\s+'+str(end),text)
         if match:return match[0]
     elif doc['kind']=='transcript':
         # First call heading, not every comparator quarter mentioned later in Q&A.
-        match=re.search(r'Q[1-4]\s*FY\s*\d{2,4}',normal(opening),re.I)
+        match=re.search(r'Q[1-4]\s*(?:FY|CY)\s*\d{2,4}',normal(opening),re.I)
         if match:return match[0].upper()
-        match=re.search(r'(?:quarter|half.year)\s+ended\s+\d{1,2}(?:st|nd|rd|th)?\s+[A-Za-z]+,?\s+20\d{2}',normal(opening),re.I)
+        match=re.search(r'(?:quarter|half.year)\s+ended\s+(?:\d{1,2}(?:st|nd|rd|th)?\s+[A-Za-z]+|[A-Za-z]+\s+\d{1,2}(?:st|nd|rd|th)?),?\s+20\d{2}',normal(opening),re.I)
         if match:return match[0]
     return doc['discovery_period']+' (source label; accounting period unverified)'
 
@@ -76,6 +76,8 @@ async def ingest(company,doc,progress):
             if f.read(5)!=b'%PDF-': raise SourceError('not_pdf','Source did not return a PDF.')
             f.seek(0); digest=hashlib.file_digest(f,'sha256').hexdigest()
         version=extraction_version(digest,kind=doc['kind'])
+        from .store import rehydrate
+        rehydrate(version)
         with db() as c:
             old=c.execute('SELECT meta FROM documents WHERE hash=?',(version,)).fetchone()
         if old:
@@ -88,11 +90,13 @@ async def ingest(company,doc,progress):
                 saved['management_speakers']=management_names(opening) if doc['kind']=='transcript' else []
                 c.execute('UPDATE documents SET meta=? WHERE hash=?',(json.dumps(saved),version))
             put(latest_key(doc),version)
+            from .store import retain
+            retain(version)
             return saved
         meta={**company,**doc,**download,'original_url':doc['original_url'],'hash':digest,'version':version,'fetched_at':now(),'parser':PARSER,'publication_date':None}
         proc=await asyncio.create_subprocess_exec(sys.executable,'-m','backend.extract_worker',str(path),
                   stdout=asyncio.subprocess.PIPE,stderr=asyncio.subprocess.DEVNULL,limit=2_000_000)
-        peak=0; count=0; chars=0; opening=[]
+        peak=0; count=0; chars=0; opening=[];glyph_mappings=[]
         async def monitor():
             nonlocal peak
             while proc.returncode is None:
@@ -113,6 +117,7 @@ async def ingest(company,doc,progress):
             nonlocal count,chars
             while line:=await proc.stdout.readline():
                 row=json.loads(line); count=row['page']; content=normal(row['text']); chars+=len(content)
+                if row.get('glyph_mappings'):glyph_mappings.append({'page':count,'mappings':row['glyph_mappings']})
                 if chars>6_000_000:raise SourceError('text_limit','Document exceeds the six-million-character processing bound.')
                 if count<=12: opening.append(content)
                 # Page-local overlap preserves sentence context and stable PDF page coordinates.
@@ -137,8 +142,10 @@ async def ingest(company,doc,progress):
         if chars<500: raise SourceError('empty_extraction','PDF has too little readable text. OCR is outside this prototype.')
         meta['period']=validate_identity(company,doc,' '.join(opening))
         meta['management_speakers']=management_names(' '.join(opening)) if doc['kind']=='transcript' else []
-        meta.update(pages=count,characters=chars,processing_seconds=round(time.monotonic()-started,2),combined_peak_mb=round(peak/1024**2,1))
+        meta.update(pages=count,characters=chars,processing_seconds=round(time.monotonic()-started,2),combined_peak_mb=round(peak/1024**2,1),glyph_mappings=glyph_mappings)
         with db() as c: c.execute('INSERT INTO documents VALUES (?,?,?,?)',(version,company['symbol'],doc['kind'],json.dumps(meta)))
+        from .store import retain
+        retain(version)
         put(latest_key(doc),version)
         return meta
     except TimeoutError:
@@ -150,6 +157,22 @@ async def ingest(company,doc,progress):
         with db() as c:
             c.execute('DELETE FROM search WHERE hash NOT IN (SELECT hash FROM documents)')
             c.execute('DELETE FROM chunks WHERE hash NOT IN (SELECT hash FROM documents)')
+
+def filing_exclusion(doc,opening=''):
+    if doc.get('kind')!='filing':return None
+    if re.search(r'newspaper|publication',doc.get('title',''),re.I):
+        return 'Newspaper pages require issuer-specific layout verification.'
+    if re.search(r'reference to (?:the )?financial results (?:issued|published)',opening,re.I):
+        return 'Referenced results require issuer-specific accounting boundaries; no issuer comparison inferred.'
+    return None
+
+
+def source_exclusion(doc):
+    if doc.get('kind')!='filing':return None
+    with db() as c:
+        opening=' '.join(r['text'] for r in c.execute('SELECT text FROM chunks WHERE hash=? AND page=1',(doc.get('version',doc.get('hash')),)))
+    return filing_exclusion(doc,opening)
+
 
 def retrieve(documents,question):
     words=re.findall(r'[a-zA-Z]{3,}',question.lower())
@@ -163,6 +186,10 @@ def retrieve(documents,question):
     groups=[]
     with db() as c:
         for doc in documents:
+            # A verified filing issuer does not identify every advertisement
+            # on a newspaper scan. Keep these out of generated answers until
+            # issuer-specific layout boundaries have been verified.
+            if source_exclusion(doc):continue
             version=doc.get('version',doc['hash'])
             results=[]
             transcript_prefix={}
@@ -181,10 +208,12 @@ def retrieve(documents,question):
             if doc['kind']=='transcript':
                 anchors=[]
                 topic_queries=[]
+                if re.search(r'challeng|qualif|adverse|contra',question,re.I) or (re.search(r'\brisks?\b',question,re.I) and not re.search(r'\bannual\b|\breport\b',question,re.I)):topic_queries.append('"risk" OR "uncertainty" OR "constraint" OR "struggling" OR "pressure"')
                 if re.search(r'\bai\b',question,re.I):topic_queries.append('"AI"')
                 if re.search(r'\bdeal',question,re.I):topic_queries.append('"TCV" OR "order book" OR "deal"')
-                if re.search(r'\bdemand\b',question,re.I) and re.search(r'\bmargins?\b',question,re.I):
-                    topic_queries.extend(['"demand"','"margin" OR "margins"'])
+                if re.search(r'\bdemand\b',question,re.I):topic_queries.append('"demand"')
+                if re.search(r'\bmargins?\b',question,re.I):topic_queries.append('"margin" OR "margins"')
+                if re.search(r'\bbacklog\b',question,re.I):topic_queries.append('"backlog"')
                 for topic in topic_queries:
                     anchors.extend(c.execute('SELECT id,text FROM search WHERE search MATCH ? AND hash=? ORDER BY bm25(search) LIMIT 1',(topic,version)).fetchall())
                 unique={r['id']:r for r in anchors+rows}
@@ -201,6 +230,20 @@ def retrieve(documents,question):
                 if context and call_focused and re.search(r'what does .{1,50} do',question,re.I):rows=context
             if not rows:
                 rows=c.execute('SELECT id,text FROM chunks WHERE hash=? ORDER BY page LIMIT 2',(version,)).fetchall()
+            contextual=[];seen_rows=set()
+            for candidate in rows:
+                # Overlapping chunks are immutable citation units. If a hit
+                # starts inside a sentence, supply its predecessor as a separate
+                # cited unit rather than inventing a merged page or losing the
+                # qualification at the boundary.
+                match=re.search(r'-c(\d+)$',candidate['id'])
+                if match and int(match[1])>0 and re.match(r'^[a-z0-9,;]',candidate['text']):
+                    previous_id=candidate['id'][:match.start(1)]+str(int(match[1])-1)
+                    previous=c.execute('SELECT id,text FROM chunks WHERE id=? AND hash=?',(previous_id,version)).fetchone()
+                    if previous and previous['id'] not in seen_rows:
+                        contextual.append(previous);seen_rows.add(previous['id'])
+                if candidate['id'] not in seen_rows:contextual.append(candidate);seen_rows.add(candidate['id'])
+            rows=contextual[:4]
             for r in rows:
                 row=c.execute('SELECT page FROM chunks WHERE id=?',(r['id'],)).fetchone()
                 results.append({**doc,'id':r['id'],'page':row['page'],'text':r['text'],'speaker_before':transcript_prefix.get(r['id'],'')})

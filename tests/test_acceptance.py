@@ -23,7 +23,7 @@ def test_display_cannot_invert_a_valid_quotation_and_cache_uses_same_renderer():
 def test_revised_filing_cannot_inherit_routine_assessment_even_at_same_url():
     row={'symbol':'TCS','seq_id':'1','desc':'Newspaper Publication','attchmntFile':'https://example.com/a.pdf','an_dt':'14-Nov-2026 10:00:00'}
     e=brief.make_filing(row,'2026-11-14')
-    store.put('assessed-'+e['id'],{'source_signature':e['source_signature'],'version':'old','text':'Please find enclosed the newspaper publication confirmation.','evidence':[]})
+    store.put('assessed-'+e['id'],{'source_signature':e['source_signature'],'version':'old','text':'Please find enclosed the newspaper publication confirmation.','evidence':[],'policy':brief.ASSESSMENT_POLICY})
     assert brief.make_filing(row,'2026-11-14')['assessment']=='routine'
     store.put('latest-document-filing-'+row['attchmntFile'],'new')
     assert brief.make_filing(row,'2026-11-14')['assessment']=='pending'

@@ -1,0 +1,102 @@
+{
+  "kind": "live Neon leased batches, NSE/Yahoo requests and primary PDF assessments; synthetic one-company probe book",
+  "symbol": "ABB",
+  "batches": 2,
+  "job_status": "complete",
+  "owner_isolation": true,
+  "coverage": {
+    "symbol": "ABB",
+    "filings": {
+      "status": "live",
+      "checked_at": "2026-11-15T07:22:29.280309+00:00",
+      "error": null
+    },
+    "price": {
+      "status": "live",
+      "session": "2026-11-13",
+      "close": 7054.5,
+      "change_percent": 1.9,
+      "volume": 551415,
+      "volume_multiple": 1.66,
+      "comparison_limit": null,
+      "operands": {
+        "current_close": "7054.5",
+        "previous_close": "6923.0",
+        "previous_session": "2026-11-12",
+        "current_volume": "551415",
+        "previous_20_volumes": [
+          "174765",
+          "320570",
+          "371620",
+          "557390",
+          "656683",
+          "378969",
+          "458735",
+          "212650",
+          "280054",
+          "142362",
+          "104516",
+          "190981",
+          "159091",
+          "241154",
+          "226604",
+          "421002",
+          "777143",
+          "422971",
+          "216200",
+          "315127"
+        ],
+        "average_previous_20_volume": "331429.35"
+      },
+      "formula": "Change = 100 \u00d7 (latest completed Close / previous completed Close \u2212 1). Volume = latest volume / mean of the preceding 20 completed sessions. Current session excluded from baseline.",
+      "price_basis": "Yahoo daily Close, not dividend-adjusted Close",
+      "currency": "INR",
+      "checked_at": "2026-11-15T06:42:01.361428+00:00",
+      "error": null,
+      "url": "https://finance.yahoo.com/quote/ABB.NS/history/",
+      "older_session": false
+    }
+  },
+  "retained_filings": 5,
+  "assessments": [
+    {
+      "id": "filing-ABB-106861067",
+      "title": "Copy of Newspaper Publication",
+      "assessment": "assessed",
+      "assessment_error": null,
+      "tier": 0
+    },
+    {
+      "id": "filing-ABB-106861044",
+      "title": "Investor Presentation",
+      "assessment": "assessed",
+      "assessment_error": null,
+      "tier": 0
+    },
+    {
+      "id": "filing-ABB-106859328",
+      "title": "Press Release",
+      "assessment": "assessed",
+      "assessment_error": null,
+      "tier": 0
+    },
+    {
+      "id": "filing-ABB-106859276",
+      "title": "Appointment",
+      "assessment": "assessed",
+      "assessment_error": null,
+      "tier": 0
+    },
+    {
+      "id": "filing-ABB-106859256",
+      "title": "Outcome of Board Meeting",
+      "assessment": "assessed",
+      "assessment_error": null,
+      "tier": 0
+    }
+  ],
+  "attachments_checked": 5,
+  "attachments_failed": 0,
+  "status": "passed",
+  "elapsed_seconds": 91.05
+}

@@ -1,0 +1,42 @@
+{
+  "kind": "Retained live ABB primary-source reprocessing; real Neon reads/writes; no new download or model inference",
+  "checked_at": "2026-11-15T07:42:47.307959+00:00",
+  "status": "passed",
+  "changed_passage_pairs": 4,
+  "commitment_candidates": 6,
+  "exact_citations_verified": 14,
+  "evaluable_commitments": 0,
+  "statement_facts": 34,
+  "financial_payload_bytes": 73547,
+  "annual_comparisons": [
+    {
+      "year": "2025",
+      "scope": "consolidated",
+      "growth": [
+        {
+          "metric": "revenue",
+          "percent": "8.322893001572818544982856500"
+        },
+        {
+          "metric": "pat",
+          "percent": "-10.86640593276484794084332457"
+        },
+        {
+          "metric": "pbt_continuing",
+          "percent": "-11.27300796574966378329341174"
+        }
+      ],
+      "cash_reconciled": true,
+      "cash_residual": "0.00"
+    },
+    {
+      "year": "2024",
+      "scope": "consolidated",
+      "growth": [],
+      "cash_reconciled": true,
+      "cash_residual": "0.00"
+    }
+  ],
+  "limitation": "Automated exact-text/typed statement checks, not visual PDF audit. No verified target/actual promise pairs; no full new/removed-section or semantic review claimed.",
+  "elapsed_seconds": 9.28
+}

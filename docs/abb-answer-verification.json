@@ -1,0 +1,35 @@
+{
+  "kind": "live source discovery and Groq generation under durable admission; local host",
+  "status": "supported",
+  "claims": [
+    {
+      "text": "Management: So on the colo side as well, the demand has been quite substantial.",
+      "nature": "reported",
+      "citations": [
+        {
+          "evidence_id": "85be510f177a55744e3eff308c12e7fafabdcb6014ed90721bfa3528397711d3-x2b3f46f529-transcript-p21-c1",
+          "quote": "So on the colo side as well, the demand has been quite substantial."
+        }
+      ]
+    },
+    {
+      "text": "Management: Backlog, strong backlog, INR11,900 crores of order backlog, in which there is no slow moving or a non-moving order.",
+      "nature": "reported",
+      "citations": [
+        {
+          "evidence_id": "85be510f177a55744e3eff308c12e7fafabdcb6014ed90721bfa3528397711d3-x2b3f46f529-transcript-p4-c0",
+          "quote": "Backlog, strong backlog, INR11,900 crores of order backlog, in which there is no slow moving or a non-moving order."
+        }
+      ]
+    }
+  ],
+  "limitation": "These are management\u2019s statements in the cited call, not verified future outcomes.",
+  "error": null,
+  "usage": {
+    "prompt_tokens": 5203,
+    "completion_tokens": 234,
+    "total_tokens": 5437
+  },
+  "elapsed_seconds": 62.33,
+  "citations_retained": true
+}

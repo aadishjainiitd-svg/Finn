@@ -35,10 +35,11 @@ def daily_signal(chart,at=None):
     current=bars[-1];previous=bars[-2] if len(bars)>1 else None
     split_times=[int(x.get('date',k)) for k,x in chart.get('events',{}).get('splits',{}).items()]
     price_split=previous and any(previous['time']<s<=current['time'] for s in split_times)
-    volume_bars=[b for b in bars[:-1] if b['volume'] is not None][-20:]
+    # Twenty preceding sessions, not the last twenty non-missing observations.
+    volume_bars=bars[:-1][-20:]
     volume_split=len(volume_bars)==20 and any(volume_bars[0]['time']<=s<=current['time'] for s in split_times)
     change=(current['close']/previous['close']-1)*100 if previous and not price_split else None
-    baseline=sum(b['volume'] for b in volume_bars)/20 if len(volume_bars)==20 else None
+    baseline=sum(b['volume'] for b in volume_bars)/20 if len(volume_bars)==20 and all(b['volume'] is not None for b in volume_bars) else None
     multiple=current['volume']/baseline if baseline and current['volume'] is not None and not volume_split else None
     reason='Corporate action crosses the comparison window.' if price_split or volume_split else 'At least 21 completed sessions are needed for volume comparison.' if baseline is None else 'Volume baseline is zero.' if baseline==0 else None
     return {'status':'available','session':current['date'],'close':display(current['close']),

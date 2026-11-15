@@ -1,0 +1,15 @@
+{
+  "kind": "Offline retained-source retrieval and exact sentence eligibility; no model request",
+  "version": "retrieval-15-prompt-11-schema-4-pdfium-5.15.2-pages-v5-verified-fonts-openai/gpt-oss-120b",
+  "spans": [
+    {
+      "id": "85be510f177a55744e3eff308c12e7fafabdcb6014ed90721bfa3528397711d3-x490ab6ab93-transcript-p21-c0",
+      "kind": "transcript",
+      "page": 21,
+      "quote": "And we are investing quite heavily in increasing our capacity, because we are definitely seeing that picking up which will come -- the demand will multifold in the coming quarters and maybe like 2027, 2028, we will be struggling to meet those demand."
+    }
+  ],
+  "management_capacity_qualification_present": true,
+  "generic_risk_governance_removed": true,
+  "live_generation": "blocked by existing conservative daily free allowance"
+}

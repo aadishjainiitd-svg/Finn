@@ -1,5 +1,7 @@
 # FINN experience proposal
 
+> **Target superseded, 15 November 2026:** The [final integrated change plan](FINN_INTEGRATED_CHANGE_PLAN.md), especially sections 4, 5, 8 and 9, defines the five-tab journey, exact visual tokens, reusable components, all requested features and shared states. This document is the earlier two-workflow experience history, not the current feature boundary. The HTML/screenshot govern Today/event appearance; the integrated plan governs behaviour and evidence. No new interface was built during this review.
+
 > Current implementation status (15 November 2026): approved scope is implemented and deployed on Render Free. Production Groq 120B, hosted CROMPTON research, restart provenance and final mobile workflows are verified. The earlier HAVELLS partial answer is resolved and verified on the deployed app; see the HAVELLS repair record in the audit. See [final audit](EVIDENCE_AUDIT.md), [implemented architecture](../ARCHITECTURE.md), [QA results](QA_REVIEW.md) and [checkpoint](RESUME.md). Historical planning-only statements below are retained as the decision record, not current authorisation. No deferred feature was added.
 
 14 November 2026. Recommendation for the agreed 6-8 hour build; not an approved visual design system or a rendered prototype.

@@ -18,9 +18,13 @@ FINN application code is original. Runtime dependencies remain under their own l
 | Vite / TypeScript | Build and type checking | MIT / Apache-2.0 |
 | Playwright (development only) | Browser regression tests | Apache-2.0 |
 | Adobe Source Sans 3 | Self-hosted typeface | SIL Open Font License 1.1; notice in frontend/public/fonts |
+| Hanken Grotesk | Integrated product's self-hosted typeface | SIL Open Font License 1.1; `frontend/public/fonts/HankenGrotesk-OFL.txt` |
+| Psycopg / psycopg-binary 3.3.9 | PostgreSQL adapter | LGPL-3.0-only (verified installed metadata); installed package retains its licence notices; repository references the wheel, not a redistributed binary |
 
 The pypdfium2 and PDFium notices are retained in `LICENSES/pdfium/`. The installed wheel includes the complete platform-dependent dependency licences under its distribution's `licenses/BUILD_LICENSES` directory. This repository references the wheel; it does not redistribute PDFium binaries.
 
 Primary financial documents belong to their issuers/exchanges. FINN links originals and uses bounded supporting excerpts; it does not claim ownership. Yahoo and NSE access is public-source integration for an assignment prototype, not a licensed production market-data feed. No redistribution licence for complete source datasets is asserted.
 
 Sources: [pypdfium2 licensing](https://pypdfium2-team.github.io/pypdfium2/readme.html#licensing), [PDFium licence](https://pdfium.googlesource.com/pdfium/+/refs/heads/main/LICENSE).
+
+Psycopg Pool 3.3.3 — LGPL-3.0-only. Official optional Psycopg component; bounded server-side connection reuse. https://pypi.org/project/psycopg-pool/

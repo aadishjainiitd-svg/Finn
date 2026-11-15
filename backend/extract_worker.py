@@ -2,6 +2,7 @@
 import json
 import sys
 import pypdfium2 as pdfium
+from .pdf_glyphs import decode_currency
 
 def main():
     if sys.platform != 'win32':
@@ -19,10 +20,10 @@ def main():
             page=reader[index]
             try:
                 textpage=page.get_textpage()
-                try:text=textpage.get_text_bounded()
+                try:text,mappings=decode_currency(textpage,textpage.get_text_bounded())
                 finally:textpage.close()
                 if len(text)>180_000: raise ValueError('page_text_limit')
-                print(json.dumps({'page':index+1,'text':text}),flush=True)
+                print(json.dumps({'page':index+1,'text':text,'glyph_mappings':mappings}),flush=True)
             finally:page.close()
     finally:reader.close()
 

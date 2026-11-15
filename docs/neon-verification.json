@@ -1,0 +1,19 @@
+{
+  "kind": "live Neon requests; evidence content is a synthetic storage fixture",
+  "started_at": "2026-11-15T06:47:02Z",
+  "checks": {
+    "client_tls": true,
+    "schema": true,
+    "owner_isolation": true,
+    "eight_writers_one_winner": true,
+    "replacement_does_not_alias": true,
+    "separate_process_read": true,
+    "old_citation": true,
+    "own_probe_cleanup": true
+  },
+  "server_major": "18",
+  "pooler_server_tls_observed": false,
+  "tls_scope": "Client-to-pooler TLS verified; no end-to-end TLS claim.",
+  "connect_seconds": 1.11,
+  "status": "passed"
+}

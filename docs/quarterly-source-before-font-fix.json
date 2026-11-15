@@ -1,0 +1,63 @@
+{
+  "kind": "Real NSE receipt requests and original PDF ingestion, local leased worker with Neon retention; no model calls",
+  "items": [
+    {
+      "symbol": "TCS",
+      "event_id": "filing-TCS-106811186",
+      "url": "https://nsearchives.nseindia.in/corporate/TCS_CORPCS_08102026153124_Post_BM_SE_Letter_fin.pdf",
+      "job_status": "complete",
+      "version": "038ef1c48011691a344e0c051d68ec515097938e15300a2fd22d7ebbdcfc9419-x2b3f46f529-filing",
+      "seconds": 10.72,
+      "error": null,
+      "results": {
+        "policy": "quarter-columns-v1",
+        "tables": [],
+        "gaps": [
+          "No verified quarterly statement layout was found."
+        ]
+      }
+    },
+    {
+      "symbol": "ICICIBANK",
+      "event_id": "filing-ICICIBANK-106821131",
+      "url": "https://nsearchives.nseindia.in/corporate/ICICI2022_17102026152608_NSEBSE17102026.pdf",
+      "job_status": "complete",
+      "version": "b28a719174d31592413f317e9baf527e4dd127f18b2468179d9cc0bfa74fabd1-x2b3f46f529-filing",
+      "seconds": 13.72,
+      "error": null,
+      "results": null
+    },
+    {
+      "symbol": "ICICIBANK",
+      "event_id": "filing-ICICIBANK-106821125",
+      "url": "https://nsearchives.nseindia.in/corporate/ICICI2022_17102026152039_NSEBSE17102026.pdf",
+      "job_status": "complete",
+      "version": "b28a719174d31592413f317e9baf527e4dd127f18b2468179d9cc0bfa74fabd1-x2b3f46f529-filing",
+      "seconds": 12.02,
+      "error": null,
+      "results": {
+        "policy": "quarter-columns-v1",
+        "tables": [],
+        "gaps": [
+          "No verified quarterly statement layout was found."
+        ]
+      }
+    },
+    {
+      "symbol": "HAVELLS",
+      "event_id": "filing-HAVELLS-106824672",
+      "url": "https://nsearchives.nseindia.in/corporate/HAVELLS1_22102026135828_QuickResults_Q2_22102026.pdf",
+      "job_status": "complete",
+      "version": "aa369a8d5be0f040b6b7d20f858fa8c2841a0b634d748253503750e5f83953b0-x2b3f46f529-filing",
+      "seconds": 12.2,
+      "error": null,
+      "results": {
+        "policy": "quarter-columns-v1",
+        "tables": [],
+        "gaps": [
+          "No verified quarterly statement layout was found."
+        ]
+      }
+    }
+  ]
+}

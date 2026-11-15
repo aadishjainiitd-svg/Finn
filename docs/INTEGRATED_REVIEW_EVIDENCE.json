@@ -1,0 +1,84 @@
+{
+  "review_date": "2026-11-15",
+  "scope": "planning-only integrated product reconciliation",
+  "executed_now": {
+    "python_tests": {
+      "command": ".venv/Scripts/python.exe -m pytest -q",
+      "passed": 56,
+      "warnings": [
+        "Starlette TestClient httpx deprecation"
+      ]
+    },
+    "frontend_state_tests": {
+      "command": "npm --prefix frontend test",
+      "passed": 8
+    },
+    "live_browser": {
+      "method": "CUA in-app browser",
+      "url": "https://finn-enam-yije.onrender.com/",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "document_scroll_width": 390,
+      "observed_filing_check_time_displayed": "10:37 am IST",
+      "wider_period_counts": {
+        "fetched": 86,
+        "distinct": 86,
+        "exact_duplicates": 0,
+        "pending_assessment": 13
+      },
+      "confirmed_defect": "INFY Infosys Prize 2026 announcement shown under Review first with capital-allocation rationale; evidence opens forward-looking disclaimer on PDF page 5.",
+      "source_version_displayed": "b6aa414e85a6",
+      "source_url": "https://nsearchives.nseindia.in/corporate/Infosys_12112026111940_PR_12112026.pdf#page=5",
+      "research_observation": "Dated TCS demonstration answer, annual report 2025-26 and Q2FY27 call, source chips and period limitation visible; no fresh model submission."
+    },
+    "github": {
+      "tool": "GitHub plugin fetch_file",
+      "ref": "main",
+      "path": "docs/RESUME.md",
+      "blob_sha": "591c3cb71077857962f03ff232344c500cfc3252",
+      "checkpoint_application_revision": "2477c701ce1b0c9a0d7f4ecce3985d0ef017ecb9"
+    },
+    "reference_contrast": {
+      "method": "WCAG relative-luminance calculation",
+      "muted_original": "#727A8F",
+      "on_white": 4.29,
+      "on_canvas_F3F4F7": 3.9,
+      "on_inset_F7F8FA": 4.04,
+      "override_667085": {
+        "on_white": 4.97,
+        "on_canvas": 4.52,
+        "on_inset": 4.68
+      }
+    }
+  },
+  "not_rerun": [
+    "Playwright full suite",
+    "Vite build",
+    "fresh model synthesis",
+    "unfamiliar ticker discovery",
+    "source access probes",
+    "server restart",
+    "document replacement",
+    "memory profiling",
+    "Telegram or scheduler",
+    "target visual rendering"
+  ],
+  "tool_limits": [
+    "gstack browse Windows ACL/lock EPERM; used CUA instead",
+    "terminal health HTTP request blocked by local socket permissions; no independent current revision/health response recorded",
+    "PDFium text extraction/render succeeded without installation using standard-library PNG encoding; Pillow absent"
+  ],
+  "historical_evidence": [
+    "docs/EVIDENCE_AUDIT.md",
+    "docs/havells-verification.json",
+    "docs/hosted-verification.json",
+    "docs/QA_REVIEW.md"
+  ],
+  "no_claim": "Passing baseline tests and live UI observations do not validate the expanded target or semantic correctness of every existing answer.",
+  "application_source_hash_check": {
+    "compared_files": 47,
+    "changed_files": []
+  }
+}

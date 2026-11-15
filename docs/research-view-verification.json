@@ -1,0 +1,149 @@
+{
+  "kind": "Retained real ABB pages and live Neon read/write; no new download or model inference",
+  "checked_at": "2026-11-15T08:42:34.095086+00:00",
+  "source_checked_at": "2026-11-15T08:37:42.743396+00:00",
+  "narrative": {
+    "observations": [
+      {
+        "aspect": "business",
+        "nature": "reported",
+        "selection_method": "explicit_issuer_description",
+        "sources": [
+          {
+            "quote": "ABB INDIA IN 2025 75 YEARS OF MANUFACTURING & INNOVATION IN INDIA Established in 1949, two years after India\u2019s independence, ABB India has spent 75 years enabling electrification, automation and digitalization across utilities, industries, infrastructure and transportation.",
+            "evidence": {
+              "symbol": "ABB",
+              "name": "ABB India Limited",
+              "isin": "INE117A01022",
+              "exchange": "NSE",
+              "kind": "annual",
+              "title": "Annual Report 2025",
+              "discovery_period": "Annual Report 2025",
+              "download_url": "https://www.bseindia.com/xml-data/corpfiling/AttachHis/3e1f777e-4988-48f8-b545-f788c673245c.pdf",
+              "original_url": "https://www.bseindia.com/xml-data/corpfiling/AttachHis/3e1f777e-4988-48f8-b545-f788c673245c.pdf",
+              "url": "https://www.bseindia.com/xml-data/corpfiling/AttachHis/3e1f777e-4988-48f8-b545-f788c673245c.pdf",
+              "bytes": 14842087,
+              "content_type": "application/pdf",
+              "hash": "29f5d8a318570a3047f87276cee6eaa74b8cfed852f4ce8b0e48bd1b9f4daca0",
+              "version": "29f5d8a318570a3047f87276cee6eaa74b8cfed852f4ce8b0e48bd1b9f4daca0-x490ab6ab93-annual",
+              "fetched_at": "2026-11-15T08:24:44.187926+00:00",
+              "parser": "pdfium-5.15.2-pages-v5-verified-fonts",
+              "publication_date": null,
+              "period": "year ended december 31, 2025",
+              "management_speakers": [],
+              "pages": 349,
+              "characters": 858914,
+              "processing_seconds": 8.12,
+              "combined_peak_mb": 110.9,
+              "glyph_mappings": [],
+              "id": "29f5d8a318570a3047f87276cee6eaa74b8cfed852f4ce8b0e48bd1b9f4daca0-x490ab6ab93-annual-p25-c0",
+              "page": 25,
+              "text": "ABB INDIA IN 2025 75 YEARS OF MANUFACTURING & INNOVATION IN INDIA Established in 1949, two years after India\u2019s independence, ABB India has spent 75 years enabling electrification, automation and digitalization across utilities, industries, infrastructure and transportation. 22 ABB India Limited | Integrated Annual Report 2025"
+            }
+          }
+        ]
+      },
+      {
+        "aspect": "favourable",
+        "nature": "interpretation",
+        "sources": [
+          {
+            "quote": "We enter 2026 with strong cash, a record, better-priced backlog, and continued discipline on pricing, productivity, and mix, consistent with the ABB Way.",
+            "evidence": {
+              "symbol": "ABB",
+              "name": "ABB India Limited",
+              "isin": "INE117A01022",
+              "exchange": "NSE",
+              "kind": "annual",
+              "title": "Annual Report 2025",
+              "discovery_period": "Annual Report 2025",
+              "download_url": "https://www.bseindia.com/xml-data/corpfiling/AttachHis/3e1f777e-4988-48f8-b545-f788c673245c.pdf",
+              "original_url": "https://www.bseindia.com/xml-data/corpfiling/AttachHis/3e1f777e-4988-48f8-b545-f788c673245c.pdf",
+              "url": "https://www.bseindia.com/xml-data/corpfiling/AttachHis/3e1f777e-4988-48f8-b545-f788c673245c.pdf",
+              "bytes": 14842087,
+              "content_type": "application/pdf",
+              "hash": "29f5d8a318570a3047f87276cee6eaa74b8cfed852f4ce8b0e48bd1b9f4daca0",
+              "version": "29f5d8a318570a3047f87276cee6eaa74b8cfed852f4ce8b0e48bd1b9f4daca0-x490ab6ab93-annual",
+              "fetched_at": "2026-11-15T08:24:44.187926+00:00",
+              "parser": "pdfium-5.15.2-pages-v5-verified-fonts",
+              "publication_date": null,
+              "period": "year ended december 31, 2025",
+              "management_speakers": [],
+              "pages": 349,
+              "characters": 858914,
+              "processing_seconds": 8.12,
+              "combined_peak_mb": 110.9,
+              "glyph_mappings": [],
+              "id": "29f5d8a318570a3047f87276cee6eaa74b8cfed852f4ce8b0e48bd1b9f4daca0-x490ab6ab93-annual-p16-c0",
+              "page": 16,
+              "text": "COULD WE TALK ABOUT ABB INDIA\u2019S PERFORMANCE IN CY 2025\u2014WHAT STOOD OUT? HITS COME WITH MISSES. HOW WOULD YOU CHARACTERIZE PROFITABILITY IN 2025? We closed with highest ever orders and revenues: Orders at \u20b914,115 Crores (+8%), Revenues at \u20b913,203 Crores (+8%), Order backlog of \u20b910,471 Crores (+12%); the Board recommended a final dividend of \u20b929.59 per share. Beyond the numbers, 2025 marked 75 years of ABB manufacturing in India, and we celebrated with action: Commissioned a new automated line for energyefficient variable\u2011speed drives at Peenya, lifting local capacity by ~25 percent. Launched IE5 ultra\u2011premium efficiency, rare\u2011earth\u2011free motors, built in India and shipped to customers. It was growth with a cyclical breathing space on margins. PBT stood at \u20b92,230 Crores (16.9%) and PAT at \u20b91,669 Crores (12.6%), both lower than 2024. However, it should be noted that since 2021, profit before tax and exceptionals have grown at a CAGR of 39 percent with the surrounding geopolitical uncertainties. In 2025, headwinds included commodity inflation, forex movements (CHF/EUR), adapting to quality control order (QCO) requirements to ensure uninterrupted supply, implementation of India\u2019s new Labour Codes, revenue mix, and one-offs. From the Board\u2019s vantage point, this is cyclical, not structural. We enter 2026 with strong cash, a record, better-priced backlog, and continued discipline on pricing, productivity, and mix, consistent with the ABB Way. Launched a new range of LIORA switches for modern homes as well as enhanced the low voltage portfolio of next generation switching products. Delivered solutions to projects that capture ABB at its best: providing ABB\u2019s power distribution technology to power the highest railway arch bridge in the world \u2014 the Chenab bridge in Jammu and Kashmir; electrification and drives solutions for Navi Mumbai and Guwahati airports, propulsion technology for the latest high-speed trains and Kolkata metro among others, digitalization of IndianOil\u2019s 20,000\u2011km pipeline network; energy efficient drives for the New Pamban Bridge; ABB Ability\u2122 SCADAvantage system deployed by THINK Gas to monitor and control its CNG distribution to more than 500 fuel stati",
+              "speaker_before": ""
+            }
+          }
+        ]
+      },
+      {
+        "aspect": "adverse",
+        "nature": "interpretation",
+        "sources": [
+          {
+            "quote": "PBT stood at \u20b92,230 Crores (16.9%) and PAT at \u20b91,669 Crores (12.6%), both lower than 2024.",
+            "evidence": {
+              "symbol": "ABB",
+              "name": "ABB India Limited",
+              "isin": "INE117A01022",
+              "exchange": "NSE",
+              "kind": "annual",
+              "title": "Annual Report 2025",
+              "discovery_period": "Annual Report 2025",
+              "download_url": "https://www.bseindia.com/xml-data/corpfiling/AttachHis/3e1f777e-4988-48f8-b545-f788c673245c.pdf",
+              "original_url": "https://www.bseindia.com/xml-data/corpfiling/AttachHis/3e1f777e-4988-48f8-b545-f788c673245c.pdf",
+              "url": "https://www.bseindia.com/xml-data/corpfiling/AttachHis/3e1f777e-4988-48f8-b545-f788c673245c.pdf",
+              "bytes": 14842087,
+              "content_type": "application/pdf",
+              "hash": "29f5d8a318570a3047f87276cee6eaa74b8cfed852f4ce8b0e48bd1b9f4daca0",
+              "version": "29f5d8a318570a3047f87276cee6eaa74b8cfed852f4ce8b0e48bd1b9f4daca0-x490ab6ab93-annual",
+              "fetched_at": "2026-11-15T08:24:44.187926+00:00",
+              "parser": "pdfium-5.15.2-pages-v5-verified-fonts",
+              "publication_date": null,
+              "period": "year ended december 31, 2025",
+              "management_speakers": [],
+              "pages": 349,
+              "characters": 858914,
+              "processing_seconds": 8.12,
+              "combined_peak_mb": 110.9,
+              "glyph_mappings": [],
+              "id": "29f5d8a318570a3047f87276cee6eaa74b8cfed852f4ce8b0e48bd1b9f4daca0-x490ab6ab93-annual-p16-c0",
+              "page": 16,
+              "text": "COULD WE TALK ABOUT ABB INDIA\u2019S PERFORMANCE IN CY 2025\u2014WHAT STOOD OUT? HITS COME WITH MISSES. HOW WOULD YOU CHARACTERIZE PROFITABILITY IN 2025? We closed with highest ever orders and revenues: Orders at \u20b914,115 Crores (+8%), Revenues at \u20b913,203 Crores (+8%), Order backlog of \u20b910,471 Crores (+12%); the Board recommended a final dividend of \u20b929.59 per share. Beyond the numbers, 2025 marked 75 years of ABB manufacturing in India, and we celebrated with action: Commissioned a new automated line for energyefficient variable\u2011speed drives at Peenya, lifting local capacity by ~25 percent. Launched IE5 ultra\u2011premium efficiency, rare\u2011earth\u2011free motors, built in India and shipped to customers. It was growth with a cyclical breathing space on margins. PBT stood at \u20b92,230 Crores (16.9%) and PAT at \u20b91,669 Crores (12.6%), both lower than 2024. However, it should be noted that since 2021, profit before tax and exceptionals have grown at a CAGR of 39 percent with the surrounding geopolitical uncertainties. In 2025, headwinds included commodity inflation, forex movements (CHF/EUR), adapting to quality control order (QCO) requirements to ensure uninterrupted supply, implementation of India\u2019s new Labour Codes, revenue mix, and one-offs. From the Board\u2019s vantage point, this is cyclical, not structural. We enter 2026 with strong cash, a record, better-priced backlog, and continued discipline on pricing, productivity, and mix, consistent with the ABB Way. Launched a new range of LIORA switches for modern homes as well as enhanced the low voltage portfolio of next generation switching products. Delivered solutions to projects that capture ABB at its best: providing ABB\u2019s power distribution technology to power the highest railway arch bridge in the world \u2014 the Chenab bridge in Jammu and Kashmir; electrification and drives solutions for Navi Mumbai and Guwahati airports, propulsion technology for the latest high-speed trains and Kolkata metro among others, digitalization of IndianOil\u2019s 20,000\u2011km pipeline network; energy efficient drives for the New Pamban Bridge; ABB Ability\u2122 SCADAvantage system deployed by THINK Gas to monitor and control its CNG distribution to more than 500 fuel stati",
+              "speaker_before": ""
+            }
+          }
+        ]
+      }
+    ],
+    "missing": [
+      "accounting"
+    ],
+    "cache_hit": false,
+    "coverage": "Selected passages from the latest readable report and call; not an exhaustive risk audit.",
+    "limitation": "Favourable and adverse selection is an interpretation. Unselected or unread risks may still exist.",
+    "provider": "groq",
+    "model": "openai/gpt-oss-120b",
+    "policy": "research-spans-v2",
+    "status": "partial"
+  },
+  "financial_facts": 44,
+  "ratios_by_year": {
+    "2025": [],
+    "2024": []
+  },
+  "exact_citations": true,
+  "status": "partial",
+  "limitation": "Business/favourable/adverse points inspected; no substantive accounting concern selected. No exhaustive risk coverage or hosted acceptance claimed.",
+  "implementation_sha256": {
+    "backend/narrative.py": "39a335087dfb579ae95292c3ab22d49ded2e8a56bb8757d05590ad5d23ad0cad",
+    "backend/llm.py": "972d64332aa2ed5a13e2b86c5a8453c85419993260f44e80403852457f794e14",
+    "backend/statements.py": "ef438ee9d71e9ac7b8c69e15106bf102cf1572b7f0fa6d84a623d0fc6366b570"
+  }
+}

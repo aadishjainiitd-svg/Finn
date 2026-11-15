@@ -1,0 +1,157 @@
+{
+  "kind": "Live Groq request, real retained ABB filing, Neon leased work and owner isolation; synthetic thesis hypothesis",
+  "hypothesis": "Demand for ABB electrification products remains strong.",
+  "job_status": "complete",
+  "event_id": "filing-ABB-106859328",
+  "model_attempts": 1,
+  "provider_usage": {
+    "prompt_tokens": 2261,
+    "completion_tokens": 306,
+    "total_tokens": 2567
+  },
+  "error": null,
+  "record": {
+    "observations": [
+      {
+        "effect": "supports",
+        "nature": "interpretation",
+        "sources": [
+          {
+            "quote": "Demand remained broadbased across industries, supported by investments in productivity, energy efficiency and sustainable growth.",
+            "evidence": {
+              "symbol": "ABB",
+              "name": "ABB India Limited",
+              "isin": "INE117A01022",
+              "exchange": "NSE",
+              "kind": "filing",
+              "title": "Press Release",
+              "discovery_period": "2026-11-13T18:06:07+05:30",
+              "download_url": "https://nsearchives.nseindia.in/corporate/ABB_13112026180525_PressReleaseQ32026signed.pdf",
+              "original_url": "https://nsearchives.nseindia.in/corporate/ABB_13112026180525_PressReleaseQ32026signed.pdf",
+              "url": "https://nsearchives.nseindia.in/corporate/ABB_13112026180525_PressReleaseQ32026signed.pdf",
+              "bytes": 324661,
+              "content_type": "application/pdf",
+              "hash": "f722e5f0566d63867eefba80c6b84c43f4d3cd05265554fa7fa3b689126c2c51",
+              "version": "f722e5f0566d63867eefba80c6b84c43f4d3cd05265554fa7fa3b689126c2c51-x2b3f46f529-filing",
+              "fetched_at": "2026-11-15T07:23:02.165608+00:00",
+              "parser": "pdfium-5.15.2-pages-v4-calendar-periods",
+              "publication_date": null,
+              "period": "2026-11-13T18:06:07+05:30",
+              "management_speakers": [],
+              "pages": 8,
+              "characters": 11907,
+              "processing_seconds": 1.44,
+              "combined_peak_mb": 134.2,
+              "id": "f722e5f0566d63867eefba80c6b84c43f4d3cd05265554fa7fa3b689126c2c51-x2b3f46f529-filing-p3-c0",
+              "page": 3,
+              "text": "EXPANDING DEMAND ACROSS SEGMENTS; SOLID EXECUTION 2/7 Country Managing Director, Sanjeev Sharma\u2019s commentary on Q3 CY2026 \u201cWe delivered a strong third quarter, with record Q3 orders, revenue growth and a healthy backlog reflecting continued customer confidence in ABB\u2019s technology and solutions. Demand remained broadbased across industries, supported by investments in productivity, energy efficiency and sustainable growth. Despite a dynamic operating environment, we maintained our focus on disciplined execution and operational performance. Looking ahead, India\u2019s structural growth drivers in industrialization, electrification, digitalization and the energy transition continue to support attractive growth opportunities, positioning us well for the quarters ahead. I thank our employees for their continued commitment and customer focus.\u201d Outlook ABB India retains strong backlog, which is providing visibility into the coming quarters. Demand trends remain supported by investments in data centers, grid modernization, renewable energy integration and energy-transition projects, alongside ongoing capex plans across metals, cement, rail, buildings. The Company remains focused on successful backlog execution, implementing continuous efficiency measures and disciplined capacity expansions to support a profitable growth momentum. ABB India's local manufacturing base, technology leadership and broad market exposure position it to capture opportunities linked to electrification, automation and industrial digitalization amid a dynamic demand environment.",
+              "speaker_before": ""
+            }
+          }
+        ]
+      },
+      {
+        "effect": "supports",
+        "nature": "interpretation",
+        "sources": [
+          {
+            "quote": "The strong backlog increase was driven by the surge in Electrification and growth in Motion as backlog increased in all the three business areas.",
+            "evidence": {
+              "symbol": "ABB",
+              "name": "ABB India Limited",
+              "isin": "INE117A01022",
+              "exchange": "NSE",
+              "kind": "filing",
+              "title": "Press Release",
+              "discovery_period": "2026-11-13T18:06:07+05:30",
+              "download_url": "https://nsearchives.nseindia.in/corporate/ABB_13112026180525_PressReleaseQ32026signed.pdf",
+              "original_url": "https://nsearchives.nseindia.in/corporate/ABB_13112026180525_PressReleaseQ32026signed.pdf",
+              "url": "https://nsearchives.nseindia.in/corporate/ABB_13112026180525_PressReleaseQ32026signed.pdf",
+              "bytes": 324661,
+              "content_type": "application/pdf",
+              "hash": "f722e5f0566d63867eefba80c6b84c43f4d3cd05265554fa7fa3b689126c2c51",
+              "version": "f722e5f0566d63867eefba80c6b84c43f4d3cd05265554fa7fa3b689126c2c51-x2b3f46f529-filing",
+              "fetched_at": "2026-11-15T07:23:02.165608+00:00",
+              "parser": "pdfium-5.15.2-pages-v4-calendar-periods",
+              "publication_date": null,
+              "period": "2026-11-13T18:06:07+05:30",
+              "management_speakers": [],
+              "pages": 8,
+              "characters": 11907,
+              "processing_seconds": 1.44,
+              "combined_peak_mb": 134.2,
+              "id": "f722e5f0566d63867eefba80c6b84c43f4d3cd05265554fa7fa3b689126c2c51-x2b3f46f529-filing-p5-c0",
+              "page": 5,
+              "text": "EXPANDING DEMAND ACROSS SEGMENTS; SOLID EXECUTION 4/7 Order Backlog As of end of this quarter, ABB India continues to have a strong order backlog, at INR 12,927 crore mark in Q3 CY2026 up by 36% Y-o-Y, providing good revenue visibility, and well aligned to support growth plans in the coming quarters. The strong backlog increase was driven by the surge in Electrification and growth in Motion as backlog increased in all the three business areas. Electrification Motion Automation 9,538 9,709 11,094 11,898 12,927 36% -9% 0% 9% 18% 27% 36% 45% 0 3,000 6,000 9,000 12,000 15,000 Q3/25 Q1/26 Q3/26 Order Backlog Order Backlog Comparable Growth% (Y-o-Y) 3,359 3,286 4,211 4,863 5,784 73% -20% 0% 20% 40% 60% 80% 100% 120% 0 3,000 6,000 9,000 Q3/25 Q1/26 Q3/26 Electrification Order Backlog EL Order Backlog Comparable Growth% (Y-o-Y) 4,138 4,251 4,742 4,889 4,964 20% 0% 20% 40% 0 2,000 4,000 6,000 Q3/25 Q1/26 Q3/26 Motion Order Backlog MO Order Backlog Comparable Growth% (Y-o-Y) 2,129 2,255 2,147 2,224 2,245 5% -15% -10% -5% 0% 5% 10% 15% 20% 0 1,000 2,000 3,000 Q3/25 Q1/26 Q3/26 Automation Order Backlog AU Order Backlog Comparable Growth% (Y-o-Y) Q3 CY2026 Q3 CY2025 Change 12,927 9,538 +36%",
+              "speaker_before": ""
+            }
+          }
+        ]
+      },
+      {
+        "effect": "supports",
+        "nature": "interpretation",
+        "sources": [
+          {
+            "quote": "There was positive momentum in Electrification & Motion, largely driven by broad-based demand and effective execution of the order backlog while in Automation it remained muted due to timing of delivery of system orders.",
+            "evidence": {
+              "symbol": "ABB",
+              "name": "ABB India Limited",
+              "isin": "INE117A01022",
+              "exchange": "NSE",
+              "kind": "filing",
+              "title": "Press Release",
+              "discovery_period": "2026-11-13T18:06:07+05:30",
+              "download_url": "https://nsearchives.nseindia.in/corporate/ABB_13112026180525_PressReleaseQ32026signed.pdf",
+              "original_url": "https://nsearchives.nseindia.in/corporate/ABB_13112026180525_PressReleaseQ32026signed.pdf",
+              "url": "https://nsearchives.nseindia.in/corporate/ABB_13112026180525_PressReleaseQ32026signed.pdf",
+              "bytes": 324661,
+              "content_type": "application/pdf",
+              "hash": "f722e5f0566d63867eefba80c6b84c43f4d3cd05265554fa7fa3b689126c2c51",
+              "version": "f722e5f0566d63867eefba80c6b84c43f4d3cd05265554fa7fa3b689126c2c51-x2b3f46f529-filing",
+              "fetched_at": "2026-11-15T07:23:02.165608+00:00",
+              "parser": "pdfium-5.15.2-pages-v4-calendar-periods",
+              "publication_date": null,
+              "period": "2026-11-13T18:06:07+05:30",
+              "management_speakers": [],
+              "pages": 8,
+              "characters": 11907,
+              "processing_seconds": 1.44,
+              "combined_peak_mb": 134.2,
+              "id": "f722e5f0566d63867eefba80c6b84c43f4d3cd05265554fa7fa3b689126c2c51-x2b3f46f529-filing-p6-c0",
+              "page": 6,
+              "text": "EXPANDING DEMAND ACROSS SEGMENTS; SOLID EXECUTION 5/7 Revenues The Company continued the revenue uptrend Y-o-Y with INR 3,738 crore for Q3 CY2026. There was positive momentum in Electrification & Motion, largely driven by broad-based demand and effective execution of the order backlog while in Automation it remained muted due to timing of delivery of system orders. Electrification Motion Automation 3,130 3,423 3,184 3,559 3,738 19% -25% 0% 25% 50% 75% - 1,500 3,000 4,500 Q3/25 Q1/26 Q3/26 Revenues Revenues Comparable Growth% (Y-o-Y) 1,378 1,598 1,564 1,804 1,927 40% 0% 20% 40% 60% 80% 0 1,000 2,000 Q3/25 Q1/26 Q3/26 Electrification Revenue EL Revenue Comparable Growth% (Y-o-Y) 1,175 1,202 1,160 1,269 1,336 14% 0% 5% 10% 15% 20% 25% 30% 0 600 1,200 1,800 Q3/25 Q1/26 Q3/26 Motion Revenue MO Revenue Comparable Growth% (Y-o-Y) 601 652 500 524 505 -16% -20% -10% 0% 10% 20% 30% 0 200 400 600 800 Q3/25 Q1/26 Q3/26 Automation Revenue AU Revenue Comparable Growth% (Y-o-Y) Q3 CY2026 Q3 CY2025 Change 3,738 3,130 +19%",
+              "speaker_before": ""
+            }
+          }
+        ]
+      }
+    ],
+    "provider": "groq",
+    "model": "openai/gpt-oss-120b",
+    "policy": "thesis-spans-v1",
+    "symbol": "ABB",
+    "thesis_version": "0c08218c99de4a038d319dcb988791c2",
+    "thesis": "Demand for ABB electrification products remains strong.",
+    "event_id": "filing-ABB-106859328",
+    "revision": "1e5b5d5fdcc70645afb7",
+    "title": "Press Release",
+    "checked_at": "2026-11-15T08:07:00.179864+00:00",
+    "coverage": "Selected retained passages only; not a complete thesis audit.",
+    "gap": null,
+    "_version": 1,
+    "_updated": 1794730020.3586857
+  },
+  "restart_retained": true,
+  "owner_isolation": true,
+  "exact_citations": [
+    true,
+    true,
+    true
+  ],
+  "source_count": 3,
+  "effect": "supports",
+  "status": "passed",
+  "limitation": "Exact source retention is checked. Direction remains a model interpretation requiring semantic review; this is not a full thesis audit.",
+  "elapsed_seconds": 68.97
+}

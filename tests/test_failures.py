@@ -45,7 +45,7 @@ def test_source_failure_becomes_terminal_state_not_empty_success(monkeypatch,cod
 def test_input_validation_and_expired_jobs():
     with TestClient(app) as client:
         assert client.post('/api/research',json={'symbol':'TCS','question':'short'}).status_code==422
-        assert client.post('/api/research',json={'symbol':'https://127.0.0.1','question':'What are the risks?'}).status_code==422
+        assert client.post('/api/research',json={'symbol':'https://127.0.0.1','question':'What are the risks?'},headers={'X-Finn-Request':'1'}).status_code==422
         assert client.get('/api/jobs/does-not-exist').status_code==410
         assert client.get('/api/evidence/does-not-exist').status_code==410
 

@@ -1,0 +1,45 @@
+name: FINN source refresh
+on:
+  workflow_dispatch:
+  schedule:
+    # UTC: 08:35 and 16:20 IST, weekdays. Best effort, not real-time.
+    - cron: '5 3 * * 1-5'
+    - cron: '50 10 * * 1-5'
+permissions: {}
+concurrency:
+  group: finn-source-refresh
+  cancel-in-progress: false
+jobs:
+  refresh:
+    if: vars.FINN_SCHEDULER_ENABLED == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      FINN_SCHEDULER_TOKEN: ${{ secrets.FINN_SCHEDULER_TOKEN }}
+    steps:
+      - name: Wake FINN and confirm durable source job
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import json,os,time,urllib.request,urllib.error
+          token=os.environ.get('FINN_SCHEDULER_TOKEN','')
+          if len(token)<32:raise SystemExit('Scheduler secret is not configured.')
+          origin='https://finn-enam-yije.onrender.com'
+          deadline=time.monotonic()+1620
+          def request(path,method):
+              while time.monotonic()<deadline:
+                  try:
+                      req=urllib.request.Request(origin+path,method=method,headers={'Authorization':'Bearer '+token})
+                      with urllib.request.urlopen(req,timeout=90) as response:return json.load(response)
+                  except urllib.error.HTTPError as exc:
+                      if exc.code not in (429,502,503,504):raise SystemExit('Scheduler request rejected: HTTP '+str(exc.code))
+                  except (urllib.error.URLError,TimeoutError):pass
+                  time.sleep(20)
+              raise SystemExit('Scheduled source check timed out; previous data remains dated.')
+          job=request('/api/internal/schedule','POST')
+          while job.get('status')=='running' and time.monotonic()<deadline:
+              time.sleep(15)
+              job=request('/api/internal/schedule/'+job['id'],'GET')
+          if job.get('status')!='complete':raise SystemExit('Scheduled source job did not complete; inspect FINN coverage.')
+          print('Scheduled source job completed. Per-source coverage remains authoritative.')
+          PY

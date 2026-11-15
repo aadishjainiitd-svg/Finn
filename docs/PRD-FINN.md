@@ -1,5 +1,9 @@
 # FINN — focused PRD
 
+> **Target superseded, 15 November 2026:** The [final integrated change plan](FINN_INTEGRATED_CHANGE_PLAN.md) now governs the next product: Today, Research, Ask, Watch and Book, with every requested feature and its acceptance check. The [decisions log](FINN_DECISIONS.md) resolves conflicts with the supplied references. This file's two-workflow scope, exclusions, estimates and completion statements describe the earlier release only. The expanded target is **not implemented or authorised for implementation by this review**.
+
+Target delta: preserve the working research/evidence path; fix claim-backed ranking and visit/review semantics; add durable evidence and private state; match the exact navy/Hanken/amber reference at 430px maximum and 390px checks; then extend the remaining features in dependency order. No requested feature is removed from the target. Current verification is recorded in [review evidence](INTEGRATED_REVIEW_EVIDENCE.json).
+
 > Current implementation status (15 November 2026): approved scope is implemented and deployed on Render Free. Production Groq 120B, hosted CROMPTON research, restart provenance and final mobile workflows are verified. The earlier HAVELLS partial answer is resolved and verified on the deployed app; see the HAVELLS repair record in the audit. See [final audit](EVIDENCE_AUDIT.md), [implemented architecture](../ARCHITECTURE.md), [QA results](QA_REVIEW.md) and [checkpoint](RESUME.md). Historical planning-only statements below are retained as the decision record, not current authorisation. No deferred feature was added.
 
 14 November 2026 · Planning only. The two-workflow scope, 6–8 hour budget and Render Free hosting are agreed; implementation details below are recommendations, not evidence of a working product.

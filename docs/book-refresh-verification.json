@@ -1,0 +1,1762 @@
+{
+  "kind": "live Neon leased batches, NSE/Yahoo requests and primary PDF assessments; synthetic probe book",
+  "symbols": [
+    "RELIANCE",
+    "HDFCBANK",
+    "ICICIBANK",
+    "TCS",
+    "INFY",
+    "LT",
+    "ULTRACEMCO",
+    "SUNPHARMA",
+    "MARUTI",
+    "TITAN",
+    "BAJFINANCE",
+    "ASIANPAINT",
+    "DIXON",
+    "POLYCAB",
+    "PERSISTENT",
+    "TATAPOWER",
+    "KPITTECH",
+    "CDSL"
+  ],
+  "identities": [
+    {
+      "symbol": "RELIANCE",
+      "name": "Reliance Industries Limited",
+      "isin": "INE002A01018"
+    },
+    {
+      "symbol": "HDFCBANK",
+      "name": "HDFC Bank Limited",
+      "isin": "INE040A01034"
+    },
+    {
+      "symbol": "ICICIBANK",
+      "name": "ICICI Bank Limited",
+      "isin": "INE090A01021"
+    },
+    {
+      "symbol": "TCS",
+      "name": "Tata Consultancy Services Limited",
+      "isin": "INE467B01029"
+    },
+    {
+      "symbol": "INFY",
+      "name": "Infosys Limited",
+      "isin": "INE009A01021"
+    },
+    {
+      "symbol": "LT",
+      "name": "Larsen & Toubro Limited",
+      "isin": "INE018A01030"
+    },
+    {
+      "symbol": "ULTRACEMCO",
+      "name": "UltraTech Cement Limited",
+      "isin": "INE481G01011"
+    },
+    {
+      "symbol": "SUNPHARMA",
+      "name": "Sun Pharmaceutical Industries Limited",
+      "isin": "INE044A01036"
+    },
+    {
+      "symbol": "MARUTI",
+      "name": "Maruti Suzuki India Limited",
+      "isin": "INE585B01010"
+    },
+    {
+      "symbol": "TITAN",
+      "name": "Titan Company Limited",
+      "isin": "INE280A01028"
+    },
+    {
+      "symbol": "BAJFINANCE",
+      "name": "Bajaj Finance Limited",
+      "isin": "INE296A01032"
+    },
+    {
+      "symbol": "ASIANPAINT",
+      "name": "Asian Paints Limited",
+      "isin": "INE021A01026"
+    },
+    {
+      "symbol": "DIXON",
+      "name": "Dixon Technologies (India) Limited",
+      "isin": "INE935N01020"
+    },
+    {
+      "symbol": "POLYCAB",
+      "name": "Polycab India Limited",
+      "isin": "INE455K01017"
+    },
+    {
+      "symbol": "PERSISTENT",
+      "name": "Persistent Systems Limited",
+      "isin": "INE262H01021"
+    },
+    {
+      "symbol": "TATAPOWER",
+      "name": "Tata Power Company Limited",
+      "isin": "INE245A01021"
+    },
+    {
+      "symbol": "KPITTECH",
+      "name": "KPIT Technologies Limited",
+      "isin": "INE04I401011"
+    },
+    {
+      "symbol": "CDSL",
+      "name": "Central Depository Services (India) Limited",
+      "isin": "INE736A01011"
+    }
+  ],
+  "batches": 32,
+  "job_status": "complete",
+  "owner_isolation": true,
+  "coverage": [
+    {
+      "symbol": "RELIANCE",
+      "filings": {
+        "status": "live",
+        "checked_at": "2026-11-15T07:47:32.158956+00:00",
+        "error": null
+      },
+      "price": {
+        "status": "live",
+        "session": "2026-11-13",
+        "close": 1339.7,
+        "change_percent": 0.0,
+        "volume": 13756247,
+        "volume_multiple": 0.63,
+        "comparison_limit": null,
+        "operands": {
+          "current_close": "1339.699951171875",
+          "previous_close": "1339.699951171875",
+          "previous_session": "2026-11-12",
+          "current_volume": "13756247",
+          "previous_20_volumes": [
+            "10938195",
+            "23456219",
+            "17225283",
+            "15572554",
+            "17607823",
+            "14957042",
+            "14905641",
+            "7490515",
+            "13067787",
+            "21866598",
+            "20939623",
+            "14753650",
+            "88121121",
+            "42319913",
+            "19451679",
+            "19479324",
+            "22768301",
+            "19734153",
+            "17554310",
+            "13807921"
+          ],
+          "average_previous_20_volume": "21800882.6"
+        },
+        "formula": "Change = 100 \u00d7 (latest completed Close / previous completed Close \u2212 1). Volume = latest volume / mean of the preceding 20 completed sessions. Current session excluded from baseline.",
+        "price_basis": "Yahoo daily Close, not dividend-adjusted Close",
+        "currency": "INR",
+        "checked_at": "2026-11-15T07:53:55.991722+00:00",
+        "error": null,
+        "url": "https://finance.yahoo.com/quote/RELIANCE.NS/history/",
+        "older_session": false
+      }
+    },
+    {
+      "symbol": "HDFCBANK",
+      "filings": {
+        "status": "live",
+        "checked_at": "2026-11-15T07:47:32.158956+00:00",
+        "error": null
+      },
+      "price": {
+        "status": "live",
+        "session": "2026-11-13",
+        "close": 804.0,
+        "change_percent": -1.02,
+        "volume": 23442886,
+        "volume_multiple": 0.59,
+        "comparison_limit": null,
+        "operands": {
+          "current_close": "804.0",
+          "previous_close": "812.2999877929688",
+          "previous_session": "2026-11-12",
+          "current_volume": "23442886",
+          "previous_20_volumes": [
+            "23945373",
+            "37365177",
+            "28936902",
+            "33524133",
+            "26573703",
+            "60280576",
+            "18989022",
+            "23489755",
+            "40614930",
+            "28534206",
+            "31422790",
+            "21296902",
+            "21480587",
+            "42746644",
+            "50677695",
+            "65401905",
+            "73482878",
+            "64826814",
+            "56398940",
+            "38292509"
+          ],
+          "average_previous_20_volume": "39414072.05"
+        },
+        "formula": "Change = 100 \u00d7 (latest completed Close / previous completed Close \u2212 1). Volume = latest volume / mean of the preceding 20 completed sessions. Current session excluded from baseline.",
+        "price_basis": "Yahoo daily Close, not dividend-adjusted Close",
+        "currency": "INR",
+        "checked_at": "2026-11-15T07:53:56.359077+00:00",
+        "error": null,
+        "url": "https://finance.yahoo.com/quote/HDFCBANK.NS/history/",
+        "older_session": false
+      }
+    },
+    {
+      "symbol": "ICICIBANK",
+      "filings": {
+        "status": "live",
+        "checked_at": "2026-11-15T07:47:32.158956+00:00",
+        "error": null
+      },
+      "price": {
+        "status": "live",
+        "session": "2026-11-13",
+        "close": 1583.6,
+        "change_percent": -0.4,
+        "volume": 11440109,
+        "volume_multiple": 0.64,
+        "comparison_limit": null,
+        "operands": {
+          "current_close": "1583.5999755859375",
+          "previous_close": "1590.0",
+          "previous_session": "2026-11-12",
+          "current_volume": "11440109",
+          "previous_20_volumes": [
+            "8253235",
+            "17551899",
+            "14925887",
+            "25149396",
+            "17537734",
+            "16108318",
+            "11573221",
+            "7936076",
+            "16183741",
+            "9519327",
+            "11553461",
+            "10523907",
+            "9043608",
+            "17496620",
+            "10606471",
+            "38324323",
+            "40383259",
+            "27542158",
+            "29190011",
+            "16293900"
+          ],
+          "average_previous_20_volume": "17784827.6"
+        },
+        "formula": "Change = 100 \u00d7 (latest completed Close / previous completed Close \u2212 1). Volume = latest volume / mean of the preceding 20 completed sessions. Current session excluded from baseline.",
+        "price_basis": "Yahoo daily Close, not dividend-adjusted Close",
+        "currency": "INR",
+        "checked_at": "2026-11-15T07:49:20.819318+00:00",
+        "error": null,
+        "url": "https://finance.yahoo.com/quote/ICICIBANK.NS/history/",
+        "older_session": false
+      }
+    },
+    {
+      "symbol": "TCS",
+      "filings": {
+        "status": "live",
+        "checked_at": "2026-11-15T07:47:32.158956+00:00",
+        "error": null
+      },
+      "price": {
+        "status": "live",
+        "session": "2026-11-13",
+        "close": 2407.5,
+        "change_percent": -1.43,
+        "volume": 3344738,
+        "volume_multiple": 0.63,
+        "comparison_limit": null,
+        "operands": {
+          "current_close": "2407.5",
+          "previous_close": "2442.39990234375",
+          "previous_session": "2026-11-12",
+          "current_volume": "3344738",
+          "previous_20_volumes": [
+            "12145767",
+            "9150523",
+            "12166634",
+            "8676373",
+            "5707347",
+            "4174671",
+            "6857942",
+            "4326029",
+            "4337081",
+            "2540047",
+            "3427569",
+            "3016983",
+            "2817192",
+            "3488517",
+            "3142051",
+            "6767948",
+            "4922308",
+            "2897701",
+            "4013371",
+            "2138619"
+          ],
+          "average_previous_20_volume": "5335733.65"
+        },
+        "formula": "Change = 100 \u00d7 (latest completed Close / previous completed Close \u2212 1). Volume = latest volume / mean of the preceding 20 completed sessions. Current session excluded from baseline.",
+        "price_basis": "Yahoo daily Close, not dividend-adjusted Close",
+        "currency": "INR",
+        "checked_at": "2026-11-15T07:53:55.324454+00:00",
+        "error": null,
+        "url": "https://finance.yahoo.com/quote/TCS.NS/history/",
+        "older_session": false
+      }
+    },
+    {
+      "symbol": "INFY",
+      "filings": {
+        "status": "live",
+        "checked_at": "2026-11-15T07:47:32.158956+00:00",
+        "error": null
+      },
+      "price": {
+        "status": "live",
+        "session": "2026-11-13",
+        "close": 1141.5,
+        "change_percent": -0.84,
+        "volume": 5936229,
+        "volume_multiple": 0.37,
+        "comparison_limit": null,
+        "operands": {
+          "current_close": "1141.5",
+          "previous_close": "1151.199951171875",
+          "previous_session": "2026-11-12",
+          "current_volume": "5936229",
+          "previous_20_volumes": [
+            "22113407",
+            "16012759",
+            "25566304",
+            "13258477",
+            "18597997",
+            "17007168",
+            "33044499",
+            "25964569",
+            "20117848",
+            "15636449",
+            "14048472",
+            "13030713",
+            "12918064",
+            "10495455",
+            "9333345",
+            "10174914",
+            "15301109",
+            "10099639",
+            "9148933",
+            "7562749"
+          ],
+          "average_previous_20_volume": "15971643.5"
+        },
+        "formula": "Change = 100 \u00d7 (latest completed Close / previous completed Close \u2212 1). Volume = latest volume / mean of the preceding 20 completed sessions. Current session excluded from baseline.",
+        "price_basis": "Yahoo daily Close, not dividend-adjusted Close",
+        "currency": "INR",
+        "checked_at": "2026-11-15T07:53:56.681079+00:00",
+        "error": null,
+        "url": "https://finance.yahoo.com/quote/INFY.NS/history/",
+        "older_session": false
+      }
+    },
+    {
+      "symbol": "LT",
+      "filings": {
+        "status": "live",
+        "checked_at": "2026-11-15T07:47:32.158956+00:00",
+        "error": null
+      },
+      "price": {
+        "status": "live",
+        "session": "2026-11-13",
+        "close": 4143.8,
+        "change_percent": -0.37,
+        "volume": 1585695,
+        "volume_multiple": 0.64,
+        "comparison_limit": null,
+        "operands": {
+          "current_close": "4143.7998046875",
+          "previous_close": "4159.2001953125",
+          "previous_session": "2026-11-12",
+          "current_volume": "1585695",
+          "previous_20_volumes": [
+            "1826165",
+            "2452067",
+            "1875108",
+            "2331147",
+            "1902623",
+            "2668020",
+            "2021973",
+            "1144515",
+            "1471485",
+            "6174490",
+            "1754505",
+            "1765873",
+            "2056829",
+            "2153031",
+            "2494060",
+            "3838083",
+            "3396323",
+            "3251721",
+            "2833382",
+            "2448016"
+          ],
+          "average_previous_20_volume": "2492970.8"
+        },
+        "formula": "Change = 100 \u00d7 (latest completed Close / previous completed Close \u2212 1). Volume = latest volume / mean of the preceding 20 completed sessions. Current session excluded from baseline.",
+        "price_basis": "Yahoo daily Close, not dividend-adjusted Close",
+        "currency": "INR",
+        "checked_at": "2026-11-15T07:53:58.207077+00:00",
+        "error": null,
+        "url": "https://finance.yahoo.com/quote/LT.NS/history/",
+        "older_session": false
+      }
+    },
+    {
+      "symbol": "ULTRACEMCO",
+      "filings": {
+        "status": "live",
+        "checked_at": "2026-11-15T07:47:32.158956+00:00",
+        "error": null
+      },
+      "price": {
+        "status": "live",
+        "session": "2026-11-13",
+        "close": 12100.0,
+        "change_percent": -1.92,
+        "volume": 171017,
+        "volume_multiple": 0.57,
+        "comparison_limit": null,
+        "operands": {
+          "current_close": "12100.0",
+          "previous_close": "12337.0",
+          "previous_session": "2026-11-12",
+          "current_volume": "171017",
+          "previous_20_volumes": [
+            "300764",
+            "349518",
+            "182520",
+            "609128",
+            "395978",
+            "172266",
+            "303532",
+            "275159",
+            "288694",
+            "213720",
+            "139118",
+            "199530",
+            "227468",
+            "341248",
+            "273181",
+            "519388",
+            "480790",
+            "264941",
+            "275931",
+            "154772"
+          ],
+          "average_previous_20_volume": "298382.3"
+        },
+        "formula": "Change = 100 \u00d7 (latest completed Close / previous completed Close \u2212 1). Volume = latest volume / mean of the preceding 20 completed sessions. Current session excluded from baseline.",
+        "price_basis": "Yahoo daily Close, not dividend-adjusted Close",
+        "currency": "INR",
+        "checked_at": "2026-11-15T07:54:00.204870+00:00",
+        "error": null,
+        "url": "https://finance.yahoo.com/quote/ULTRACEMCO.NS/history/",
+        "older_session": false
+      }
+    },
+    {
+      "symbol": "SUNPHARMA",
+      "filings": {
+        "status": "live",
+        "checked_at": "2026-11-15T07:47:32.158956+00:00",
+        "error": null
+      },
+      "price": {
+        "status": "live",
+        "session": "2026-11-13",
+        "close": 1880.0,
+        "change_percent": -0.27,
+        "volume": 2037762,
+        "volume_multiple": 0.88,
+        "comparison_limit": null,
+        "operands": {
+          "current_close": "1880.0",
+          "previous_close": "1885.0",
+          "previous_session": "2026-11-12",
+          "current_volume": "2037762",
+          "previous_20_volumes": [
+            "1808782",
+            "1376380",
+            "1522459",
+            "829445",
+            "2316342",
+            "1778519",
+            "1064528",
+            "1622698",
+            "1547898",
+            "1056767",
+            "1107854",
+            "5130218",
+            "3457791",
+            "2646691",
+            "4925315",
+            "3923834",
+            "2348251",
+            "3127099",
+            "2262492",
+            "2464003"
+          ],
+          "average_previous_20_volume": "2315868.3"
+        },
+        "formula": "Change = 100 \u00d7 (latest completed Close / previous completed Close \u2212 1). Volume = latest volume / mean of the preceding 20 completed sessions. Current session excluded from baseline.",
+        "price_basis": "Yahoo daily Close, not dividend-adjusted Close",
+        "currency": "INR",
+        "checked_at": "2026-11-15T07:53:58.868718+00:00",
+        "error": null,
+        "url": "https://finance.yahoo.com/quote/SUNPHARMA.NS/history/",
+        "older_session": false
+      }
+    },
+    {
+      "symbol": "MARUTI",
+      "filings": {
+        "status": "live",
+        "checked_at": "2026-11-15T07:47:32.158956+00:00",
+        "error": null
+      },
+      "price": {
+        "status": "live",
+        "session": "2026-11-13",
+        "close": 12854.0,
+        "change_percent": -1.31,
+        "volume": 492029,
+        "volume_multiple": 0.88,
+        "comparison_limit": null,
+        "operands": {
+          "current_close": "12854.0",
+          "previous_close": "13024.0",
+          "previous_session": "2026-11-12",
+          "current_volume": "492029",
+          "previous_20_volumes": [
+            "463850",
+            "513644",
+            "408961",
+            "453832",
+            "393314",
+            "407490",
+            "333253",
+            "489223",
+            "426915",
+            "938032",
+            "317248",
+            "280448",
+            "414092",
+            "363875",
+            "581928",
+            "1203576",
+            "923719",
+            "558028",
+            "963516",
+            "720496"
+          ],
+          "average_previous_20_volume": "557772"
+        },
+        "formula": "Change = 100 \u00d7 (latest completed Close / previous completed Close \u2212 1). Volume = latest volume / mean of the preceding 20 completed sessions. Current session excluded from baseline.",
+        "price_basis": "Yahoo daily Close, not dividend-adjusted Close",
+        "currency": "INR",
+        "checked_at": "2026-11-15T07:53:59.196568+00:00",
+        "error": null,
+        "url": "https://finance.yahoo.com/quote/MARUTI.NS/history/",
+        "older_session": false
+      }
+    },
+    {
+      "symbol": "TITAN",
+      "filings": {
+        "status": "live",
+        "checked_at": "2026-11-15T07:47:32.158956+00:00",
+        "error": null
+      },
+      "price": {
+        "status": "live",
+        "session": "2026-11-13",
+        "close": 4844.9,
+        "change_percent": -1.56,
+        "volume": 624040,
+        "volume_multiple": 0.66,
+        "comparison_limit": null,
+        "operands": {
+          "current_close": "4844.89990234375",
+          "previous_close": "4921.89990234375",
+          "previous_session": "2026-11-12",
+          "current_volume": "624040",
+          "previous_20_volumes": [
+            "552204",
+            "533115",
+            "577590",
+            "651506",
+            "448729",
+            "426321",
+            "633220",
+            "382563",
+            "749496",
+            "527965",
+            "958380",
+            "1143254",
+            "603203",
+            "774059",
+            "1324883",
+            "1241367",
+            "4132719",
+            "839812",
+            "1716837",
+            "732932"
+          ],
+          "average_previous_20_volume": "947507.75"
+        },
+        "formula": "Change = 100 \u00d7 (latest completed Close / previous completed Close \u2212 1). Volume = latest volume / mean of the preceding 20 completed sessions. Current session excluded from baseline.",
+        "price_basis": "Yahoo daily Close, not dividend-adjusted Close",
+        "currency": "INR",
+        "checked_at": "2026-11-15T07:54:01.150521+00:00",
+        "error": null,
+        "url": "https://finance.yahoo.com/quote/TITAN.NS/history/",
+        "older_session": false
+      }
+    },
+    {
+      "symbol": "BAJFINANCE",
+      "filings": {
+        "status": "live",
+        "checked_at": "2026-11-15T07:47:32.158956+00:00",
+        "error": null
+      },
+      "price": {
+        "status": "live",
+        "session": "2026-11-13",
+        "close": 1117.0,
+        "change_percent": 0.18,
+        "volume": 11898219,
+        "volume_multiple": 1.18,
+        "comparison_limit": null,
+        "operands": {
+          "current_close": "1117.0",
+          "previous_close": "1115.0",
+          "previous_session": "2026-11-12",
+          "current_volume": "11898219",
+          "previous_20_volumes": [
+            "7139305",
+            "10802450",
+            "7810809",
+            "8308852",
+            "18557070",
+            "10621523",
+            "6270760",
+            "3976714",
+            "6233563",
+            "5460928",
+            "8659753",
+            "9334765",
+            "6645450",
+            "7531281",
+            "14416253",
+            "29819613",
+            "9053404",
+            "9203283",
+            "9276361",
+            "11872744"
+          ],
+          "average_previous_20_volume": "10049744.05"
+        },
+        "formula": "Change = 100 \u00d7 (latest completed Close / previous completed Close \u2212 1). Volume = latest volume / mean of the preceding 20 completed sessions. Current session excluded from baseline.",
+        "price_basis": "Yahoo daily Close, not dividend-adjusted Close",
+        "currency": "INR",
+        "checked_at": "2026-11-15T07:54:02.551989+00:00",
+        "error": null,
+        "url": "https://finance.yahoo.com/quote/BAJFINANCE.NS/history/",
+        "older_session": false
+      }
+    },
+    {
+      "symbol": "ASIANPAINT",
+      "filings": {
+        "status": "live",
+        "checked_at": "2026-11-15T07:47:32.158956+00:00",
+        "error": null
+      },
+      "price": {
+        "status": "live",
+        "session": "2026-11-13",
+        "close": 2550.0,
+        "change_percent": 0.53,
+        "volume": 613905,
+        "volume_multiple": 0.56,
+        "comparison_limit": null,
+        "operands": {
+          "current_close": "2550.0",
+          "previous_close": "2536.5",
+          "previous_session": "2026-11-12",
+          "current_volume": "613905",
+          "previous_20_volumes": [
+            "700495",
+            "833000",
+            "1012228",
+            "497488",
+            "514424",
+            "440415",
+            "836468",
+            "845552",
+            "1043006",
+            "621924",
+            "2521129",
+            "1315150",
+            "789896",
+            "2008963",
+            "1354097",
+            "2383904",
+            "969158",
+            "1001985",
+            "1260836",
+            "817076"
+          ],
+          "average_previous_20_volume": "1088359.7"
+        },
+        "formula": "Change = 100 \u00d7 (latest completed Close / previous completed Close \u2212 1). Volume = latest volume / mean of the preceding 20 completed sessions. Current session excluded from baseline.",
+        "price_basis": "Yahoo daily Close, not dividend-adjusted Close",
+        "currency": "INR",
+        "checked_at": "2026-11-15T07:54:02.193186+00:00",
+        "error": null,
+        "url": "https://finance.yahoo.com/quote/ASIANPAINT.NS/history/",
+        "older_session": false
+      }
+    },
+    {
+      "symbol": "DIXON",
+      "filings": {
+        "status": "live",
+        "checked_at": "2026-11-15T07:47:32.158956+00:00",
+        "error": null
+      },
+      "price": {
+        "status": "live",
+        "session": "2026-11-13",
+        "close": 12798.0,
+        "change_percent": -1.49,
+        "volume": 196350,
+        "volume_multiple": 0.5,
+        "comparison_limit": null,
+        "operands": {
+          "current_close": "12798.0",
+          "previous_close": "12992.0",
+          "previous_session": "2026-11-12",
+          "current_volume": "196350",
+          "previous_20_volumes": [
+            "145473",
+            "310891",
+            "477554",
+            "310831",
+            "503302",
+            "276958",
+            "352292",
+            "233086",
+            "304443",
+            "259771",
+            "299637",
+            "521838",
+            "1631850",
+            "528694",
+            "249033",
+            "329831",
+            "227053",
+            "171649",
+            "352841",
+            "296032"
+          ],
+          "average_previous_20_volume": "389152.95"
+        },
+        "formula": "Change = 100 \u00d7 (latest completed Close / previous completed Close \u2212 1). Volume = latest volume / mean of the preceding 20 completed sessions. Current session excluded from baseline.",
+        "price_basis": "Yahoo daily Close, not dividend-adjusted Close",
+        "currency": "INR",
+        "checked_at": "2026-11-15T07:54:01.832799+00:00",
+        "error": null,
+        "url": "https://finance.yahoo.com/quote/DIXON.NS/history/",
+        "older_session": false
+      }
+    },
+    {
+      "symbol": "POLYCAB",
+      "filings": {
+        "status": "live",
+        "checked_at": "2026-11-15T07:47:32.158956+00:00",
+        "error": null
+      },
+      "price": {
+        "status": "live",
+        "session": "2026-11-13",
+        "close": 7904.0,
+        "change_percent": -2.18,
+        "volume": 433490,
+        "volume_multiple": 1.1,
+        "comparison_limit": null,
+        "operands": {
+          "current_close": "7904.0",
+          "previous_close": "8080.5",
+          "previous_session": "2026-11-12",
+          "current_volume": "433490",
+          "previous_20_volumes": [
+            "1146595",
+            "853479",
+            "597786",
+            "294308",
+            "308749",
+            "335530",
+            "325551",
+            "225323",
+            "350924",
+            "298745",
+            "325369",
+            "346386",
+            "310317",
+            "241183",
+            "141947",
+            "228020",
+            "415293",
+            "228133",
+            "350445",
+            "541933"
+          ],
+          "average_previous_20_volume": "393300.8"
+        },
+        "formula": "Change = 100 \u00d7 (latest completed Close / previous completed Close \u2212 1). Volume = latest volume / mean of the preceding 20 completed sessions. Current session excluded from baseline.",
+        "price_basis": "Yahoo daily Close, not dividend-adjusted Close",
+        "currency": "INR",
+        "checked_at": "2026-11-15T07:54:04.067326+00:00",
+        "error": null,
+        "url": "https://finance.yahoo.com/quote/POLYCAB.NS/history/",
+        "older_session": false
+      }
+    },
+    {
+      "symbol": "PERSISTENT",
+      "filings": {
+        "status": "live",
+        "checked_at": "2026-11-15T07:47:32.158956+00:00",
+        "error": null
+      },
+      "price": {
+        "status": "live",
+        "session": "2026-11-13",
+        "close": 6003.0,
+        "change_percent": -0.45,
+        "volume": 346539,
+        "volume_multiple": 0.44,
+        "comparison_limit": null,
+        "operands": {
+          "current_close": "6003.0",
+          "previous_close": "6030.0",
+          "previous_session": "2026-11-12",
+          "current_volume": "346539",
+          "previous_20_volumes": [
+            "632681",
+            "1334838",
+            "2196570",
+            "1277186",
+            "911865",
+            "738967",
+            "1173561",
+            "458956",
+            "930218",
+            "370086",
+            "450167",
+            "1108361",
+            "835738",
+            "388562",
+            "409225",
+            "608422",
+            "534110",
+            "481139",
+            "431913",
+            "392129"
+          ],
+          "average_previous_20_volume": "783234.7"
+        },
+        "formula": "Change = 100 \u00d7 (latest completed Close / previous completed Close \u2212 1). Volume = latest volume / mean of the preceding 20 completed sessions. Current session excluded from baseline.",
+        "price_basis": "Yahoo daily Close, not dividend-adjusted Close",
+        "currency": "INR",
+        "checked_at": "2026-11-15T07:54:05.133350+00:00",
+        "error": null,
+        "url": "https://finance.yahoo.com/quote/PERSISTENT.NS/history/",
+        "older_session": false
+      }
+    },
+    {
+      "symbol": "TATAPOWER",
+      "filings": {
+        "status": "live",
+        "checked_at": "2026-11-15T07:47:32.158956+00:00",
+        "error": null
+      },
+      "price": {
+        "status": "live",
+        "session": "2026-11-13",
+        "close": 348.0,
+        "change_percent": -2.52,
+        "volume": 10965923,
+        "volume_multiple": 1.92,
+        "comparison_limit": null,
+        "operands": {
+          "current_close": "348.0",
+          "previous_close": "357.0",
+          "previous_session": "2026-11-12",
+          "current_volume": "10965923",
+          "previous_20_volumes": [
+            "4962004",
+            "3677028",
+            "3463576",
+            "3247837",
+            "3778796",
+            "3071573",
+            "4180666",
+            "9489132",
+            "6059999",
+            "2324748",
+            "3441946",
+            "3535796",
+            "5172325",
+            "3732291",
+            "6079527",
+            "4043164",
+            "10084522",
+            "4438333",
+            "10973990",
+            "18307724"
+          ],
+          "average_previous_20_volume": "5703248.85"
+        },
+        "formula": "Change = 100 \u00d7 (latest completed Close / previous completed Close \u2212 1). Volume = latest volume / mean of the preceding 20 completed sessions. Current session excluded from baseline.",
+        "price_basis": "Yahoo daily Close, not dividend-adjusted Close",
+        "currency": "INR",
+        "checked_at": "2026-11-15T07:54:05.464075+00:00",
+        "error": null,
+        "url": "https://finance.yahoo.com/quote/TATAPOWER.NS/history/",
+        "older_session": false
+      }
+    },
+    {
+      "symbol": "KPITTECH",
+      "filings": {
+        "status": "live",
+        "checked_at": "2026-11-15T07:47:32.158956+00:00",
+        "error": null
+      },
+      "price": {
+        "status": "live",
+        "session": "2026-11-13",
+        "close": 552.0,
+        "change_percent": -1.08,
+        "volume": 1200423,
+        "volume_multiple": 0.5,
+        "comparison_limit": null,
+        "operands": {
+          "current_close": "552.0",
+          "previous_close": "558.0499877929688",
+          "previous_session": "2026-11-12",
+          "current_volume": "1200423",
+          "previous_20_volumes": [
+            "4941428",
+            "2951514",
+            "5187629",
+            "1570789",
+            "2886807",
+            "1366533",
+            "3408006",
+            "1534848",
+            "3017837",
+            "7309935",
+            "1796946",
+            "1238050",
+            "1007341",
+            "885491",
+            "1620202",
+            "2026902",
+            "1283225",
+            "1010010",
+            "1470828",
+            "1300517"
+          ],
+          "average_previous_20_volume": "2390741.9"
+        },
+        "formula": "Change = 100 \u00d7 (latest completed Close / previous completed Close \u2212 1). Volume = latest volume / mean of the preceding 20 completed sessions. Current session excluded from baseline.",
+        "price_basis": "Yahoo daily Close, not dividend-adjusted Close",
+        "currency": "INR",
+        "checked_at": "2026-11-15T07:54:04.734079+00:00",
+        "error": null,
+        "url": "https://finance.yahoo.com/quote/KPITTECH.NS/history/",
+        "older_session": false
+      }
+    },
+    {
+      "symbol": "CDSL",
+      "filings": {
+        "status": "live",
+        "checked_at": "2026-11-15T07:47:32.158956+00:00",
+        "error": null
+      },
+      "price": {
+        "status": "live",
+        "session": "2026-11-13",
+        "close": 1447.0,
+        "change_percent": -0.55,
+        "volume": 2925722,
+        "volume_multiple": 2.01,
+        "comparison_limit": null,
+        "operands": {
+          "current_close": "1447.0",
+          "previous_close": "1455.0",
+          "previous_session": "2026-11-12",
+          "current_volume": "2925722",
+          "previous_20_volumes": [
+            "640217",
+            "828150",
+            "825106",
+            "555214",
+            "650041",
+            "677522",
+            "1312164",
+            "907846",
+            "826875",
+            "678644",
+            "1828237",
+            "887384",
+            "2677103",
+            "3359973",
+            "1040765",
+            "1384511",
+            "788398",
+            "1354523",
+            "3723037",
+            "4199335"
+          ],
+          "average_previous_20_volume": "1457252.25"
+        },
+        "formula": "Change = 100 \u00d7 (latest completed Close / previous completed Close \u2212 1). Volume = latest volume / mean of the preceding 20 completed sessions. Current session excluded from baseline.",
+        "price_basis": "Yahoo daily Close, not dividend-adjusted Close",
+        "currency": "INR",
+        "checked_at": "2026-11-15T07:54:05.966447+00:00",
+        "error": null,
+        "url": "https://finance.yahoo.com/quote/CDSL.NS/history/",
+        "older_session": false
+      }
+    }
+  ],
+  "retained_filings": 97,
+  "assessments": [
+    {
+      "id": "filing-HDFCBANK-106858944",
+      "title": "Re-appointment of Mr. V. Srinivasa Rangan as the Whole-time Director (designated as Executive Director) of HDFC Bank Limited (\u201cBank\u201d)",
+      "assessment": "assessed",
+      "assessment_error": null,
+      "tier": 0
+    },
+    {
+      "id": "filing-RELIANCE-106859406",
+      "title": "Analysts/Institutional Investor Meet/Con. Call Updates",
+      "assessment": "assessed",
+      "assessment_error": null,
+      "tier": 1
+    },
+    {
+      "id": "filing-ULTRACEMCO-106858735",
+      "title": "Analysts/Institutional Investor Meet/Con. Call Updates",
+      "assessment": "assessed",
+      "assessment_error": null,
+      "tier": 1
+    },
+    {
+      "id": "filing-RELIANCE-106857662",
+      "title": "Analysts/Institutional Investor Meet/Con. Call Updates",
+      "assessment": "assessed",
+      "assessment_error": null,
+      "tier": 1
+    },
+    {
+      "id": "filing-TITAN-106857341",
+      "title": "General Updates",
+      "assessment": "assessed",
+      "assessment_error": null,
+      "tier": 1
+    },
+    {
+      "id": "filing-ICICIBANK-106857193",
+      "title": "General Updates",
+      "assessment": "assessed",
+      "assessment_error": null,
+      "tier": 1
+    },
+    {
+      "id": "filing-HDFCBANK-106857049",
+      "title": "General Updates",
+      "assessment": "assessed",
+      "assessment_error": null,
+      "tier": 1
+    },
+    {
+      "id": "filing-KPITTECH-106856809",
+      "title": "Analysts/Institutional Investor Meet/Con. Call Updates",
+      "assessment": "assessed",
+      "assessment_error": null,
+      "tier": 1
+    },
+    {
+      "id": "filing-KPITTECH-106856808",
+      "title": "Analysts/Institutional Investor Meet/Con. Call Updates",
+      "assessment": "assessed",
+      "assessment_error": null,
+      "tier": 1
+    },
+    {
+      "id": "filing-TITAN-106856694",
+      "title": "Analysts/Institutional Investor Meet/Con. Call Updates",
+      "assessment": "assessed",
+      "assessment_error": null,
+      "tier": 1
+    },
+    {
+      "id": "filing-TATAPOWER-106856607",
+      "title": "Copy of Newspaper Publication",
+      "assessment": "pending",
+      "assessment_error": null,
+      "tier": 0
+    },
+    {
+      "id": "filing-HDFCBANK-106856600",
+      "title": "Analysts/Institutional Investor Meet/Con. Call Updates",
+      "assessment": "assessed",
+      "assessment_error": null,
+      "tier": 1
+    },
+    {
+      "id": "filing-MARUTI-106856325",
+      "title": "Analysts/Institutional Investor Meet/Con. Call Updates",
+      "assessment": "assessed",
+      "assessment_error": null,
+      "tier": 1
+    },
+    {
+      "id": "filing-INFY-106856189",
+      "title": "Updates",
+      "assessment": "assessed",
+      "assessment_error": null,
+      "tier": 1
+    },
+    {
+      "id": "filing-TATAPOWER-106855738",
+      "title": "Analysts/Institutional Investor Meet/Con. Call Updates",
+      "assessment": "assessed",
+      "assessment_error": null,
+      "tier": 0
+    },
+    {
+      "id": "filing-TATAPOWER-106855670",
+      "title": "Updates",
+      "assessment": "assessed",
+      "assessment_error": null,
+      "tier": 1
+    },
+    {
+      "id": "filing-TATAPOWER-106855625",
+      "title": "Appointment",
+      "assessment": "assessed",
+      "assessment_error": null,
+      "tier": 0
+    },
+    {
+      "id": "filing-TATAPOWER-106855429",
+      "title": "Capacity addition",
+      "assessment": "assessed",
+      "assessment_error": null,
+      "tier": 1
+    },
+    {
+      "id": "filing-TATAPOWER-106855421",
+      "title": "Press Release",
+      "assessment": "assessed",
+      "assessment_error": null,
+      "tier": 0
+    },
+    {
+      "id": "filing-TATAPOWER-106855404",
+      "title": "Investor Presentation",
+      "assessment": "assessed",
+      "assessment_error": null,
+      "tier": 0
+    },
+    {
+      "id": "filing-TATAPOWER-106855371",
+      "title": "Outcome of Board Meeting",
+      "assessment": "assessed",
+      "assessment_error": null,
+      "tier": 0
+    },
+    {
+      "id": "filing-BAJFINANCE-106855359",
+      "title": "General Updates",
+      "assessment": "assessed",
+      "assessment_error": null,
+      "tier": 1
+    },
+    {
+      "id": "filing-ULTRACEMCO-106855351",
+      "title": "Analysts/Institutional Investor Meet/Con. Call Updates",
+      "assessment": "assessed",
+      "assessment_error": null,
+      "tier": 1
+    },
+    {
+      "id": "filing-TITAN-106855083",
+      "title": "Analysts/Institutional Investor Meet/Con. Call Updates",
+      "assessment": "assessed",
+      "assessment_error": null,
+      "tier": 0
+    },
+    {
+      "id": "filing-TATAPOWER-106855021",
+      "title": "ESOP/ESOS/ESPS",
+      "assessment": "assessed",
+      "assessment_error": null,
+      "tier": 1
+    },
+    {
+      "id": "filing-TATAPOWER-106854653",
+      "title": "Analysts/Institutional Investor Meet/Con. Call Updates",
+      "assessment": "assessed",
+      "assessment_error": null,
+      "tier": 1
+    },
+    {
+      "id": "filing-BAJFINANCE-106854062",
+      "title": "Allotment of Securities",
+      "assessment": "assessed",
+      "assessment_error": null,
+      "tier": 1
+    },
+    {
+      "id": "filing-BAJFINANCE-106854034",
+      "title": "Committee Meeting Updates",
+      "assessment": "assessed",
+      "assessment_error": null,
+      "tier": 1
+    },
+    {
+      "id": "filing-MARUTI-106854012",
+      "title": "General Updates",
+      "assessment": "assessed",
+      "assessment_error": null,
+      "tier": 0
+    },
+    {
+      "id": "filing-ASIANPAINT-106853629",
+      "title": "Analysts/Institutional Investor Meet/Con. Call Updates",
+      "assessment": "assessed",
+      "assessment_error": null,
+      "tier": 1
+    },
+    {
+      "id": "filing-CDSL-106853622",
+      "title": "Analysts/Institutional Investor Meet/Con. Call Updates",
+      "assessment": "assessed",
+      "assessment_error": null,
+      "tier": 1
+    },
+    {
+      "id": "filing-CDSL-106853618",
+      "title": "Analysts/Institutional Investor Meet/Con. Call Updates",
+      "assessment": "assessed",
+      "assessment_error": null,
+      "tier": 1
+    },
+    {
+      "id": "filing-CDSL-106853616",
+      "title": "Analysts/Institutional Investor Meet/Con. Call Updates",
+      "assessment": "assessed",
+      "assessment_error": null,
+      "tier": 1
+    },
+    {
+      "id": "filing-CDSL-106853610",
+      "title": "Analysts/Institutional Investor Meet/Con. Call Updates",
+      "assessment": "assessed",
+      "assessment_error": null,
+      "tier": 1
+    },
+    {
+      "id": "filing-TCS-106853516",
+      "title": "Analysts/Institutional Investor Meet/Con. Call Updates",
+      "assessment": "assessed",
+      "assessment_error": null,
+      "tier": 1
+    },
+    {
+      "id": "filing-TITAN-106853387",
+      "title": "General Updates",
+      "assessment": "assessed",
+      "assessment_error": null,
+      "tier": 1
+    },
+    {
+      "id": "filing-TITAN-106853374",
+      "title": "Analysts/Institutional Investor Meet/Con. Call Updates",
+      "assessment": "assessed",
+      "assessment_error": null,
+      "tier": 1
+    },
+    {
+      "id": "filing-ICICIBANK-106853322",
+      "title": "General Updates",
+      "assessment": "assessed",
+      "assessment_error": null,
+      "tier": 1
+    },
+    {
+      "id": "filing-LT-106853097",
+      "title": "Bagging/Receiving of orders/contracts",
+      "assessment": "assessed",
+      "assessment_error": null,
+      "tier": 1
+    },
+    {
+      "id": "filing-TATAPOWER-106852712",
+      "title": "General Updates",
+      "assessment": "assessed",
+      "assessment_error": null,
+      "tier": 0
+    },
+    {
+      "id": "filing-BAJFINANCE-106852542",
+      "title": "General Updates",
+      "assessment": "assessed",
+      "assessment_error": null,
+      "tier": 0
+    },
+    {
+      "id": "filing-HDFCBANK-106851783",
+      "title": "Shareholders meeting",
+      "assessment": "assessed",
+      "assessment_error": null,
+      "tier": 0
+    },
+    {
+      "id": "filing-ASIANPAINT-106851770",
+      "title": "Appointment",
+      "assessment": "assessed",
+      "assessment_error": null,
+      "tier": 1
+    },
+    {
+      "id": "filing-POLYCAB-106851763",
+      "title": "General Updates",
+      "assessment": "assessed",
+      "assessment_error": null,
+      "tier": 1
+    },
+    {
+      "id": "filing-ASIANPAINT-106851762",
+      "title": "Change in Director(s)",
+      "assessment": "assessed",
+      "assessment_error": null,
+      "tier": 1
+    },
+    {
+      "id": "filing-ASIANPAINT-106851750",
+      "title": "Shareholders meeting",
+      "assessment": "assessed",
+      "assessment_error": null,
+      "tier": 1
+    },
+    {
+      "id": "filing-RELIANCE-106851483",
+      "title": "Analysts/Institutional Investor Meet/Con. Call Updates",
+      "assessment": "assessed",
+      "assessment_error": null,
+      "tier": 1
+    },
+    {
+      "id": "filing-TITAN-106850807",
+      "title": "Copy of Newspaper Publication",
+      "assessment": "pending",
+      "assessment_error": null,
+      "tier": 0
+    },
+    {
+      "id": "filing-LT-106850438",
+      "title": "Analysts/Institutional Investor Meet/Con. Call Updates",
+      "assessment": "assessed",
+      "assessment_error": null,
+      "tier": 1
+    },
+    {
+      "id": "filing-HDFCBANK-106850382",
+      "title": "Change in Management",
+      "assessment": "assessed",
+      "assessment_error": null,
+      "tier": 0
+    },
+    {
+      "id": "filing-PERSISTENT-106849153",
+      "title": "General Updates",
+      "assessment": "assessed",
+      "assessment_error": null,
+      "tier": 1
+    },
+    {
+      "id": "filing-TITAN-106848795",
+      "title": "Analysts/Institutional Investor Meet/Con. Call Updates",
+      "assessment": "assessed",
+      "assessment_error": null,
+      "tier": 0
+    },
+    {
+      "id": "filing-TITAN-106848400",
+      "title": "Retirement",
+      "assessment": "assessed",
+      "assessment_error": null,
+      "tier": 1
+    },
+    {
+      "id": "filing-TITAN-106848291",
+      "title": "Change in Auditors",
+      "assessment": "assessed",
+      "assessment_error": null,
+      "tier": 0
+    },
+    {
+      "id": "filing-TITAN-106848217",
+      "title": "General Updates",
+      "assessment": "assessed",
+      "assessment_error": null,
+      "tier": 1
+    },
+    {
+      "id": "filing-TITAN-106848049",
+      "title": "General Updates",
+      "assessment": "assessed",
+      "assessment_error": null,
+      "tier": 1
+    },
+    {
+      "id": "filing-DIXON-106847697",
+      "title": "Allotment of Securities",
+      "assessment": "assessed",
+      "assessment_error": null,
+      "tier": 1
+    },
+    {
+      "id": "filing-TITAN-106847693",
+      "title": "Investor Presentation",
+      "assessment": "assessed",
+      "assessment_error": null,
+      "tier": 0
+    },
+    {
+      "id": "filing-CDSL-106847538",
+      "title": "Analysts/Institutional Investor Meet/Con. Call Updates",
+      "assessment": "assessed",
+      "assessment_error": null,
+      "tier": 0
+    },
+    {
+      "id": "filing-TITAN-106847532",
+      "title": "Outcome of Board Meeting",
+      "assessment": "assessed",
+      "assessment_error": null,
+      "tier": 0
+    },
+    {
+      "id": "filing-DIXON-106847469",
+      "title": "Analysts/Institutional Investor Meet/Con. Call Updates",
+      "assessment": "assessed",
+      "assessment_error": null,
+      "tier": 1
+    },
+    {
+      "id": "filing-SUNPHARMA-106847279",
+      "title": "Analysts/Institutional Investor Meet/Con. Call Updates",
+      "assessment": "assessed",
+      "assessment_error": null,
+      "tier": 1
+    },
+    {
+      "id": "filing-ICICIBANK-106846397",
+      "title": "ESOP/ESOS/ESPS",
+      "assessment": "assessed",
+      "assessment_error": null,
+      "tier": 1
+    },
+    {
+      "id": "filing-TATAPOWER-106846325",
+      "title": "Press Release",
+      "assessment": "assessed",
+      "assessment_error": null,
+      "tier": 1
+    },
+    {
+      "id": "filing-INFY-106845792",
+      "title": "Updates",
+      "assessment": "assessed",
+      "assessment_error": null,
+      "tier": 1
+    },
+    {
+      "id": "filing-RELIANCE-106845760",
+      "title": "Credit Rating",
+      "assessment": "assessed",
+      "assessment_error": null,
+      "tier": 1
+    },
+    {
+      "id": "filing-SUNPHARMA-106845480",
+      "title": "Analysts/Institutional Investor Meet/Con. Call Updates",
+      "assessment": "assessed",
+      "assessment_error": null,
+      "tier": 0
+    },
+    {
+      "id": "filing-LT-106845341",
+      "title": "Updates",
+      "assessment": "assessed",
+      "assessment_error": null,
+      "tier": 1
+    },
+    {
+      "id": "filing-BAJFINANCE-106844300",
+      "title": "Shareholders meeting",
+      "assessment": "assessed",
+      "assessment_error": null,
+      "tier": 0
+    },
+    {
+      "id": "filing-PERSISTENT-106844222",
+      "title": "Allotment of Securities",
+      "assessment": "assessed",
+      "assessment_error": null,
+      "tier": 1
+    },
+    {
+      "id": "filing-PERSISTENT-106844210",
+      "title": "Committee Meeting Updates",
+      "assessment": "assessed",
+      "assessment_error": null,
+      "tier": 1
+    },
+    {
+      "id": "filing-ULTRACEMCO-106843790",
+      "title": "Updates",
+      "assessment": "assessed",
+      "assessment_error": null,
+      "tier": 1
+    },
+    {
+      "id": "filing-TCS-106843544",
+      "title": "Updates",
+      "assessment": "assessed",
+      "assessment_error": null,
+      "tier": 1
+    },
+    {
+      "id": "filing-SUNPHARMA-106843482",
+      "title": "News Verification",
+      "assessment": "assessed",
+      "assessment_error": null,
+      "tier": 0
+    },
+    {
+      "id": "filing-KPITTECH-106843088",
+      "title": "Updates",
+      "assessment": "assessed",
+      "assessment_error": null,
+      "tier": 1
+    },
+    {
+      "id": "filing-KPITTECH-106843037",
+      "title": "Analysts/Institutional Investor Meet/Con. Call Updates",
+      "assessment": "assessed",
+      "assessment_error": null,
+      "tier": 1
+    },
+    {
+      "id": "filing-TCS-106842587",
+      "title": "Copy of Newspaper Publication",
+      "assessment": "pending",
+      "assessment_error": null,
+      "tier": 1
+    },
+    {
+      "id": "filing-ASIANPAINT-106842474",
+      "title": "Analysts/Institutional Investor Meet/Con. Call Updates",
+      "assessment": "assessed",
+      "assessment_error": null,
+      "tier": 0
+    },
+    {
+      "id": "filing-DIXON-106842234",
+      "title": "Updates",
+      "assessment": "assessed",
+      "assessment_error": null,
+      "tier": 1
+    },
+    {
+      "id": "filing-POLYCAB-106841885",
+      "title": "ESOP/ESOS/ESPS",
+      "assessment": "assessed",
+      "assessment_error": null,
+      "tier": 1
+    },
+    {
+      "id": "filing-CDSL-106841813",
+      "title": "Analysts/Institutional Investor Meet/Con. Call Updates",
+      "assessment": "assessed",
+      "assessment_error": null,
+      "tier": 1
+    },
+    {
+      "id": "filing-CDSL-106841496",
+      "title": "Press Release",
+      "assessment": "assessed",
+      "assessment_error": null,
+      "tier": 1
+    },
+    {
+      "id": "filing-DIXON-106841276",
+      "title": "Analysts/Institutional Investor Meet/Con. Call Updates",
+      "assessment": "assessed",
+      "assessment_error": null,
+      "tier": 1
+    },
+    {
+      "id": "filing-ICICIBANK-106841159",
+      "title": "ESOP/ESOS/ESPS",
+      "assessment": "assessed",
+      "assessment_error": null,
+      "tier": 1
+    },
+    {
+      "id": "filing-MARUTI-106840686",
+      "title": "Analysts/Institutional Investor Meet/Con. Call Updates",
+      "assessment": "assessed",
+      "assessment_error": null,
+      "tier": 0
+    },
+    {
+      "id": "filing-SUNPHARMA-106840669",
+      "title": "Rumour Verification - Regulation 30(11)",
+      "assessment": "assessed",
+      "assessment_error": null,
+      "tier": 0
+    },
+    {
+      "id": "filing-BAJFINANCE-106840525",
+      "title": "Shareholders meeting",
+      "assessment": "assessed",
+      "assessment_error": null,
+      "tier": 1
+    },
+    {
+      "id": "filing-LT-106840137",
+      "title": "Analysts/Institutional Investor Meet/Con. Call Updates",
+      "assessment": "assessed",
+      "assessment_error": null,
+      "tier": 1
+    },
+    {
+      "id": "filing-CDSL-106840127",
+      "title": "Analysts/Institutional Investor Meet/Con. Call Updates",
+      "assessment": "assessed",
+      "assessment_error": null,
+      "tier": 1
+    },
+    {
+      "id": "filing-TATAPOWER-106839928",
+      "title": "Analysts/Institutional Investor Meet/Con. Call Updates",
+      "assessment": "assessed",
+      "assessment_error": null,
+      "tier": 1
+    },
+    {
+      "id": "filing-SUNPHARMA-106839459",
+      "title": "News Verification",
+      "assessment": "pending",
+      "assessment_error": "Only public HTTPS sources are allowed.",
+      "tier": 1
+    },
+    {
+      "id": "filing-LT-106839016",
+      "title": "Bagging/Receiving of orders/contracts",
+      "assessment": "assessed",
+      "assessment_error": null,
+      "tier": 1
+    },
+    {
+      "id": "filing-RELIANCE-106838897",
+      "title": "Analysts/Institutional Investor Meet/Con. Call Updates",
+      "assessment": "assessed",
+      "assessment_error": null,
+      "tier": 0
+    },
+    {
+      "id": "filing-MARUTI-106838789",
+      "title": "General Updates",
+      "assessment": "assessed",
+      "assessment_error": null,
+      "tier": 1
+    },
+    {
+      "id": "filing-CDSL-106838788",
+      "title": "Copy of Newspaper Publication",
+      "assessment": "pending",
+      "assessment_error": null,
+      "tier": 0
+    },
+    {
+      "id": "filing-MARUTI-106838779",
+      "title": "Press Release",
+      "assessment": "assessed",
+      "assessment_error": null,
+      "tier": 1
+    },
+    {
+      "id": "filing-ICICIBANK-106838744",
+      "title": "General Updates",
+      "assessment": "assessed",
+      "assessment_error": null,
+      "tier": 1
+    }
+  ],
+  "attachments_checked": 96,
+  "attachments_failed": 1,
+  "status": "passed",
+  "classification_policy": "claim-linked-v5",
+  "limitation": "A completed queue and live fetches do not establish semantic correctness or complete newspaper layout extraction; pending assessments remain visible.",
+  "elapsed_seconds": 775.84
+}

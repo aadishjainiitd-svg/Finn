@@ -1,0 +1,234 @@
+{
+  "kind": "Live ABB six-document requests, Groq research selection and Neon leased job; local runtime",
+  "job_status": "complete",
+  "error": null,
+  "narrative": {
+    "observations": [
+      {
+        "aspect": "business",
+        "nature": "reported",
+        "sources": [
+          {
+            "quote": "We closed with highest ever orders and revenues: Orders at \u20b914,115 Crores (+8%), Revenues at \u20b913,203 Crores (+8%), Order backlog of \u20b910,471 Crores (+12%); the Board recommended a final dividend of \u20b929.59 per share.",
+            "evidence": {
+              "symbol": "ABB",
+              "name": "ABB India Limited",
+              "isin": "INE117A01022",
+              "exchange": "NSE",
+              "kind": "annual",
+              "title": "Annual Report 2025",
+              "discovery_period": "Annual Report 2025",
+              "download_url": "https://www.bseindia.com/xml-data/corpfiling/AttachHis/3e1f777e-4988-48f8-b545-f788c673245c.pdf",
+              "original_url": "https://www.bseindia.com/xml-data/corpfiling/AttachHis/3e1f777e-4988-48f8-b545-f788c673245c.pdf",
+              "url": "https://www.bseindia.com/xml-data/corpfiling/AttachHis/3e1f777e-4988-48f8-b545-f788c673245c.pdf",
+              "bytes": 14842087,
+              "content_type": "application/pdf",
+              "hash": "29f5d8a318570a3047f87276cee6eaa74b8cfed852f4ce8b0e48bd1b9f4daca0",
+              "version": "29f5d8a318570a3047f87276cee6eaa74b8cfed852f4ce8b0e48bd1b9f4daca0-x490ab6ab93-annual",
+              "fetched_at": "2026-11-15T08:24:44.187926+00:00",
+              "parser": "pdfium-5.15.2-pages-v5-verified-fonts",
+              "publication_date": null,
+              "period": "year ended december 31, 2025",
+              "management_speakers": [],
+              "pages": 349,
+              "characters": 858914,
+              "processing_seconds": 8.12,
+              "combined_peak_mb": 110.9,
+              "glyph_mappings": [],
+              "id": "29f5d8a318570a3047f87276cee6eaa74b8cfed852f4ce8b0e48bd1b9f4daca0-x490ab6ab93-annual-p16-c0",
+              "page": 16,
+              "text": "COULD WE TALK ABOUT ABB INDIA\u2019S PERFORMANCE IN CY 2025\u2014WHAT STOOD OUT? HITS COME WITH MISSES. HOW WOULD YOU CHARACTERIZE PROFITABILITY IN 2025? We closed with highest ever orders and revenues: Orders at \u20b914,115 Crores (+8%), Revenues at \u20b913,203 Crores (+8%), Order backlog of \u20b910,471 Crores (+12%); the Board recommended a final dividend of \u20b929.59 per share. Beyond the numbers, 2025 marked 75 years of ABB manufacturing in India, and we celebrated with action: Commissioned a new automated line for energyefficient variable\u2011speed drives at Peenya, lifting local capacity by ~25 percent. Launched IE5 ultra\u2011premium efficiency, rare\u2011earth\u2011free motors, built in India and shipped to customers. It was growth with a cyclical breathing space on margins. PBT stood at \u20b92,230 Crores (16.9%) and PAT at \u20b91,669 Crores (12.6%), both lower than 2024. However, it should be noted that since 2021, profit before tax and exceptionals have grown at a CAGR of 39 percent with the surrounding geopolitical uncertainties. In 2025, headwinds included commodity inflation, forex movements (CHF/EUR), adapting to quality control order (QCO) requirements to ensure uninterrupted supply, implementation of India\u2019s new Labour Codes, revenue mix, and one-offs. From the Board\u2019s vantage point, this is cyclical, not structural. We enter 2026 with strong cash, a record, better-priced backlog, and continued discipline on pricing, productivity, and mix, consistent with the ABB Way. Launched a new range of LIORA switches for modern homes as well as enhanced the low voltage portfolio of next generation switching products. Delivered solutions to projects that capture ABB at its best: providing ABB\u2019s power distribution technology to power the highest railway arch bridge in the world \u2014 the Chenab bridge in Jammu and Kashmir; electrification and drives solutions for Navi Mumbai and Guwahati airports, propulsion technology for the latest high-speed trains and Kolkata metro among others, digitalization of IndianOil\u2019s 20,000\u2011km pipeline network; energy efficient drives for the New Pamban Bridge; ABB Ability\u2122 SCADAvantage system deployed by THINK Gas to monitor and control its CNG distribution to more than 500 fuel stati",
+              "speaker_before": ""
+            }
+          }
+        ]
+      },
+      {
+        "aspect": "favourable",
+        "nature": "interpretation",
+        "sources": [
+          {
+            "quote": "We enter 2026 with strong cash, a record, better-priced backlog, and continued discipline on pricing, productivity, and mix, consistent with the ABB Way.",
+            "evidence": {
+              "symbol": "ABB",
+              "name": "ABB India Limited",
+              "isin": "INE117A01022",
+              "exchange": "NSE",
+              "kind": "annual",
+              "title": "Annual Report 2025",
+              "discovery_period": "Annual Report 2025",
+              "download_url": "https://www.bseindia.com/xml-data/corpfiling/AttachHis/3e1f777e-4988-48f8-b545-f788c673245c.pdf",
+              "original_url": "https://www.bseindia.com/xml-data/corpfiling/AttachHis/3e1f777e-4988-48f8-b545-f788c673245c.pdf",
+              "url": "https://www.bseindia.com/xml-data/corpfiling/AttachHis/3e1f777e-4988-48f8-b545-f788c673245c.pdf",
+              "bytes": 14842087,
+              "content_type": "application/pdf",
+              "hash": "29f5d8a318570a3047f87276cee6eaa74b8cfed852f4ce8b0e48bd1b9f4daca0",
+              "version": "29f5d8a318570a3047f87276cee6eaa74b8cfed852f4ce8b0e48bd1b9f4daca0-x490ab6ab93-annual",
+              "fetched_at": "2026-11-15T08:24:44.187926+00:00",
+              "parser": "pdfium-5.15.2-pages-v5-verified-fonts",
+              "publication_date": null,
+              "period": "year ended december 31, 2025",
+              "management_speakers": [],
+              "pages": 349,
+              "characters": 858914,
+              "processing_seconds": 8.12,
+              "combined_peak_mb": 110.9,
+              "glyph_mappings": [],
+              "id": "29f5d8a318570a3047f87276cee6eaa74b8cfed852f4ce8b0e48bd1b9f4daca0-x490ab6ab93-annual-p16-c0",
+              "page": 16,
+              "text": "COULD WE TALK ABOUT ABB INDIA\u2019S PERFORMANCE IN CY 2025\u2014WHAT STOOD OUT? HITS COME WITH MISSES. HOW WOULD YOU CHARACTERIZE PROFITABILITY IN 2025? We closed with highest ever orders and revenues: Orders at \u20b914,115 Crores (+8%), Revenues at \u20b913,203 Crores (+8%), Order backlog of \u20b910,471 Crores (+12%); the Board recommended a final dividend of \u20b929.59 per share. Beyond the numbers, 2025 marked 75 years of ABB manufacturing in India, and we celebrated with action: Commissioned a new automated line for energyefficient variable\u2011speed drives at Peenya, lifting local capacity by ~25 percent. Launched IE5 ultra\u2011premium efficiency, rare\u2011earth\u2011free motors, built in India and shipped to customers. It was growth with a cyclical breathing space on margins. PBT stood at \u20b92,230 Crores (16.9%) and PAT at \u20b91,669 Crores (12.6%), both lower than 2024. However, it should be noted that since 2021, profit before tax and exceptionals have grown at a CAGR of 39 percent with the surrounding geopolitical uncertainties. In 2025, headwinds included commodity inflation, forex movements (CHF/EUR), adapting to quality control order (QCO) requirements to ensure uninterrupted supply, implementation of India\u2019s new Labour Codes, revenue mix, and one-offs. From the Board\u2019s vantage point, this is cyclical, not structural. We enter 2026 with strong cash, a record, better-priced backlog, and continued discipline on pricing, productivity, and mix, consistent with the ABB Way. Launched a new range of LIORA switches for modern homes as well as enhanced the low voltage portfolio of next generation switching products. Delivered solutions to projects that capture ABB at its best: providing ABB\u2019s power distribution technology to power the highest railway arch bridge in the world \u2014 the Chenab bridge in Jammu and Kashmir; electrification and drives solutions for Navi Mumbai and Guwahati airports, propulsion technology for the latest high-speed trains and Kolkata metro among others, digitalization of IndianOil\u2019s 20,000\u2011km pipeline network; energy efficient drives for the New Pamban Bridge; ABB Ability\u2122 SCADAvantage system deployed by THINK Gas to monitor and control its CNG distribution to more than 500 fuel stati",
+              "speaker_before": ""
+            }
+          }
+        ]
+      },
+      {
+        "aspect": "adverse",
+        "nature": "interpretation",
+        "sources": [
+          {
+            "quote": "PBT stood at \u20b92,230 Crores (16.9%) and PAT at \u20b91,669 Crores (12.6%), both lower than 2024.",
+            "evidence": {
+              "symbol": "ABB",
+              "name": "ABB India Limited",
+              "isin": "INE117A01022",
+              "exchange": "NSE",
+              "kind": "annual",
+              "title": "Annual Report 2025",
+              "discovery_period": "Annual Report 2025",
+              "download_url": "https://www.bseindia.com/xml-data/corpfiling/AttachHis/3e1f777e-4988-48f8-b545-f788c673245c.pdf",
+              "original_url": "https://www.bseindia.com/xml-data/corpfiling/AttachHis/3e1f777e-4988-48f8-b545-f788c673245c.pdf",
+              "url": "https://www.bseindia.com/xml-data/corpfiling/AttachHis/3e1f777e-4988-48f8-b545-f788c673245c.pdf",
+              "bytes": 14842087,
+              "content_type": "application/pdf",
+              "hash": "29f5d8a318570a3047f87276cee6eaa74b8cfed852f4ce8b0e48bd1b9f4daca0",
+              "version": "29f5d8a318570a3047f87276cee6eaa74b8cfed852f4ce8b0e48bd1b9f4daca0-x490ab6ab93-annual",
+              "fetched_at": "2026-11-15T08:24:44.187926+00:00",
+              "parser": "pdfium-5.15.2-pages-v5-verified-fonts",
+              "publication_date": null,
+              "period": "year ended december 31, 2025",
+              "management_speakers": [],
+              "pages": 349,
+              "characters": 858914,
+              "processing_seconds": 8.12,
+              "combined_peak_mb": 110.9,
+              "glyph_mappings": [],
+              "id": "29f5d8a318570a3047f87276cee6eaa74b8cfed852f4ce8b0e48bd1b9f4daca0-x490ab6ab93-annual-p16-c0",
+              "page": 16,
+              "text": "COULD WE TALK ABOUT ABB INDIA\u2019S PERFORMANCE IN CY 2025\u2014WHAT STOOD OUT? HITS COME WITH MISSES. HOW WOULD YOU CHARACTERIZE PROFITABILITY IN 2025? We closed with highest ever orders and revenues: Orders at \u20b914,115 Crores (+8%), Revenues at \u20b913,203 Crores (+8%), Order backlog of \u20b910,471 Crores (+12%); the Board recommended a final dividend of \u20b929.59 per share. Beyond the numbers, 2025 marked 75 years of ABB manufacturing in India, and we celebrated with action: Commissioned a new automated line for energyefficient variable\u2011speed drives at Peenya, lifting local capacity by ~25 percent. Launched IE5 ultra\u2011premium efficiency, rare\u2011earth\u2011free motors, built in India and shipped to customers. It was growth with a cyclical breathing space on margins. PBT stood at \u20b92,230 Crores (16.9%) and PAT at \u20b91,669 Crores (12.6%), both lower than 2024. However, it should be noted that since 2021, profit before tax and exceptionals have grown at a CAGR of 39 percent with the surrounding geopolitical uncertainties. In 2025, headwinds included commodity inflation, forex movements (CHF/EUR), adapting to quality control order (QCO) requirements to ensure uninterrupted supply, implementation of India\u2019s new Labour Codes, revenue mix, and one-offs. From the Board\u2019s vantage point, this is cyclical, not structural. We enter 2026 with strong cash, a record, better-priced backlog, and continued discipline on pricing, productivity, and mix, consistent with the ABB Way. Launched a new range of LIORA switches for modern homes as well as enhanced the low voltage portfolio of next generation switching products. Delivered solutions to projects that capture ABB at its best: providing ABB\u2019s power distribution technology to power the highest railway arch bridge in the world \u2014 the Chenab bridge in Jammu and Kashmir; electrification and drives solutions for Navi Mumbai and Guwahati airports, propulsion technology for the latest high-speed trains and Kolkata metro among others, digitalization of IndianOil\u2019s 20,000\u2011km pipeline network; energy efficient drives for the New Pamban Bridge; ABB Ability\u2122 SCADAvantage system deployed by THINK Gas to monitor and control its CNG distribution to more than 500 fuel stati",
+              "speaker_before": ""
+            }
+          }
+        ]
+      },
+      {
+        "aspect": "accounting",
+        "nature": "reported",
+        "sources": [
+          {
+            "quote": "Project revenue and costs (refer note 2.6) The Company uses the percentage-of-completion method in accounting for its fixed-price contracts.",
+            "evidence": {
+              "symbol": "ABB",
+              "name": "ABB India Limited",
+              "isin": "INE117A01022",
+              "exchange": "NSE",
+              "kind": "annual",
+              "title": "Annual Report 2025",
+              "discovery_period": "Annual Report 2025",
+              "download_url": "https://www.bseindia.com/xml-data/corpfiling/AttachHis/3e1f777e-4988-48f8-b545-f788c673245c.pdf",
+              "original_url": "https://www.bseindia.com/xml-data/corpfiling/AttachHis/3e1f777e-4988-48f8-b545-f788c673245c.pdf",
+              "url": "https://www.bseindia.com/xml-data/corpfiling/AttachHis/3e1f777e-4988-48f8-b545-f788c673245c.pdf",
+              "bytes": 14842087,
+              "content_type": "application/pdf",
+              "hash": "29f5d8a318570a3047f87276cee6eaa74b8cfed852f4ce8b0e48bd1b9f4daca0",
+              "version": "29f5d8a318570a3047f87276cee6eaa74b8cfed852f4ce8b0e48bd1b9f4daca0-x490ab6ab93-annual",
+              "fetched_at": "2026-11-15T08:24:44.187926+00:00",
+              "parser": "pdfium-5.15.2-pages-v5-verified-fonts",
+              "publication_date": null,
+              "period": "year ended december 31, 2025",
+              "management_speakers": [],
+              "pages": 349,
+              "characters": 858914,
+              "processing_seconds": 8.12,
+              "combined_peak_mb": 110.9,
+              "glyph_mappings": [],
+              "id": "29f5d8a318570a3047f87276cee6eaa74b8cfed852f4ce8b0e48bd1b9f4daca0-x490ab6ab93-annual-p229-c1",
+              "page": 229,
+              "text": "l cost is generally based on the fair value of the consideration given in exchange for goods and services. 2.2 Use of estimates The preparation of the standalone financial statements in conformity with Ind AS requires management to make estimates, judgments and assumptions. These estimates, judgments and assumptions affect the application of accounting policies and the reported amounts of assets and liabilities, the disclosures of contingent assets and liabilities at the date of the financial statements and reported amounts of revenues and expenses during the period. Application of accounting policies that require critical accounting estimates involving complex and subjective judgments and the use of assumptions in these standalone financial statements have been disclosed in Note 2.3. Accounting estimates could change from period to period. Actual results could differ from those estimates. Appropriate changes in estimates are made as management becomes aware of changes in circumstances surrounding the estimates. Changes in estimates are reflected in the financial statements in the period in which changes are made and, if material, their effects are disclosed in the notes to the standalone financial statements. Estimates and underlying assumptions are reviewed on an ongoing basis. 2.3 Critical accounting estimates and judgements a. Project revenue and costs (refer note 2.6) The Company uses the percentage-of-completion method in accounting for its fixed-price contracts. Use of the percentage-of-completion method requires the Company to measure the costs expended to date as a proportion of the total costs estimated to be incurred. Costs expended have been used to measure progress towards completion as there is a direct relationship between input and productivity. Provisions for estimated losses, if any, on uncompleted contracts are recorded in the period in which such losses become probable based on the expected contract estimates at the reporting date. b. Provision for litigations and contingencies (refer note 2.14) The Company estimates the provisions that have present obligations as a result of past events and it is probable that outflow of resources will be re",
+              "speaker_before": ""
+            }
+          }
+        ]
+      }
+    ],
+    "missing": [],
+    "cache_hit": false,
+    "coverage": "Selected passages from the latest readable report and call; not an exhaustive risk audit.",
+    "limitation": "Favourable and adverse selection is an interpretation. Unselected or unread risks may still exist.",
+    "provider": "groq",
+    "model": "openai/gpt-oss-120b",
+    "policy": "research-spans-v1",
+    "status": "selected"
+  },
+  "exact_narrative_citations": [
+    true,
+    true,
+    true,
+    true
+  ],
+  "documents": [
+    {
+      "kind": "annual",
+      "period": "year ended december 31, 2025",
+      "version": "29f5d8a318570a3047f87276cee6eaa74b8cfed852f4ce8b0e48bd1b9f4daca0-x490ab6ab93-annual",
+      "processing_seconds": 8.12,
+      "combined_peak_mb": 110.9
+    },
+    {
+      "kind": "annual",
+      "period": "year ended december 31, 2024",
+      "version": "6ca7e6193bb2651f2817f70a40fc2d59be598e2c8ba012eab1520ea68c0d4d0c-x490ab6ab93-annual",
+      "processing_seconds": 6.0,
+      "combined_peak_mb": 109.8
+    },
+    {
+      "kind": "transcript",
+      "period": "Q2 CY2026",
+      "version": "85be510f177a55744e3eff308c12e7fafabdcb6014ed90721bfa3528397711d3-x490ab6ab93-transcript",
+      "processing_seconds": 1.23,
+      "combined_peak_mb": 107.5
+    },
+    {
+      "kind": "transcript",
+      "period": "Q4 CY2025",
+      "version": "f0563a3b77c718486fbbcf6297d9dc6913dece04d73f128bada5a0dc3d6589ae-x490ab6ab93-transcript",
+      "processing_seconds": 1.27,
+      "combined_peak_mb": 107.3
+    },
+    {
+      "kind": "transcript",
+      "period": "Q2CY2025",
+      "version": "6e0375d3c31e894a3d95fd296f91c2df0f021433e94699970c4734c17884ed9e-x490ab6ab93-transcript",
+      "processing_seconds": 1.38,
+      "combined_peak_mb": 107.0
+    },
+    {
+      "kind": "transcript",
+      "period": "Q1 CY2025",
+      "version": "69d9621b2bc4ecf81bcc2a05044847ab899e7cf6c95b320b86fb67d147de0644-x490ab6ab93-transcript",
+      "processing_seconds": 1.09,
+      "combined_peak_mb": 111.6
+    }
+  ],
+  "financial_fact_count": 44,
+  "gaps": [],
+  "model_attempts": 1,
+  "provider_usage": {
+    "prompt_tokens": 4025,
+    "completion_tokens": 480,
+    "total_tokens": 4505
+  },
+  "status": "passed",
+  "limitation": "Exact citation and pipeline checks only; substantive balance and relevance require semantic review. Hosted expanded memory/restart remain unverified.",
+  "elapsed_seconds": 69.94
+}

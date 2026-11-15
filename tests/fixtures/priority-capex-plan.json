@@ -1,0 +1,41 @@
+{
+  "id": "filing-DIXON-106847469",
+  "title": "Analysts/Institutional Investor Meet/Con. Call Updates",
+  "meta": {
+    "symbol": "DIXON",
+    "name": "Dixon Technologies (India) Limited",
+    "isin": "INE935N01020",
+    "exchange": "NSE",
+    "kind": "filing",
+    "title": "Analysts/Institutional Investor Meet/Con. Call Updates",
+    "discovery_period": "2026-11-05T16:36:21+05:30",
+    "download_url": "https://nsearchives.nseindia.in/corporate/DIXON_05112026163605_EarningCallTranscriptQ2Intimation.pdf",
+    "original_url": "https://nsearchives.nseindia.in/corporate/DIXON_05112026163605_EarningCallTranscriptQ2Intimation.pdf",
+    "url": "https://nsearchives.nseindia.in/corporate/DIXON_05112026163605_EarningCallTranscriptQ2Intimation.pdf",
+    "bytes": 909626,
+    "content_type": "application/pdf",
+    "hash": "4deece13445b61edc4734a1c17361d40b6ae2ef97a136a6ce211845435564829",
+    "version": "4deece13445b61edc4734a1c17361d40b6ae2ef97a136a6ce211845435564829-x2b3f46f529-filing",
+    "fetched_at": "2026-11-15T08:00:12.315608+00:00",
+    "parser": "pdfium-5.15.2-pages-v4-calendar-periods",
+    "publication_date": null,
+    "period": "2026-11-05T16:36:21+05:30",
+    "management_speakers": [],
+    "pages": 24,
+    "characters": 62681,
+    "processing_seconds": 1.47,
+    "combined_peak_mb": 131.0
+  },
+  "chunks": [
+    {
+      "id": "4deece13445b61edc4734a1c17361d40b6ae2ef97a136a6ce211845435564829-x2b3f46f529-filing-p10-c0",
+      "page": 10,
+      "text": "Dixon Technologies (India) Limited October 30, 2026 Page 9 of 23 Siddhartha Bera: And lastly, sir, on the customers addition side, do you see with this MPMS scheme now in place, will there be more potential to add more customers in the coming years? And where do you see the total exports for us sort of trending in the next few years? Atul Lall: So, one can see a traction from our anchor customer. The outlook given is that we should be doing approximately 3.5 million units per quarter. So that is almost 14 million, and out of that, almost 6 to 7 million is going to be exports, if not more. We have also acquired one Indian brand as our customer, which is doing extremely well. For that, the production has already started. We feel that for that customer, next year, we should be doing almost 8 to 10 million. So, these are new customer acquisitions which have already come on board. So, there is a pressure in the market, but I think because of acquisition of our new customers and exports coming into play and our deep stickiness with our existing customers, we are going to grow significantly. And all the more with the integration of Vivo into the system, the numbers are going to be very good. Siddhartha Bera: I will come back in the queue. Moderator: Next question is from the line of Santhosh Seshadri from Avendus Spark. Please go ahead. Santhosh Seshadri: My first question is on some of the new projects that you mentioned that you are working on. In your opening remarks, you mentioned that there are some projects that you are working beyond mobile phones. And also in the previous calls, you spoke about investments into precision manufacturing and entry into industrial manufacturing and server opportunities. Can you put in perspective which of these segments will see major capital allocation and where do you see the management spending most of the bandwidth internally? And also on the revenue front, how should we think about the revenue contribution from these segments? I actually don't want a number here, but directionally, like 5 years down the line, do you think any of these opportunities are large enough to overshadow the mobile segment? And yes, what are the steps "
+    },
+    {
+      "id": "4deece13445b61edc4734a1c17361d40b6ae2ef97a136a6ce211845435564829-x2b3f46f529-filing-p10-c1",
+      "page": 10,
+      "text": "tal allocation and where do you see the management spending most of the bandwidth internally? And also on the revenue front, how should we think about the revenue contribution from these segments? I actually don't want a number here, but directionally, like 5 years down the line, do you think any of these opportunities are large enough to overshadow the mobile segment? And yes, what are the steps that you are taking? Atul Lall: So certain sectors, certain domains that we are pursuing very actively. The first one is the IT products category. If you see the numbers, from practically minuscule numbers in the current quarter, we have grown to almost 2,100 stores. We already have 4 out of top 5 global brands as our customers. We are migrating from the present hybrid category wherein we had committed a CAPEX of INR 250 crores under IT PLI 2 to the global category wherein we are upping our CAPEX plans to INR 500 crores. This is because of the order book and also what we have foreseen. And this year itself we feel confident that we are going to be somewhere around INR 6,000 crores in this"
+    }
+  ]
+}

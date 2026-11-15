@@ -42,7 +42,7 @@ def primary_pdf(url):
 def issuer_sites(soup):
     return list(dict.fromkeys(a['href'] for a in soup.select('a[href]') if a.select_one('i.icon-link') and a['href'].startswith('https://')))[:2]
 
-def parse_discovery(html, company,extra_hosts=()):
+def parse_discovery(html, company,extra_hosts=(),annual_count=1,transcript_count=1):
     soup=BeautifulSoup(html,'html.parser')
     # Verify the discovery index identifies the exchange symbol as well.
     links=[a.get('href','') for a in soup.select('a[href]')]
@@ -76,11 +76,12 @@ def parse_discovery(html, company,extra_hosts=()):
                     return datetime(int(year[0]),1,1) if year else datetime.min
                 try:return datetime.strptime(label,'%b %Y')
                 except ValueError:return datetime.min
-            docs.append(max(candidates,key=period_order))
+            unique={item['download_url']:item for item in candidates}
+            docs.extend(sorted(unique.values(),key=period_order,reverse=True)[:annual_count if kind=='annual' else transcript_count])
     return docs
 
-async def discover(company):
-    key='discovery-v2-'+company['symbol']; hit=cached(key,86400)
+async def discover(company,annual_count=1,transcript_count=1):
+    key='discovery-v3-'+company['symbol']+f'-{annual_count}-{transcript_count}'; hit=cached(key,86400)
     if hit: return hit
     last=None; found=[]
     for suffix in ('/consolidated/','/'):
@@ -97,10 +98,10 @@ async def discover(company):
                         if host and ('investor' in label or 'corporate' in label or ('about' in label and company['name'].split()[0].lower() in label)):
                             extra_hosts.add(host.removeprefix('www.'))
                 except SourceError:pass # Direct issuer-domain and exchange links remain usable.
-            docs=parse_discovery(body,company,extra_hosts)
+            docs=parse_discovery(body,company,extra_hosts,annual_count,transcript_count)
             for doc in docs:
-                if not any(d['kind']==doc['kind'] for d in found):found.append(doc)
-            if len(found)==2:
+                if not any(d['download_url']==doc['download_url'] for d in found) and sum(d['kind']==doc['kind'] for d in found)<(annual_count if doc['kind']=='annual' else transcript_count):found.append(doc)
+            if sum(d['kind']=='annual' for d in found)>=annual_count and sum(d['kind']=='transcript' for d in found)>=transcript_count:
                 put(key,found); return found
         except SourceError as e: last=e
     if found:put(key,found);return found

@@ -1,0 +1,20 @@
+{
+  "kind": "Live NSE/issuer PDF requests, Groq inference and Neon persistence; synthetic conversation input",
+  "earlier_question": "What does ABB management say about electrification demand and backlog?",
+  "question": "What risks or qualifications could challenge that outlook?",
+  "job_status": "error",
+  "answer": {},
+  "error": {
+    "code": "daily_quota",
+    "message": "FINN has reached its conservative daily free allowance. Stored sources remain readable."
+  },
+  "exact_citations": [],
+  "model_attempts": null,
+  "provider_usage": null,
+  "owner_isolation": true,
+  "reconnect_retained": true,
+  "parent_retained": false,
+  "status": "partial",
+  "limitation": "Exact citations and context retention checked; source relevance requires separate semantic inspection. Local runtime, not deployed Render.",
+  "elapsed_seconds": 69.52
+}

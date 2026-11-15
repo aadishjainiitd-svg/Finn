@@ -79,3 +79,27 @@ def test_review_revision_survives_assessment_expiry_and_parser_upgrade(monkeypat
     assert brief.make_filing(row,'later')['revision']==assessed['revision']
     store.put(key,'replacement-xparser2-filing')
     assert brief.make_filing(row,'later')['revision']!=assessed['revision']
+
+
+def test_legacy_retained_filing_migration_requires_one_byte_identity_and_retains_before_citing(monkeypatch):
+    import json
+    from backend import brief,store
+    event={'id':'legacy','symbol':'TEST','kind':'filing','title':'Auditor change','url':'https://issuer.example/report.pdf',
+        'source_signature':'s','assessment':'pending','tier':0,'published_at':'2026-11-01','reason':'Pending'}
+    meta={'symbol':'TEST','hash':'bytes','version':'bytes-xold-filing','kind':'filing','title':event['title'],'original_url':event['url']}
+    with store.db() as c:
+        c.execute('INSERT INTO documents VALUES (?,?,?,?)',(meta['version'],'TEST','filing',json.dumps(meta)))
+        c.execute('INSERT INTO chunks VALUES (?,?,?,?)',('old-p1-c0',meta['version'],1,'The statutory auditor resigned after a qualified opinion.'))
+    store.put('brief-snapshot',{'events':[event],'checked_at':'original-date','counts':{}})
+    retained=[];monkeypatch.setattr(store,'retain',lambda version:retained.append(version))
+    brief.upgrade_stored_snapshot();snapshot=store.cached('brief-snapshot')
+    assert snapshot['checked_at']=='original-date' and snapshot['events'][0]['tier']==0
+    assert snapshot['events'][0]['assessment']=='assessed' and retained
+    # A different historical byte version at the same URL cannot be guessed.
+    with store.db() as c:
+        c.execute('DELETE FROM cache WHERE key=?',('latest-document-filing-'+event['url'],))
+        other={**meta,'hash':'replacement','version':'replacement-xnew-filing'}
+        c.execute('INSERT INTO documents VALUES (?,?,?,?)',(other['version'],'TEST','filing',json.dumps(other)))
+    store.put('brief-snapshot',{'events':[event],'checked_at':'original-date','counts':{}})
+    brief.upgrade_stored_snapshot();unresolved=store.cached('brief-snapshot')['events'][0]
+    assert unresolved['assessment']=='pending' and unresolved['tier']==0 and unresolved['evidence']==[]

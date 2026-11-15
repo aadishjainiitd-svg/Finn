@@ -1,0 +1,15 @@
+{
+  "kind": "live local HTTP processes with real Neon; empty local caches each start",
+  "checks": {
+    "retained_citation_0": true,
+    "research_pack_0": true,
+    "private_state_after_restart": true,
+    "retained_citation_1": true,
+    "research_pack_1": true
+  },
+  "startup_seconds": [
+    4.359,
+    4.125
+  ],
+  "status": "passed"
+}

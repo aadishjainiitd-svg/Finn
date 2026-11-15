@@ -1,0 +1,35 @@
+{
+  "kind": "live local HTTP and real Neon after bounded connection pooling",
+  "owned_server_pid": 37776,
+  "repository_sha256": "bcbf156e4ac77930b1f86d8f8cf4cf837146956ffb7862f17734acdcb0a02f53",
+  "measurements": [
+    {
+      "path": "/api/session",
+      "status": 200,
+      "seconds": 1.266,
+      "bytes": 1516
+    },
+    {
+      "path": "/api/today",
+      "status": 200,
+      "seconds": 1.422,
+      "bytes": 126074
+    },
+    {
+      "path": "/api/today",
+      "status": 200,
+      "seconds": 1.172,
+      "bytes": 126074
+    },
+    {
+      "path": "/api/research-pack/ABB",
+      "status": 200,
+      "seconds": 0.64,
+      "bytes": 188442
+    }
+  ],
+  "baseline_today_seconds": [
+    3.25,
+    3.828
+  ]
+}
