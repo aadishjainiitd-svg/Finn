@@ -35,6 +35,8 @@ export function Trajectory({data,facts,evidence,onEvidence,onReadOlder,busy}:{da
   ['patg','Profit YoY',y=>{const g=y.growth.pat;return g?cell(y,'patg',percent(g.percent),g.current,Number(g.percent)<0?'fn-neg':'fn-pos'):cell(y,'patg','—');}],
   ['cfo','Operating cash flow',y=>cell(y,'cfo',amount(value(y,'cfo')),y.values.cfo)],
   ['capex','Capex (cash paid)',y=>{const id=y.values.capex;const v=id?facts[id]?.crore:null;return cell(y,'capex',v==null?'—':amount(String(-Number(v))),id);}],
+  ['recv','Receivable days',y=>{const d=y.derived.receivable_days;return d?cell(y,'recv',Math.round(Number(d.value))+'d',d.operands[0]):cell(y,'recv','—');}],
+  ['inv','Inventory days',y=>{const d=y.derived.inventory_days;return d?cell(y,'inv',Math.round(Number(d.value))+'d',d.operands[0]):cell(y,'inv','—');}],
   ['conv','Cash conversion',y=>{const d=y.derived.cash_conversion;return d?cell(y,'conv',Number(d.value).toFixed(2)+'×',d.operands[0]):cell(y,'conv','—');}],
  ];
  const formulas=Object.values(Object.fromEntries(data.years.flatMap(y=>Object.values(y.derived)).map(d=>[d.formula,d])));

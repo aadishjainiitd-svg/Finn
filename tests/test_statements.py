@@ -120,3 +120,15 @@ def test_unlabelled_scope_glyph_declaration_and_whole_number_columns():
     assert not extract(doc,[rows[0],{**rows[1],'text':declaration.replace('(H)','(J)')}])
     running=[{**rows[0],'text':'Consolidated Financial Statements '+page},rows[1]]
     assert not extract(doc,running)
+
+
+def test_working_capital_days_use_closing_balance_and_same_report_revenue():
+    from decimal import Decimal
+    from backend.statements import trajectory
+    facts=report('v25',2025,1200,1000)
+    balance=('CONSOLIDATED BALANCE SHEET as at December 31, 2025 (INR in Crores) December 31, 2025 December 31, 2024 '
+             'Inventories 120.00 100.00 Trade receivables 240.00 200.00 Total assets 1000.00 900.00 ')
+    facts+=extract({'symbol':'TEST','version':'v25','kind':'annual'},[{'id':'v25-p3-c0','page':3,'text':balance}])
+    y=next(y for y in trajectory(facts)['years'] if y['fiscal_year']=='2025')
+    assert Decimal(y['derived']['receivable_days']['value'])==Decimal(240)/Decimal(1200)*365
+    assert Decimal(y['derived']['inventory_days']['value'])==Decimal(120)/Decimal(1200)*365

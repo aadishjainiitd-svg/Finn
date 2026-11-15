@@ -360,6 +360,14 @@ def trajectory(facts,financial=False,span=5):
         if values.get('cfo') and values.get('pat') and decimal(values['pat']['crore'])>0 and values['cfo']['restatement']==values['pat']['restatement']:
             derived['cash_conversion']={'value':str(decimal(values['cfo']['crore'])/decimal(values['pat']['crore'])),'operands':[values['cfo'],values['pat']],
                 'formula':'Operating cash flow ÷ profit for the year'}
+        # Working-capital days: closing balance ÷ the same year's revenue, from one report.
+        if not financial and revenue and decimal(revenue['crore'])>0:
+            for metric,key,name in (('receivables','receivable_days','Receivable days'),('inventories','inventory_days','Inventory days')):
+                balance=next((f for f in facts if f['metric']==metric and f['period_kind']=='instant' and f['scope']==scope and f['period_end']==end
+                              and f['restatement']==revenue['restatement'] and f['value'] is not None),None)
+                if balance:
+                    derived[key]={'value':str(decimal(balance['crore'])/decimal(revenue['crore'])*365),'operands':[balance,revenue],'label':name,
+                                  'formula':f'Closing {metric} ÷ revenue × 365, both from the same report. Year-end balance, not an average.'}
         years.append({'fiscal_year':label,'period_end':end,'gap':False,'values':values,'restated':restated,'growth':changes,'derived':derived})
     years.reverse()
     allocation=None if financial else cash_allocation(years)
