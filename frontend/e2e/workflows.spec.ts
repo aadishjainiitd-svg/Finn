@@ -103,6 +103,19 @@ test('event sheet says when no research has been read for the company',async({pa
  await expect(page.getByText('No research yet')).toBeVisible();await expect(page.getByText(/Read TCS's latest call in Research/)).toBeVisible();
 });
 
+test('desktop width uses a side rail and a centred sheet; tablet keeps bottom navigation',async({page})=>{
+ await fixture(page);await page.setViewportSize({width:1366,height:800});await page.goto('/');
+ const nav=await page.getByRole('navigation',{name:'Main navigation'}).boundingBox();
+ expect(nav!.height).toBeGreaterThan(700);expect(nav!.width).toBeLessThan(260);
+ await page.getByRole('button',{name:/TCS.*Director appointed/}).click();
+ const sheet=await page.getByRole('dialog').boundingBox();
+ expect(Math.abs(sheet!.x+sheet!.width/2-683)).toBeLessThan(4);expect(sheet!.width).toBeLessThanOrEqual(720);
+ expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
+ await page.keyboard.press('Escape');await page.setViewportSize({width:820,height:1100});
+ const tablet=await page.getByRole('navigation',{name:'Main navigation'}).boundingBox();
+ expect(tablet!.height).toBeLessThan(90);expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
+});
+
 test('installed production shell reloads offline without acknowledging an item',async({page,context})=>{
  test.skip(!process.env.FINN_E2E_URL,'Requires a production preview with the actual service worker.');
  await fixture(page);await page.goto('/');
