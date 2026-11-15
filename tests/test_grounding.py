@@ -152,3 +152,15 @@ def test_dropped_context_does_not_change_answer_on_cache_rerender():
     raw={'question':'What does Example do?','status':'supported','evidence':evidence,'claims':[{'text':'ignored','citations':[{'evidence_id':e['id'],'quote':e['text']}]} for e in evidence]}
     rendered=grounded_display(raw)
     assert grounded_display(rendered)==rendered
+
+
+def test_mixed_citations_keep_the_same_budget_on_cache_rerender():
+    from backend.llm import grounded_display
+    evidence=[{'id':'annual','kind':'annual','text':'Annual '+('observation '*109)+'.'},
+              {'id':'call','kind':'transcript','text':'Management '+('observation '*74)+'.'}]
+    raw={'question':'What does Example do and what does management say?', 'status':'supported',
+         'evidence':evidence,'claims':[{'text':'ignored','citations':[
+             {'evidence_id':e['id'],'quote':e['text']} for e in evidence]}]}
+    rendered=grounded_display(raw)
+    assert rendered['claims'][0]['citations'][0]['evidence_id']=='call'
+    assert grounded_display(rendered)==rendered
