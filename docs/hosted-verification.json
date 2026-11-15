@@ -117,5 +117,50 @@
       "routine": 0
     },
     "source_checked_at": "2026-11-15T04:15:04.632801+00:00"
+  },
+  "public_links": {
+    "method": "Unauthenticated HTTP requests with redirects, 15 November 2026",
+    "results": [
+      {
+        "url": "https://finn-enam-yije.onrender.com/",
+        "http_status": 200,
+        "bytes": 573
+      },
+      {
+        "url": "https://finn-enam-yije.onrender.com/health",
+        "http_status": 200,
+        "bytes": 77
+      },
+      {
+        "url": "https://github.com/aadishjainiitd-svg/Finn",
+        "http_status": 200,
+        "bytes": 242357
+      },
+      {
+        "url": "https://github.com/aadishjainiitd-svg/Finn/blob/main/docs/AI_BUILD_HISTORY.md",
+        "http_status": 200,
+        "bytes": 658012
+      },
+      {
+        "url": "https://github.com/aadishjainiitd-svg/Finn/blob/main/docs/SUBMISSION.md",
+        "http_status": 200,
+        "bytes": 197619
+      },
+      {
+        "url": "https://github.com/aadishjainiitd-svg/Finn/blob/main/docs/EVIDENCE_AUDIT.md",
+        "http_status": 200,
+        "bytes": 208573
+      },
+      {
+        "url": "https://raw.githubusercontent.com/aadishjainiitd-svg/Finn/main/docs/screenshots/mobile-research-final.jpg",
+        "http_status": 200,
+        "bytes": 52100
+      }
+    ]
+  },
+  "secret_scan": {
+    "files_checked": 60,
+    "exact_secret_matches": 0,
+    "scope": "First-party source, public documents, prepared seed and built frontend assets; exact local credential values plus history prefix checks"
   }
 }

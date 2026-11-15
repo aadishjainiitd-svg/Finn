@@ -60,7 +60,7 @@ def test_numeric_conversion_and_incompatible_period_refusal():
 def test_shared_job_retention_and_filing_coalescing(monkeypatch):
     research.jobs.update({str(n):{'status':'error'} for n in range(40)})
     async def scenario():
-    gate=asyncio.Event()
+        gate=asyncio.Event()
         async def run(job,event):await gate.wait()
         monkeypatch.setattr(brief,'run_filing',run)
         brief.events_by_id['event']={'id':'event','symbol':'TEST','evidence':[],'source_signature':'x','url':'https://example.com/a.pdf'}
