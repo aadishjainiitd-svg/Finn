@@ -88,6 +88,21 @@ test('five-year trajectory keeps gaps empty, marks restatements and opens the ci
  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
 });
 
+test('event sheet shows saved management guidance with its status and source',async({page})=>{
+ await fixture(page);
+ const call={...evidence,id:'fx-call',kind:'transcript',period:'Q2 FY27',text:'We have given a guidance of 16%-18% EBITDA.'};
+ await page.route('**/api/guidance/TCS',r=>r.fulfill({json:{available:true,checked_at:date,items:[{label:'EBITDA margin 16–18% · FY27',status:'not_due',reason:'The guided year ends 2027-03-31; not scored until results for it are read.',quote:call.text,speaker:'Hiranand Savlani',evidence:call,due:'2027-03-31',actual:null}]}}));
+ await page.goto('/');await page.getByRole('button',{name:/TCS.*Director appointed/}).click();
+ await expect(page.getByText('Not due yet')).toBeVisible();await expect(page.getByText('EBITDA margin 16–18% · FY27')).toBeVisible();
+ await page.getByRole('button',{name:"Hiranand's words"}).click();await expect(page.locator('blockquote')).toHaveText(call.text);
+});
+
+test('event sheet says when no research has been read for the company',async({page})=>{
+ await fixture(page);await page.route('**/api/guidance/TCS',r=>r.fulfill({json:{available:false,items:[]}}));
+ await page.goto('/');await page.getByRole('button',{name:/TCS.*Director appointed/}).click();
+ await expect(page.getByText('No research yet')).toBeVisible();await expect(page.getByText(/Read TCS's latest call in Research/)).toBeVisible();
+});
+
 test('installed production shell reloads offline without acknowledging an item',async({page,context})=>{
  test.skip(!process.env.FINN_E2E_URL,'Requires a production preview with the actual service worker.');
  await fixture(page);await page.goto('/');

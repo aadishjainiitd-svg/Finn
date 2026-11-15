@@ -179,3 +179,18 @@ def test_anonymous_read_does_not_persist_default_book(monkeypatch):
         identity=owner_rows[0]['owner']
         assert repository.get(identity,'state','book') is None
         assert portfolio.book(identity)['_version']==0
+
+
+def test_expired_session_rows_are_pruned_hourly_and_live_ones_kept(tmp_path,monkeypatch):
+    import time
+    from backend import repository,owners
+    monkeypatch.setenv('FINN_DATABASE_URL','');monkeypatch.setattr(repository,'DATA',tmp_path);repository.init()
+    repository.save('_system','sessions','old',{'owner':'a','expires':1})
+    repository.save('_system','sessions','live',{'owner':'b','expires':time.time()+100})
+    repository.save('owner-a','book','default',{'holdings':[]})
+    with repository.transaction() as tx:tx.execute("UPDATE records SET updated=? WHERE id='old'",(time.time()-owners.LIFETIME-10,))
+    monkeypatch.setattr(owners,'_pruned',0.0)
+    assert owners.prune()==1
+    assert repository.get('_system','sessions','old') is None and repository.get('_system','sessions','live')
+    assert repository.get('owner-a','book','default')  # private state is not deleted here
+    assert owners.prune()==0  # at most hourly

@@ -28,19 +28,20 @@ def targets():
     # Only configured rules/reminders trigger owner evaluation. Public demo
     # observations refresh separately; private questions never enter this job.
     with repository.transaction() as tx:
-        rows=tx.execute("SELECT owner,bucket,value FROM records WHERE bucket IN ('rules','reminders') ORDER BY updated DESC LIMIT 1000").fetchall()
-    owners=set();symbols=set(PORTFOLIO)
+        rows=tx.execute("SELECT owner,bucket,value FROM records WHERE bucket IN ('rules','reminders') ORDER BY updated DESC LIMIT 5001").fetchall()
+    owners=set();symbols=set(PORTFOLIO);active=0
     for row in rows:
         record=json.loads(row['value'])
         if row['bucket']=='rules' and record.get('rule',{}).get('enabled'):
-            owners.add(row['owner']);symbols.add(record['rule']['symbol'])
+            owners.add(row['owner']);symbols.add(record['rule']['symbol']);active+=1
         elif row['bucket']=='reminders' and record.get('enabled'):
-            owners.add(row['owner']);symbols.add(record['event']['symbol'])
+            owners.add(row['owner']);symbols.add(record['event']['symbol']);active+=1
     for owner in owners:
         symbols.update(h['symbol'] for h in portfolio.book(owner)['holdings'])
     # No silently truncated book. If the free-service batch cannot cover the
     # configured scope, retain the last dated snapshot and expose the failure.
-    if len(symbols)>100 or len(rows)>=1000:
+    # Capacity counts enabled rules and reminders only; disabled rows cost nothing.
+    if len(symbols)>100 or active>=1000 or len(rows)>5000:
         raise SourceError('schedule_capacity','Scheduled scope exceeds this free service’s bounded batch. Explicit per-book refresh remains available.')
     return sorted(owners),sorted(symbols)
 

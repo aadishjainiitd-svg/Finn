@@ -301,8 +301,24 @@ class PackRequest(BaseModel):
 
 @app.get('/api/research-pack/{symbol}')
 def get_research_pack(symbol:str,identity:str=Depends(owner)):
+    from .research_pack import get,slim
+    return {'pack':slim(get(ticker(symbol)))}
+
+@app.get('/api/guidance/{symbol}')
+def get_guidance(symbol:str,identity:str=Depends(owner)):
+    """Management guidance from the saved research, for the event sheet. No model, no fetch."""
     from .research_pack import get
-    return {'pack':get(ticker(symbol))}
+    pack=get(ticker(symbol))
+    if not pack:return {'available':False,'items':[]}
+    order={'missed':0,'met':1,'indicative':2,'not_due':3,'revised':4,'withdrawn':5,'not_comparable':6}
+    items=[i for i in (pack.get('commitments') or {}).get('items',[]) if i.get('target')]
+    items.sort(key=lambda i:(order.get(i['status'],9),(i['target'].get('scope')!='company')))
+    keep=lambda e:dict(e)
+    return {'available':True,'checked_at':pack.get('checked_at'),'items':[{
+        'label':i['target'].get('label') or f"{i['target'].get('metric')} {i['target'].get('minimum')}",'status':i['status'],'reason':i['reason'],
+        'quote':i['quote'],'speaker':i.get('speaker'),'evidence':keep(i['evidence']),'due':i.get('due'),
+        'actual':{'value':i['actual']['value'],'unit':i['actual'].get('unit'),'quote':i['actual'].get('quote'),'evidence':keep(i['actual'].get('evidence') or {})} if i.get('actual') else None}
+        for i in items[:3]]}
 
 @app.post('/api/research-pack',status_code=202,dependencies=[Depends(mutation)])
 def create_research_pack(body:PackRequest,identity:str=Depends(owner)):

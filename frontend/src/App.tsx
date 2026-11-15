@@ -15,6 +15,7 @@ import {BookView} from './Book';
 import {WatchView} from './Watch';
 
 import {ResearchPack} from './ResearchPack';
+import {GuidanceCard} from './Guidance';
 
 import {HoldingDetail} from './Holding';
 
@@ -174,7 +175,7 @@ export default function App(){
 
  {panel.event.management_profile&&<div className="fn-c"><h3>Management background</h3><p className="fn-f fn-m">{panel.event.management_profile.label}</p><p className="fn-gap">{panel.event.management_profile.text}</p><button className="fn-hit" onClick={()=>{evidenceTrigger.current=document.activeElement as HTMLElement;setNested(panel.event.management_profile!.evidence);}}>Inspect profile source <Glyph name="file" size={14}/></button></div>}
 
- <div className="fn-grid2 fn-verdicts"><div className="fn-c"><h3 className="fn-label">Their guidance</h3><Pill>No comparable guidance</Pill><p>No comparable guidance and actual pair is established yet.</p></div><div className="fn-c"><h3 className="fn-label">Your thesis</h3><Pill tone={panel.event.thesis?thesisLabel(panel.event.thesis_status)[1]:''}>{panel.event.thesis?thesisLabel(panel.event.thesis_status)[0]:'Add a thesis'}</Pill><p>{panel.event.thesis||'Capture your reason for owning this stock in Book.'}</p></div></div>
+ <div className="fn-grid2 fn-verdicts"><GuidanceCard symbol={panel.event.symbol} onEvidence={e=>{evidenceTrigger.current=document.activeElement as HTMLElement;setNested(e);}}/><div className="fn-c"><h3 className="fn-label">Your thesis</h3><Pill tone={panel.event.thesis?thesisLabel(panel.event.thesis_status)[1]:''}>{panel.event.thesis?thesisLabel(panel.event.thesis_status)[0]:'Add a thesis'}</Pill><p>{panel.event.thesis||'Capture your reason for owning this stock in Book.'}</p></div></div>
 
  <ThesisEvidence record={panel.event.thesis_assessment} onEvidence={e=>{evidenceTrigger.current=document.activeElement as HTMLElement;setNested(e);}}/><div className="fn-c"><h3 className="fn-label">Why it ranks here</h3>{panel.event.ranking_reasons?.map((r,i)=><div className="fn-gap" key={i}><div className="fn-row"><span>{r.label}</span><strong>{r.value>0?'+':''}{r.value}</strong></div><p className="fn-f fn-m">{r.explanation}</p>{r.evidence?.[0]&&<button className="fn-hit" onClick={()=>{evidenceTrigger.current=document.activeElement as HTMLElement;setNested(r.evidence![0]);}}>Inspect this reason <Glyph name="file" size={14}/></button>}</div>)}<p className="fn-f fn-m fn-gap">{panel.event.ranking_note}</p><div className="fn-row fn-gap"><span className="fn-m">Worth your time?</span><span className="fn-tags"><button className="fn-hit" aria-pressed={session?.review.feedback[panel.event.id]==='mattered'} onClick={()=>change('feedback',panel.event,session?.review.feedback[panel.event.id]==='mattered'?null:'mattered')}><Pill tone={session?.review.feedback[panel.event.id]==='mattered'?'navy':''}>Mattered</Pill></button><button className="fn-hit" aria-pressed={session?.review.feedback[panel.event.id]==='noise'} onClick={()=>change('feedback',panel.event,session?.review.feedback[panel.event.id]==='noise'?null:'noise')}><Pill tone={session?.review.feedback[panel.event.id]==='noise'?'navy':''}>Noise</Pill></button></span></div></div><button className="fn-askbar" onClick={()=>navigate('ask',panel.event.symbol,panel.event)}>Ask about this event <Glyph name="ask"/></button></>}
 

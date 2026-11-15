@@ -86,6 +86,9 @@ def preview(rule,chart):
             'sessions':last}
 
 
+MAX_ENABLED_RULES=25
+
+
 async def save(owner,data,rule_id=None,version=0):
     rule=Rule.model_validate(data);rule.symbol=ticker(rule.symbol)
     await identity(rule.symbol)
@@ -94,6 +97,10 @@ async def save(owner,data,rule_id=None,version=0):
     if rule.channel=='telegram':raise SourceError('delivery_unavailable','Connect and verify Telegram before enabling that delivery channel. In-app watches are available.')
     import time
     previous=repository.get(owner,'rules',rule_id) if rule_id else None
+    if rule.enabled and not (previous and previous.get('rule',{}).get('enabled')):
+        enabled=sum(1 for r in repository.listing(owner,'rules') if r.get('rule',{}).get('enabled'))
+        if enabled>=MAX_ENABLED_RULES:
+            raise SourceError('rule_limit',f'Up to {MAX_ENABLED_RULES} watches can be on at once. Turn one off before adding another.')
     return repository.save(owner,'rules',rule_id or uuid.uuid4().hex,{'rule':rule.model_dump(mode='json'),
         'sentence':describe(rule),'delivery_status':'in_app_only','created_at':previous.get('created_at',time.time()) if previous else time.time(),
         'active_since':time.time()},expected=version)

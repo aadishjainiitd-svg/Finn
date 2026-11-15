@@ -46,6 +46,104 @@ def typed_target(quote,evidence):
         'evidence_id':evidence['id'],'quote':quote,
         'status':'withdrawn' if re.search(r'\bwithdraw',quote,re.I) else 'revised' if re.search(r'\brevis',quote,re.I) else 'issued'}
 
+PCT=r'(\d{1,2}(?:\.\d{1,2})?)\s?(?:%|percent)'
+BAND=r'(\d{1,2}(?:\.\d{1,2})?)\s?(?:%|percent)?\s*(?:-|–|to)\s*'+PCT
+
+
+def fiscal_period(quote,doc):
+    """Year from the sentence, else the call's own label (Q2 FY27 -> FY27)."""
+    def from_text(text):
+        m=re.search(r'\b(FY|CY)\s?[\'’]?(20)?(\d{2})\b',text,re.I)
+        if m:return m[1].upper(),2000+int(m[3])
+        m=re.search(r'\b(?:financial|fiscal) year\s+20(\d{2})(?:\s*-\s*20?(\d{2}))?',text,re.I)
+        if m:return 'FY',2000+int(m[2] or m[1])
+        return None
+    stated=from_text(quote);basis='stated in the sentence'
+    if not stated:
+        stated=from_text(doc.get('period') or doc.get('discovery_period') or '');basis="the call's fiscal year (not stated in the sentence)"
+        if stated and re.search(r'\bnext (?:financial |fiscal )?year\b',quote,re.I):
+            stated=(stated[0],stated[1]+1);basis="the year after the call's fiscal year ('next year')"
+    if not stated:return None
+    kind,year=stated
+    end=f'{year}-03-31' if kind=='FY' else f'{year}-12-31'
+    label=f'FY{str(year)[2:]}' if kind=='FY' else str(year)
+    return {'period_end':end,'label':label,'period_basis':basis}
+
+
+def percent_target(quote,doc):
+    """Margin bands and revenue-growth guidance stated by management in percent."""
+    if quote.rstrip().endswith('?') or not re.search(r'\b(?:guid\w*|target\w*|expect\w*|aim\w*|outlook)\b',quote,re.I):return None
+    if re.search(r'\bEBITDA\b',quote,re.I):metric='ebitda_margin';name='EBITDA margin'
+    elif re.search(r'\b(?:revenue|top[- ]?line|sales)\s+growth\b|\bgrow (?:our )?(?:revenue|top[- ]?line|sales)\b',quote,re.I):metric='revenue_growth';name='Revenue growth'
+    elif re.search(r'\bvolume growth\b',quote,re.I):metric='volume_growth';name='Volume growth'
+    else:return None
+    band=re.search(BAND,quote,re.I);approx=False
+    if band:low,high=band[1],band[2]
+    else:
+        single=re.search(r'(at least|minimum of|around|about|approximately|~)?\s*'+PCT,quote,re.I)
+        if not single:return None
+        qualifier=(single[1] or '').lower()
+        if qualifier in ('at least','minimum of'):low,high=single[2],None
+        elif qualifier:
+            approx=True;low,high=str(float(single[2])-1),str(float(single[2])+1)
+        else:low=high=single[2]
+    from .numbers import decimal
+    if high is not None and decimal(high)<decimal(low):return None
+    period=fiscal_period(quote,doc)
+    body=re.sub(r'^[A-Z][\w.\' ]{1,40}:\s*','',quote)
+    segment=re.match(r'([A-Z][a-z]+(?: [A-Z][a-z]+)?),\s+we\b',body) or re.search(r'\bfor (?:the |our )?([a-z]+) (?:business|segment|division)\b',body,re.I)
+    ambiguous=len(re.findall(BAND,quote,re.I))>1
+    shown=(f'{low}–{high}%' if high and high!=low else f'{low}%' if high else f'at least {low}%')
+    if approx:shown=f'about {float(low)+1:g}% (read as {low}–{high}%)'
+    return {'kind':'percent','symbol':doc.get('symbol'),'metric':metric,'minimum':low,'maximum':high,'approximate':approx,
+            'scope':'segment: '+segment[1].lower() if segment else 'company','ambiguous':ambiguous,
+            'label':(f'{segment[1]} · ' if segment else '')+f'{name} {shown}'+(f' · {period["label"]}' if period else ' · period not stated'),
+            'period_end':period['period_end'] if period else None,'period_basis':period['period_basis'] if period else None,
+            'due':period['period_end'] if period else None,'evidence_id':doc['id'],'quote':quote,'status':'issued'}
+
+
+def percent_verdict(target,facts,today):
+    """Revenue growth is scored on cited statement growth; margins only indicatively."""
+    from .numbers import decimal
+    if target.get('ambiguous'):
+        return 'not_comparable',None,'The sentence gives more than one range, so FINN does not pick one to score.'
+    if target.get('scope','company')!='company':
+        return 'not_comparable',None,'This guidance is for one business segment; segment results are not yet read from the statements.'
+    if target['metric']=='volume_growth':
+        return 'not_comparable',None,'Volume is not reported in the financial statements, so this cannot be checked from primary numbers.'
+    if not target['due']:return 'not_comparable',None,'No fiscal year could be tied to this statement, so it is not scored.'
+    if target['due']>today:return 'not_due',None,f'The guided year ends {target["due"]}; not scored until results for it are read.'
+    selected=[f for f in facts if f.get('symbol')==target['symbol'] and f.get('period_kind')=='annual' and f.get('value') is not None]
+    def value(metric,end,basis=None):
+        rows=[f for f in selected if f['metric']==metric and f['period_end']==end and (basis is None or f['restatement']==basis)]
+        consolidated=[f for f in rows if f['scope']=='consolidated']
+        return (consolidated or rows or [None])[0]
+    end=target['due']
+    revenue=value('revenue',end)
+    if not revenue:return 'not_comparable',None,'Results for the guided year have not been read from an annual statement yet.'
+    basis=revenue['restatement']
+    if target['metric']=='revenue_growth':
+        from .statements import prior_year
+        prior=value('revenue',prior_year(datetime.fromisoformat(end).date()).isoformat(),basis)
+        if not prior or prior['scope']!=revenue['scope']:return 'not_comparable',None,'The prior year is not printed in the same statement, so growth is not scored.'
+        actual=(decimal(revenue['crore'])/decimal(prior['crore'])-1)*100
+        operands=[revenue,prior]
+        low=decimal(target['minimum']);high=decimal(target['maximum']) if target['maximum'] else None
+        status='met' if actual>=low and (high is None or actual<=high) else 'missed'
+        return status,{'value':f'{actual:.1f}','unit':'percent','operands':operands,'quote':revenue['quote'],'evidence':revenue['evidence'],
+                       'formula':'Revenue ÷ prior-year revenue − 1, both from one statement'},(
+            'Reported revenue growth is inside the guided range.' if status=='met' else
+            'Reported revenue growth is outside the guided range'+(' (above it).' if high is not None and actual>high else '.'))
+    parts=[value(m,end,basis) for m in ('pbt','finance_cost','depreciation','other_income')]
+    if not all(parts) or decimal(revenue['crore'])<=0:return 'not_comparable',None,'The statement rows needed for an EBITDA proxy were not all found.'
+    proxy=(decimal(parts[0]['crore'])+decimal(parts[1]['crore'])+decimal(parts[2]['crore'])-decimal(parts[3]['crore']))/decimal(revenue['crore'])*100
+    low=decimal(target['minimum']);high=decimal(target['maximum']) if target['maximum'] else None
+    inside=proxy>=low and (high is None or proxy<=high)
+    return 'indicative',{'value':f'{proxy:.1f}','unit':'percent (EBITDA proxy)','operands':[*parts,revenue],'quote':revenue['quote'],'evidence':revenue['evidence'],
+        'formula':'(PBT + finance costs + depreciation − other income) ÷ revenue'},(
+        f'FINN\'s EBITDA proxy is {"inside" if inside else "outside"} the guided band. The company\'s own EBITDA definition may differ, so this is not counted as kept or missed.')
+
+
 TOPICS={
     'Contingencies':r'contingent liabilit|litigation|legal proceedings',
     'Related parties':r'related.part(?:y|ies)',
@@ -106,6 +204,11 @@ def compare_reports(documents):
 def commitment_ledger(documents,facts=(),today=None):
     calls=[d for d in documents if d['kind']=='transcript']
     evidence=retrieve(calls,'management guidance target commitment expect plan achieve capacity revenue margin next year') if calls else []
+    if calls:
+        # Percent guidance is usually phrased around margins and growth.
+        known={e['id'] for e in evidence}
+        evidence+=[e for e in retrieve(calls,'guidance EBITDA margin percent revenue growth range') if e['id'] not in known]
+    today=today or datetime.now(timezone.utc).date().isoformat()
     items=[];seen=set()
     for span in source_spans(evidence).values():
         quote=span['quote']
@@ -123,7 +226,11 @@ def commitment_ledger(documents,facts=(),today=None):
             matches=[f for f in facts if all(f.get(k)==target.get(k) for k in ('symbol','metric','scope','currency','period_start','period_end','period_kind')) and f.get('value') is not None]
             # Conflicting report versions require an explicit restatement review.
             if matches and len({(f['value'],f['unit']) for f in matches})==1:actual=matches[0]
-            status=promise_verdict(target,actual,today or datetime.now(timezone.utc).date().isoformat())
+            status=promise_verdict(target,actual,today)
+        custom=None
+        if not target and status=='not_comparable':
+            target=percent_target(quote,doc)
+            if target:status,actual,custom=percent_verdict(target,facts,today)
         reasons={'met':'The cited comparable actual meets the disclosed minimum or falls within the explicit range; this is not a judgement on broader execution.',
             'missed':'The cited comparable actual falls outside the explicit target. Inspect the target and actual; an upside range miss is not evidence of weaker performance.',
             'not_due':'The disclosed target period has not ended; excluded from the kept count.',
@@ -132,7 +239,7 @@ def commitment_ledger(documents,facts=(),today=None):
             'not_comparable':'A metric, accounting basis, due period and cited actual have not all been verified; excluded from the kept count.'}
         items.append({'id':hashlib.sha256((doc['id']+quote).encode()).hexdigest()[:24],
             'quote':quote,'evidence':doc,'speaker':span['speaker'],'status':status,
-            'target':target,'actual':actual,'due':target['due'] if target else None,'reason':reasons[status]})
+            'target':target,'actual':actual,'due':target['due'] if target else None,'reason':custom or reasons.get(status,'')})
         if len(items)>=12:break
     # Changed targets for the same metric/period are not two independent wins.
     groups={}

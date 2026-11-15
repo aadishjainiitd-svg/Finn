@@ -7,6 +7,24 @@ from fastapi import Request, Response, HTTPException
 from . import repository
 
 COOKIE='finn_session'
+LIFETIME=365*86400
+_pruned=0.0
+
+
+def prune(now=None):
+    """Delete expired session rows, at most hourly. Each save sets expiry to
+    updated + LIFETIME, so 'updated' alone identifies expired rows. Private
+    state is not deleted here."""
+    global _pruned
+    now=time.time() if now is None else now
+    if now-_pruned<3600:return 0
+    _pruned=now
+    try:
+        with repository.transaction() as tx:
+            cursor=tx.execute("DELETE FROM records WHERE owner='_system' AND bucket='sessions' AND updated<?",(now-LIFETIME,))
+            return getattr(cursor,'rowcount',0) or 0
+    except Exception:
+        return 0  # Housekeeping must never block a visit.
 
 
 def owner(request:Request,response:Response):
@@ -20,6 +38,7 @@ def owner(request:Request,response:Response):
             except repository.Conflict:pass
             response.set_cookie(COOKIE,token,max_age=365*86400,httponly=True,secure=https(request),samesite='lax',path='/')
         return session['owner']
+    prune()
     token=secrets.token_urlsafe(32);key=hashlib.sha256(token.encode()).hexdigest()
     identity=secrets.token_hex(24)
     repository.save('_system','sessions',key,{'owner':identity,'expires':time.time()+365*86400})

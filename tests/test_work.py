@@ -194,3 +194,25 @@ def test_transient_heartbeat_failure_is_retried_but_lost_lease_stops(monkeypatch
     monkeypatch.setattr(work,'execute',forever)
     job=work.enqueue('bob','research',{'symbol':'TCS','question':'q2'});asyncio.run(work.run_one(work.claim()))
     assert work.get('bob',job['id'])['status']=='error'
+
+
+def test_one_browser_cannot_spend_the_shared_model_allowance(monkeypatch):
+    monkeypatch.setitem(work.OWNER_DAILY,'research',2)
+    monkeypatch.setitem(work.OWNER_DAILY,'thesis',2)
+    with repository.transaction() as tx:
+        for i in range(2):
+            tx.execute('INSERT INTO work_jobs(id,owner,kind,identity_key,payload,status,progress,created,updated) VALUES (?,?,?,?,?,?,?,?,?)',
+                       ('old'+str(i),'alice','research','k'+str(i),'{}','complete','{}',__import__('time').time()-60,0))
+    with pytest.raises(SourceError) as exc:work.enqueue('alice','thesis',{'symbol':'TCS'})
+    assert exc.value.code=='owner_quota'
+    # Another browser and system work are unaffected; old jobs age out after 24h.
+    assert work.enqueue('bob','research',{'symbol':'TCS','question':'q'})['status']=='running'
+    with repository.transaction() as tx:tx.execute("UPDATE work_jobs SET created=created-90000 WHERE owner='alice'")
+    assert work.enqueue('alice','thesis',{'symbol':'TCS'})['status']=='running'
+
+
+def test_errored_once_only_slot_can_be_retried():
+    first=work.enqueue('_scheduler','scheduled_refresh',{'slot':'2026-11-15-evening'},once=True)
+    assert work.enqueue('_scheduler','scheduled_refresh',{'slot':'2026-11-15-evening'},once=True)['id']==first['id']
+    with repository.transaction() as tx:tx.execute("UPDATE work_jobs SET status='error' WHERE id=?",(first['id'],))
+    assert work.enqueue('_scheduler','scheduled_refresh',{'slot':'2026-11-15-evening'},once=True)['id']!=first['id']

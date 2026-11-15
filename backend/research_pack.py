@@ -6,7 +6,7 @@ from .documents import ingest,retrieve
 from .network import SourceError
 from .facts import summary_facts
 from .report_insights import compare_reports,commitment_ledger
-from . import statements,results
+from . import statements,results,segments
 
 POLICY='primary-pack-v2'
 LEGACY_POLICY='primary-pack-v1'
@@ -45,7 +45,7 @@ async def build(progress,symbol,annual_count=2):
             if count<required:gaps.append({'kind':kind,'message':f'{count} of {required} requested {kind} documents verified and readable.'})
         if not docs:raise SourceError('no_readable_documents','No issuer-verified documents could be read.')
         progress['stage']='Indexing supported research sections'
-        sections=[];facts=[];statement_facts=[]
+        sections=[];facts=[];statement_facts=[];mixes=[]
         for section,(label,query) in TOPICS.items():
             selected=[d for d in docs if d['kind']==('transcript' if section=='promises' else 'annual')]
             evidence=retrieve(selected,query)[:3] if selected else []
@@ -57,7 +57,8 @@ async def build(progress,symbol,annual_count=2):
             with store.db() as c:
                 rows=c.execute('SELECT id,page,text FROM chunks WHERE hash=? ORDER BY page,id',(doc['version'],)).fetchall()
             facts.extend(summary_facts(doc,rows))
-            statement_facts.extend(statements.extract(doc,rows))
+            extracted=statements.extract(doc,rows);statement_facts.extend(extracted)
+            mixes.extend(segments.extract(doc,rows,extracted))
         # Reuse the latest retained filing versions for quarter actuals. This
         # does not promise discovery of an unobserved historical quarter.
         quarterly_facts=[];quarterly_sources=[]
@@ -86,6 +87,7 @@ async def build(progress,symbol,annual_count=2):
                 'report_changes':compare_reports(docs),'commitments':commitment_ledger(docs,[*statement_facts,*quarterly_facts]),
                 'quarterly_actual_sources':quarterly_sources,
                 'financials':statements.compact(statements.analyse(statement_facts)),
+                'revenue_mix':segments.latest(mixes),
                 'checked_at':now(),'policy':POLICY,'is_demo_seed':False,'annual_reports_requested':annual_count,
                 'coverage_note':f'{sum(d["kind"]=="annual" for d in docs)} reports and {sum(d["kind"]=="transcript" for d in docs)} calls read. Readable documents do not guarantee five comparable years. Source-summary values retain their disclosed basis; unknown scope is never consolidated.'}
         repository.save('_public','research_packs',key(symbol),result)
@@ -102,3 +104,25 @@ def get(symbol):
         return current
     previous=repository.get('_public','research_packs',LEGACY_POLICY+'-'+symbol)
     return {**previous,'update_available':True} if previous else None
+
+
+FACT_FIELDS=('metric','reported_label','crore','scope','scope_basis','period_start','period_end','quote','evidence_id','headers')
+
+
+def slim(pack):
+    """Response shape for the phone: one copy of each header citation set, no
+    unused fact fields, and no legacy summary facts once statements cover it.
+    Stored packs are unchanged."""
+    if not pack:return pack
+    financials=pack.get('financials')
+    if not financials or not financials.get('facts'):return pack
+    sets={};facts={}
+    for fid,fact in financials['facts'].items():
+        headers=fact.get('headers') or []
+        signature=json.dumps(headers,sort_keys=True)
+        hid=sets.setdefault(signature,'h'+str(len(sets)))
+        facts[fid]={**{k:fact[k] for k in FACT_FIELDS if k in fact and k!='headers'},'header_set':hid}
+    header_sets={hid:json.loads(signature) for signature,hid in sets.items()}
+    out={**pack,'financials':{**financials,'facts':facts,'header_sets':header_sets}}
+    if financials.get('trajectory'):out['facts']=[]
+    return out

@@ -9,6 +9,9 @@ from .network import SourceError
 
 LEASE=90
 LONG=('refresh','research_pack','thesis')
+# Per-browser rolling 24-hour shares of model-backed work.
+OWNER_GROUP={'research':'questions','portfolio_research':'questions','thesis':'questions','research_pack':'questions','filing':'filings'}
+OWNER_DAILY={**{k:15 for k,v in OWNER_GROUP.items() if v=='questions'},'filing':40}
 _runner_loop=None
 _wake=None
 
@@ -26,9 +29,18 @@ def enqueue(owner,kind,payload,once=False):
         # Serialize admission across web processes; same transaction protects the
         # queue capacity and duplicate request check. No private payload is global.
         tx.execute("UPDATE worker_slots SET lease_until=lease_until WHERE id='global'")
-        statuses="" if once else " AND status IN ('queued','running')"
+        # A once-only slot (scheduled refresh) may be retried after an error.
+        statuses=" AND status<>'error'" if once else " AND status IN ('queued','running')"
         existing=tx.execute("SELECT * FROM work_jobs WHERE owner=? AND identity_key=?"+statuses+" ORDER BY created DESC LIMIT 1",(owner,identity)).fetchone()
         if existing:return public(existing)
+        share=OWNER_DAILY.get(kind)
+        if share and not owner.startswith('_'):
+            # One visitor cannot spend the whole shared free model allowance.
+            group=[k for k,v in OWNER_GROUP.items() if v==OWNER_GROUP[kind]]
+            used=tx.execute("SELECT COUNT(*) AS n FROM work_jobs WHERE owner=? AND created>? AND kind IN ("+','.join('?'*len(group))+")",
+                            (owner,now-86400,*group)).fetchone()['n']
+            if used>=share:
+                raise SourceError('owner_quota',f"This browser has used its share of today's free analysis ({share}). Saved sources and earlier answers stay readable; try again tomorrow.")
         active=tx.execute("SELECT COUNT(*) AS n FROM work_jobs WHERE status IN ('queued','running')").fetchone()['n']
         if active>=2:raise SourceError('busy','One investigation is running and one is waiting. Please retry shortly.')
         if kind in LONG:

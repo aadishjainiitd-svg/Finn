@@ -37,3 +37,17 @@ def test_preview_excludes_future_data_and_missing_baseline_cannot_be_skipped():
     latest=daily_signal(c,datetime(2026,4,1,tzinfo=timezone.utc))
     assert latest['volume_multiple'] is None
     assert evaluate(rule,latest) is None
+
+
+def test_enabled_watches_are_capped_per_browser(tmp_path,monkeypatch):
+    import asyncio
+    from backend import repository,watches
+    monkeypatch.setenv('FINN_DATABASE_URL','');monkeypatch.setattr(repository,'DATA',tmp_path);repository.init()
+    async def known(symbol):return {'symbol':symbol}
+    monkeypatch.setattr(watches,'identity',known);monkeypatch.setattr(watches,'MAX_ENABLED_RULES',2)
+    rule={'symbol':'TCS','metric':'volume','threshold':'2'}
+    for _ in range(2):asyncio.run(watches.save('alice',rule))
+    with pytest.raises(SourceError) as exc:asyncio.run(watches.save('alice',rule))
+    assert exc.value.code=='rule_limit'
+    asyncio.run(watches.save('alice',{**rule,'enabled':False}))  # disabled watches are not capped
+    asyncio.run(watches.save('bob',rule))
