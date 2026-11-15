@@ -70,3 +70,10 @@ export const noticeLine=(e:{kind?:string;title?:string;description?:string})=>{
 export const ago=(iso?:string|null,now=Date.now())=>{
  if(!iso)return 'not yet';const minutes=Math.max(0,Math.round((now-new Date(iso).getTime())/60000));
  return minutes<60?`${minutes} min ago`:minutes<48*60?`${Math.round(minutes/60)} h ago`:`${Math.round(minutes/1440)} d ago`;};
+
+const GENERIC=/^\s*(?:general updates?|appointment|outcome of board meeting|press release|updates?|intimation|disclosure|announcement|copy of newspaper publication|investor presentation|shareholders meeting|committee meeting updates)\s*$/i;
+/** Card headline: the filing subject, or the exchange's own words when the subject is generic. */
+export const cardHeadline=(e:{kind?:string;title?:string;description?:string})=>{
+ const line=noticeLine(e);const title=displayTitle(e.title||'');
+ return GENERIC.test(e.title||'')&&line?{title:line,line:''}:{title,line};
+};

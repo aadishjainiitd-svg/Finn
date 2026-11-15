@@ -52,7 +52,7 @@ test('failed first check is not called quiet, and slow filing cannot open over R
  await fixture(page);await page.route('**/api/today',r=>r.fulfill({status:503,json:{error:{message:'Fixture exchange unavailable'}}}));await page.goto('/');await expect(page.getByText('Fixture exchange unavailable')).toBeVisible();await expect(page.getByText('Nothing needs you in this view.')).toHaveCount(0);
  await page.unroute('**/api/today');await fixture(page);await page.route('**/api/today',r=>r.fulfill({json:{...brief,events:[{...event,evidence:[]}]}}));await page.reload();let finish:()=>void=()=>{};
  await page.route('**/api/filings/**/assess',async r=>{await new Promise<void>(resolve=>finish=resolve);await r.fulfill({json:{id:'slow',status:'complete',result:{evidence:[evidence]}}});});
- await page.getByRole('button',{name:/TCS.*Director appointed/}).click();await page.getByRole('button',{name:'Inspect supporting evidence'}).click();await expect(page.getByText('Reading the attachment…')).toBeVisible();await page.keyboard.press('Escape');await page.getByRole('button',{name:'Research',exact:true}).click();finish();await page.waitForTimeout(100);await expect(page.getByRole('dialog')).toHaveCount(0);await expect(page.getByRole('heading',{name:'Understand the business.'})).toBeVisible();
+ await page.getByRole('button',{name:/TCS.*Director appointed/}).click();await page.getByRole('button',{name:'Inspect supporting evidence'}).click();await expect(page.getByText('Reading the attachment…')).toBeVisible();await page.keyboard.press('Escape');await page.getByRole('button',{name:'Research',exact:true}).click();finish();await page.waitForTimeout(100);await expect(page.getByRole('dialog')).toHaveCount(0);await expect(page.getByRole('heading',{name:'Research any company'})).toBeVisible();
 });
 
 test('Research keeps scope warning and five-year source headers inspectable',async({page})=>{
@@ -183,7 +183,7 @@ test('browser Back closes only the top sheet and retains the underlying item',as
  await page.goBack();await expect(page.locator('[role=dialog]')).toHaveCount(0);await expect(open).toBeFocused();
  await expect(page.getByRole('button',{name:'Mark done'})).toBeVisible();
  await open.click();await page.getByRole('button',{name:'Ask about this event'}).click();
- await expect(page.getByRole('heading',{name:'Ask what matters.'})).toBeVisible();
+ await expect(page.getByRole('heading',{name:'Ask with sources'})).toBeVisible();
  await page.goBack();await expect(page.locator('[role=dialog]')).toHaveCount(0);
 });
 

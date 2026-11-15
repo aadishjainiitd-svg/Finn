@@ -23,7 +23,9 @@ class Holding(BaseModel):
 
 def book(owner):
     saved=repository.get(owner,'state','book')
-    if saved:return saved
+    if saved:
+        # Books saved before sector labels existed show the demo profile until the owner edits it.
+        return {**saved,'holdings':[{**h,'sector':h.get('sector') or PORTFOLIO_PROFILE.get(h['symbol'],'')} for h in saved.get('holdings',[])]}
     # Served without persisting: anonymous reads (crawlers, health pings) must not
     # write a row each. The first explicit save inserts it (expected version 0).
     return {'holdings':[{'symbol':s,'weight':None,'thesis':'','sector':PORTFOLIO_PROFILE.get(s,''),'inputs':[]} for s in PORTFOLIO],

@@ -18,7 +18,7 @@ export function RevenueMix({data,onEvidence}:{data?:RevenueMixData;onEvidence:(e
  return <section id="research-mix" className="fn-c">
   <div className="fn-row"><h3>Revenue mix</h3><Pill>{yearOf(mix.period_end)} · {mix.scope}</Pill></div>
   {data?.business&&data?.geography&&<div className="fn-tiers" role="group" aria-label="Mix view">{(['business','geography'] as const).map(k=><button key={k} className="fn-hit" aria-pressed={active===k} onClick={()=>setView(k)}><Pill tone={active===k?'navy':'white'}>{k==='business'?'By segment':'By geography'}</Pill></button>)}</div>}
-  <div className="fn-mixbar" role="img" aria-label={mix.segments.map(s=>`${s.name} ${Number(s.share).toFixed(0)}%`).join(', ')}>{mix.segments.map((s,i)=><i key={s.name} style={{width:Math.max(0,Number(s.share))+'%',background:COLORS[i%COLORS.length]}}/>)}</div>
+  <div className="fn-mixbar" role="img" aria-label={mix.segments.map(s=>`${s.name} ${Number(s.share).toFixed(0)}%`).join(', ')}>{mix.segments.map((s,i)=><i key={s.name} style={{width:Math.max(0,Number(s.share))+'%',background:COLORS[i%COLORS.length]}}>{Number(s.share)>=12?Math.round(Number(s.share))+'%':''}</i>)}</div>
   <ul className="fn-list">{mix.segments.map((s,i)=><li key={s.name} className="fn-mixrow">
    <span className="fn-dot" style={{background:COLORS[i%COLORS.length]}} aria-hidden="true"/>
    <span className="fn-mixname">{s.name}</span>
