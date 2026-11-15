@@ -1,14 +1,10 @@
 # FINN — AI build history
 
-How FINN was built with coding agents, from a blank folder on 14 November 2026 to the live release on 15 November 2026.
-
-**About this document.** Prompts are quoted from the actual conversations. Long prompts are trimmed (marked `…`) and obvious typos fixed; nothing was reworded into something that was not sent. Status questions ("is it done?"), form answers and credential exchanges are omitted. The unedited export of the first sessions is in [AI_BUILD_HISTORY_RAW.md](AI_BUILD_HISTORY_RAW.md) (keys redacted).
-
 | | |
 |---|---|
-| Agents | An earlier coding-agent session (sessions 1–2, raw export linked), then Claude Code (Claude Opus) for session 3 |
+| Agents | Codex using GPT 6 Astra for sessions 1–2, then Claude Code (Claude Opus) for session 3 |
 | Agent skills used | `pdf`, gstack (`design-consultation`, `plan-ceo-review`, `plan-eng-review`, `plan-design-review`, `review`, `qa`, `office-hours`, `devex-review`), pm-skills (`create-prd`, `pre-mortem`, `prioritize-features`) |
-| In-product model | Groq `openai/gpt-oss-120b` on the free tier; Gemini fallback disabled |
+| In-product model | Groq `openai/gpt-oss-120b` for questions and `openai/gpt-oss-20b` for selection work, on the free tier; Gemini fallback disabled |
 | Spend | ₹0 — Render Free, Neon Free, Groq free tier |
 
 ## How I worked with the agents
@@ -21,7 +17,7 @@ How FINN was built with coding agents, from a blank folder on 14 November 2026 t
 
 ---
 
-## Session 1 — Discovery, plan and first release (14 Nov)
+## Session 1 — Codex (GPT 6 Astra): discovery, plan and first release (14 Nov)
 
 ### 1. Read the brief and scope it
 **Prompt**
@@ -59,7 +55,7 @@ How FINN was built with coding agents, from a blank folder on 14 November 2026 t
 
 **Outcome:** PDF extraction was moved into a bounded subprocess after memory was measured on the 512 MB host; first release deployed with a 12-case research audit.
 
-## Session 2 — Resume and verify (15 Nov, morning)
+## Session 2 — Codex (GPT 6 Astra): resume and verify (15 Nov, morning)
 
 > I've signed back in. Resume from the checkpoint, repair the Python environment, resolve the remaining failures, and complete FINN's final verification and submission package.
 
