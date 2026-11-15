@@ -52,3 +52,21 @@ export const typeTone=(e:{kind?:string;category?:string;title?:string;reason?:st
  if(/director|appoint|management|resign|ceo|cfo|auditor/.test(text))return 'people';
  if(/dividend|capital|allot|buyback|bonus|split|rating|debt|borrow/.test(text))return 'capital';
  return 'filing';};
+
+/** What happened, in the exchange's own words: the NSE notice text without its
+ * "<Company> has informed the Exchange about" preamble. Empty when it adds nothing. */
+export const noticeLine=(e:{kind?:string;title?:string;description?:string})=>{
+ if(e.kind==='price')return '';
+ const raw=(e.description||'').split(' · ').slice(1).join(' · ').trim();
+ if(!raw)return '';
+ let text=raw.replace(/^.{0,120}?\bhas\s+(?:(?:informed|intimated)\s+the\s+Exchange\s+(?:about|regarding|that|of)|submitted\s+to\s+the\s+Exchange,?)\s+/i,'').replace(/^(?:the\s+)?/i,'').trim();
+ text=text.charAt(0).toUpperCase()+text.slice(1);
+ const norm=(s:string)=>s.toLowerCase().replace(/[^a-z0-9]+/g,' ').trim();
+ if(!text||norm(text)===norm(e.title||'')||norm(e.title||'').includes(norm(text)))return '';
+ return text.length>220?text.slice(0,217).replace(/\s+\S*$/,'')+'…':text;
+};
+
+/** "12 min ago", "7 h ago", "2 d ago" for a source check time. */
+export const ago=(iso?:string|null,now=Date.now())=>{
+ if(!iso)return 'not yet';const minutes=Math.max(0,Math.round((now-new Date(iso).getTime())/60000));
+ return minutes<60?`${minutes} min ago`:minutes<48*60?`${Math.round(minutes/60)} h ago`:`${Math.round(minutes/1440)} d ago`;};

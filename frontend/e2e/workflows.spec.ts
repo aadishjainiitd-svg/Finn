@@ -40,7 +40,7 @@ test('generation failure retains document coverage, missing-source gap and evide
 
 test('coverage loss is visible without events being reordered',async({page})=>{
  await fixture(page);await page.clock.install();let reads=0;await page.route('**/api/today',r=>r.fulfill({json:++reads===1?brief:{...brief,source_status:'unavailable',coverage:brief.coverage.map(c=>({...c,filings:{...c.filings,status:'unavailable'}}))}}));
- await page.goto('/');await expect(page.getByRole('button',{name:'Coverage 15/15'})).toBeVisible();await page.clock.fastForward(61000);await expect(page.getByRole('button',{name:'Coverage 0/15'})).toBeVisible();await expect(page.getByRole('button',{name:/TCS.*Director appointed/})).toBeVisible();
+ await page.goto('/');await expect(page.getByRole('button',{name:/^Checked 15\/15 · /})).toBeVisible();await page.clock.fastForward(61000);await expect(page.getByRole('button',{name:/^Checked 0\/15 · /})).toBeVisible();await expect(page.getByRole('button',{name:/TCS.*Director appointed/})).toBeVisible();
 });
 
 test('lost source version retains saved quote and explicitly marks unavailable',async({page})=>{

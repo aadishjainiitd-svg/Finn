@@ -1,0 +1,65 @@
+{
+  "checked_at": "2026-11-15T16:21:41.081452+00:00",
+  "method": "Statement reader vs five-year summary reader on the same cached reports; tolerance 0.5 crore.",
+  "limits": "Only companies whose reports print a parseable five-year summary can be cross-checked. Agreement shows two readers are consistent, not that either is complete. These companies were also used while building the readers, so this is not a held-out test.",
+  "compared": 30,
+  "agreed": 30,
+  "companies": [
+    {
+      "symbol": "ABB",
+      "reports_read": 9,
+      "statement_revenue_years": [
+        "2020",
+        "2021",
+        "2022",
+        "2023",
+        "2024",
+        "2025"
+      ],
+      "compared": 30,
+      "agreed": 30,
+      "mismatches": []
+    },
+    {
+      "symbol": "ASTRAL",
+      "reports_read": 3,
+      "statement_revenue_years": [
+        "2025",
+        "2026"
+      ],
+      "compared": 0,
+      "agreed": 0,
+      "mismatches": []
+    },
+    {
+      "symbol": "HAVELLS",
+      "reports_read": 4,
+      "statement_revenue_years": [
+        "2025",
+        "2026"
+      ],
+      "compared": 0,
+      "agreed": 0,
+      "mismatches": []
+    },
+    {
+      "symbol": "KPITTECH",
+      "reports_read": 3,
+      "statement_revenue_years": [],
+      "compared": 0,
+      "agreed": 0,
+      "mismatches": []
+    },
+    {
+      "symbol": "TCS",
+      "reports_read": 4,
+      "statement_revenue_years": [
+        "2025",
+        "2026"
+      ],
+      "compared": 0,
+      "agreed": 0,
+      "mismatches": []
+    }
+  ]
+}

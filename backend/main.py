@@ -255,6 +255,7 @@ def today(identity:str=Depends(owner)):
             event={k:v for k,v in event.items() if k not in brief.EXTRA_FIELDS}
             event['evidence']=[]
         if event['kind']=='filing' and event.get('assessment')=='pending':event=brief.pending_priority(event)
+        event=brief.refine_tier(event)
         public_events.append(event)
         brief.events_by_id[event['id']]=event
     from . import theses

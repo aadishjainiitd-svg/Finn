@@ -43,6 +43,27 @@ def pending_priority(event):
     return {**event,'tier':0 if sensitive else min(event.get('tier',1),1),
         'reason':'Potentially important exchange notice; attachment evidence is incomplete. Review the original notice.' if sensitive else event.get('reason','Attachment evidence is incomplete; kept visible.')}
 
+SENIOR=re.compile(r'resign|cessation|ceas(?:e|ed|es)\b|step(?:s|ped)? down|\b(?:ceo|cfo|coo|managing director|chief executive|chief financial|whole[- ]time director)\b',re.I)
+
+
+def refine_tier(event):
+    """'Needs you' is for what changes a holding's story. Routine governance moves
+    to 'Worth knowing' with its reason kept; nothing is hidden or dropped."""
+    if event.get('tier')!=0 or event.get('kind')!='filing':return event
+    reason=event.get('reason') or ''
+    text=' '.join(str(event.get(k) or '') for k in ('title','description','trigger_quote'))
+    demote=None
+    if reason.startswith('Board or senior-management change') and not SENIOR.search(text):
+        demote='Director appointment or re-appointment; worth knowing, rarely urgent.'
+    elif reason.startswith('Auditor appointment or reappointment'):
+        demote='Routine auditor appointment or reappointment; worth knowing.'
+    elif reason.startswith('Newspaper attachment'):
+        demote='Newspaper publication of an earlier disclosure; check the original filing instead.'
+    elif event.get('assessment')=='pending' and re.fullmatch(r'\s*(?:appointment|outcome of board meeting|general updates?)\s*',(event.get('description') or event.get('title') or '').split(' · ')[0],re.I):
+        demote='Generic notice title awaiting its attachment check; kept visible as worth knowing.'
+    return {**event,'tier':1,'reason':demote,'tier_note':'Moved from Needs you: '+reason} if demote else event
+
+
 def priority(title,text=None):
     if not text:return {'tier':1,'assessment':'pending','reason':'Attachment not yet assessed; kept visible.'}
     # A title supplies routing context, never evidence of a transaction. Match
