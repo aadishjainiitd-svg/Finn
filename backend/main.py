@@ -305,6 +305,12 @@ def get_research_pack(symbol:str,identity:str=Depends(owner)):
     from .research_pack import get,slim
     return {'pack':slim(get(ticker(symbol)))}
 
+@app.get('/api/research-set')
+def research_set():
+    """Suggested companies outside the portfolio; research works on any NSE ticker."""
+    from .config import RESEARCH_SET
+    return {'items':RESEARCH_SET,'note':'Any NSE ticker can be researched; these are suggested starting points outside the portfolio.'}
+
 @app.get('/api/guidance/{symbol}')
 def get_guidance(symbol:str,identity:str=Depends(owner)):
     """Management guidance from the saved research, for the event sheet. No model, no fetch."""

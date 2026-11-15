@@ -7,7 +7,7 @@ from datetime import datetime
 from decimal import Decimal
 from pydantic import BaseModel,Field,ConfigDict
 from . import repository
-from .config import PORTFOLIO
+from .config import PORTFOLIO,PORTFOLIO_PROFILE
 from .sources import identity,ticker
 from .network import SourceError
 
@@ -26,7 +26,7 @@ def book(owner):
     if saved:return saved
     # Served without persisting: anonymous reads (crawlers, health pings) must not
     # write a row each. The first explicit save inserts it (expected version 0).
-    return {'holdings':[{'symbol':s,'weight':None,'thesis':'','sector':'','inputs':[]} for s in PORTFOLIO],
+    return {'holdings':[{'symbol':s,'weight':None,'thesis':'','sector':PORTFOLIO_PROFILE.get(s,''),'inputs':[]} for s in PORTFOLIO],
             'is_demo':True,'label':'Demonstration book · weights and theses not supplied','_version':0}
 
 

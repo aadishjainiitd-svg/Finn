@@ -33,3 +33,12 @@ export function Sheet({title,header,children,onClose,trigger}:{title:string;head
  <div className="fn-bd">{children}</div></Dialog.Content></Dialog.Portal></Dialog.Root>;
 }
 export function Skeleton(){return <div className="fn-skeleton" role="status" aria-label="Loading"><div/><div/><div/></div>;}
+
+/** FINN mark: an amber tile with a navy F and a rising tick. */
+export function Logo({size=28,label=true}:{size?:number;label?:boolean}){
+ return <span className="fn-brand"><svg width={size} height={size} viewBox="0 0 32 32" aria-hidden="true" focusable="false">
+  <rect width="32" height="32" rx="9" fill="#f6a81f"/>
+  <path d="M10 24V8h12M10 16h8" fill="none" stroke="#16213e" strokeWidth="3.4" strokeLinecap="round" strokeLinejoin="round"/>
+  <path d="M19.5 22.5l2.5-3 2 2 3-4.5" fill="none" stroke="#16213e" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+ </svg>{label&&<span className="fn-wordmark">FINN</span>}</span>;
+}

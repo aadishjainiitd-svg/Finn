@@ -126,6 +126,18 @@ test('first visit with nothing in 24 hours opens on the last 14 days and says so
  await expect(page.locator('#period')).toHaveValue('14');await expect(page.getByRole('button',{name:/TCS.*Director appointed/})).toBeVisible();
 });
 
+test('research set is offered outside the portfolio and the event sheet links to research',async({page})=>{
+ await fixture(page);await page.goto('/');
+ await expect(page.locator('.fn-hd .fn-wordmark')).toHaveText('FINN');
+ await page.getByRole('button',{name:/TCS.*Director appointed/}).click();
+ await page.getByRole('button',{name:'Research TCS'}).click();
+ await expect(page.getByRole('dialog')).toHaveCount(0);await expect(page.getByLabel('Research any NSE ticker')).toHaveValue('TCS');
+ await page.getByLabel('Research any NSE ticker').fill('');
+ await expect(page.getByText('Demo research set')).toBeVisible();
+ for(const name of ['ABB India','Havells India','Astral','Crompton Greaves Consumer'])await expect(page.getByText(name,{exact:true})).toBeVisible();
+ await expect(page.getByText(/type any NSE ticker above, including one we did not pick/)).toBeVisible();
+});
+
 test('installed production shell reloads offline without acknowledging an item',async({page,context})=>{
  test.skip(!process.env.FINN_E2E_URL,'Requires a production preview with the actual service worker.');
  await fixture(page);await page.goto('/');
